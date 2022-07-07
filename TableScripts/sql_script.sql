@@ -47,7 +47,7 @@ CREATE TABLE STUDENTS (
     CHECK (Credits >= 0),
     CHECK (GPA >= 0),
     
-	FOREIGN KEY (UserID) REFERENCES users(ID)
+	FOREIGN KEY (UserID) REFERENCES USERS(ID)
 );
 
 DROP TABLE IF EXISTS LECTURERS;
@@ -69,5 +69,5 @@ CREATE TABLE LECTURERS (
 	CHECK (Gender in ('Female', 'Male', 'Other')),
 	CHECK (LecturerStatus in ('Active', 'Inactive')),
     
-	FOREIGN KEY (UserID) REFERENCES users(ID)
+	FOREIGN KEY (UserID) REFERENCES USERS(ID)
 );
