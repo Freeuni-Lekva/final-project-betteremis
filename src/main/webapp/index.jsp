@@ -19,7 +19,7 @@
         Welcome to BetterEmis.
     </h1>
     <div style="position:relative;text-align: left; zoom: 125%;display: inline-block">
-        <form action="" method="post">
+        <form action="loginServlet" method="post">
             <a>Email:</a>
             </br>
             <input type="text" name="mail">
@@ -29,8 +29,8 @@
             </br>
             <input type="password" name="pass">
             <p style="margin:10px;"></p>
-            <a style="position:absolute; zoom: 80%; left: -4rem" href="registerServlet"> Don't yet have account?</a>
-            <a style="position: absolute; zoom: 80%; right: -4rem" href="passRecoverServlet">Forgot Password?</a>
+            <a style="position:absolute; zoom: 80%; left: -4rem" href="register.jsp"> Don't yet have account?</a>
+            <a style="position: absolute; zoom: 80%; right: -4rem" href="resetPass.jsp">Forgot Password?</a>
             </br>
             </br>
             <input style="position:absolute; right: -4rem" type="submit" name="login">
