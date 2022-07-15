@@ -29,7 +29,7 @@ public class Student extends User {
     public int getCurrentSemester(){
         return currentSemester;
     }
-    public double getGpa(){
+    public double getGPA(){
         return gpa;
     }
     public String getGroup(){
