@@ -33,7 +33,7 @@
             <a style="position: absolute; zoom: 80%; right: -4rem" href="resetPass.jsp">Forgot Password?</a>
             </br>
             </br>
-            <input style="position:absolute; right: -4rem" type="button" name="login" id="loginButton">
+            <input style="position:absolute; right: -4rem" type="button" value="Login" id="loginButton">
         </form>
     </div>
     <script type="module" src="loginHashing.js"></script>
