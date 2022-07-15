@@ -4,6 +4,7 @@
 
 <head>
     <title>Emis</title>
+    <script src="https://unpkg.com/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
 </head>
 
 <body>
@@ -19,23 +20,23 @@
         Welcome to BetterEmis.
     </h1>
     <div style="position:relative;text-align: left; zoom: 125%;display: inline-block">
-        <form action="loginServlet" method="post">
+        <form>
             <a>Email:</a>
             </br>
-            <input type="text" name="mail">
-            </br>
-            </br>
+            <input type="text" name="mail" id="mail" required>
+            <p style="margin:8px;"></p>
             <a>Password:</a>
             </br>
-            <input type="password" name="pass">
+            <input type="password" name="pass" id="pass" required>
             <p style="margin:10px;"></p>
             <a style="position:absolute; zoom: 80%; left: -4rem" href="register.jsp"> Don't yet have account?</a>
             <a style="position: absolute; zoom: 80%; right: -4rem" href="resetPass.jsp">Forgot Password?</a>
             </br>
             </br>
-            <input style="position:absolute; right: -4rem" type="submit" name="login">
+            <input style="position:absolute; right: -4rem" type="button" name="login" id="loginButton">
         </form>
     </div>
+    <script type="module" src="loginHashing.js"></script>
 </div>
 </body>
 
