@@ -1,6 +1,19 @@
 package DAO;
 
-public interface UserDAO {
+import Model.Student;
+import Model.User;
 
-    public void addUser();
+public class UserDAO {
+
+    public void addUser(User user){
+
+    }
+
+    public void removeUser(User user){
+
+    }
+
+    boolean isValidUser(User user){
+        return false;
+    }
 }

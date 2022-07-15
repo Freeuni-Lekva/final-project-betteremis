@@ -1,8 +1,10 @@
 package DAO;
 
-public class LecturerDAO implements UserDAO{
+import Model.Lecturer;
+import Model.User;
 
-    public void addUser(){
+public class LecturerDAO {
+    public void addLecturer(Lecturer lecturer){
         //TODO
     }
 }

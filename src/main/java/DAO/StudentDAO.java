@@ -1,8 +1,10 @@
 package DAO;
 
-public class StudentDAO implements UserDAO{
+import Model.*;
 
-    public void addUser(){
+public class StudentDAO{
+
+    public void addStudent(Student user){
         //TODO
     }
 }
