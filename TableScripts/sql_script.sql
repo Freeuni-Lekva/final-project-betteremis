@@ -27,10 +27,8 @@ CREATE TABLE STUDENTS (
 	FirstName CHAR(64) NOT NULL,
     LastName CHAR(64) NOT NULL,
     Profession CHAR(255) NOT NULL,
-    Degree CHAR(64) NOT NULL,
     CurrentSemester int NOT NULL,
     Gender CHAR(20) NOT NULL,
-    Nationality CHAR(20) NOT NULL,
     DateOfBirth DATE NOT NULL,
     Address CHAR(255) NOT NULL, -- Expected form (Country, City, Address).
     StudentStatus CHAR(64) NOT NULL,
@@ -41,7 +39,6 @@ CREATE TABLE STUDENTS (
     GroupName CHAR(100) NOT NULL,
 
 	CHECK (Gender in ('Female', 'Male', 'Other')),
-	CHECK (Degree in ('Bachelor', 'Master', 'PhD')),
     CHECK (CurrentSemester >= 0),
 	CHECK (StudentStatus in ('Active', 'Inactive')),
     CHECK (Credits >= 0),
@@ -60,7 +57,6 @@ CREATE TABLE LECTURERS (
     LastName CHAR(64) NOT NULL,
     Profession CHAR(255) NOT NULL,
     Gender CHAR(20) NOT NULL,
-    Nationality CHAR(20) NOT NULL,
     DateOfBirth DATE NOT NULL,
     Address CHAR(255) NOT NULL, -- Expected form (Country, City, Address).
     LecturerStatus CHAR(64) NOT NULL,
