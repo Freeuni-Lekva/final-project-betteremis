@@ -1,19 +1,58 @@
 package DAO;
 
-import Model.Student;
+import Model.USERTYPE;
 import Model.User;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAO {
 
-    public UserDAO(){
+    private final ConnectionPool pool;
 
+    public UserDAO(ConnectionPool pool){
+        this.pool = pool;
     }
-    public void addUser(User user){
 
+    /**
+     * Adds the user into the database.
+     * @param user user to be added
+     * @return true if the user has been added successfully, false otherwise.
+     */
+    public boolean addUser(User user) {
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("INSERT INTO USERS VALUES (?, ?, ?)");
+            stm.setString(1, user.getEmail());
+            stm.setString(2, user.getPasswordHash());
+            stm.setString(3, user.getType().toString());
+            int added = stm.executeUpdate();
+            return added == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void removeUser(User user){
-
+    /**
+     * Removes the user from the database, if it's present.
+     * @param user user to be removed
+     * @return true if removed successfully, false otherwise
+     * @throws SQLException
+     */
+    public boolean removeUser(User user) {
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("DELETE FROM USERS WHERE Email=?;");
+            stm.setString(1, user.getEmail());
+            int added = stm.executeUpdate();
+            return added == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /** If there exists user with given email or password hash,
@@ -23,8 +62,22 @@ public class UserDAO {
      * @param email email of the user
      * @param passHash hash of the password used to log in
      * @return User object containing information about user*/
-    public User isValidUser(String email, String passHash){
-        //TODO
-        return null;
+    public User getUser(String email, String passHash){
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("SELECT * FROM USERS WHERE Email=? AND PasswordHash=?;");
+            stm.setString(1, email);
+            stm.setString(2, passHash);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                String privilege = rs.getString(3);
+                USERTYPE type = USERTYPE.toUserType(privilege);
+                return new User(email, passHash, type);
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
