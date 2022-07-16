@@ -1,9 +1,6 @@
 package emis.betteremis;
 
-import DAO.ConnectionPool;
-import DAO.LecturerDAO;
-import DAO.StudentDAO;
-import DAO.UserDAO;
+import DAO.*;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
@@ -17,16 +14,16 @@ public class ContextListener implements ServletContextListener {
         UserDAO userDAO = new UserDAO(pool);
         StudentDAO studentDAO = new StudentDAO(pool);
         LecturerDAO lecturerDAO = new LecturerDAO(pool);
-        sce.getServletContext().setAttribute("userDAO", userDAO);
-        sce.getServletContext().setAttribute("studentDAO", studentDAO);
-        sce.getServletContext().setAttribute("lecturerDAO", lecturerDAO);
+        sce.getServletContext().setAttribute(Mapping.USER_DAO, userDAO);
+        sce.getServletContext().setAttribute(Mapping.STUDENT_DAO, studentDAO);
+        sce.getServletContext().setAttribute(Mapping.LECTURER_DAO, lecturerDAO);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        sce.getServletContext().removeAttribute("userDAO");
-        sce.getServletContext().removeAttribute("studentDAO");
-        sce.getServletContext().removeAttribute("lecturerDAO");
+        sce.getServletContext().removeAttribute(Mapping.USER_DAO);
+        sce.getServletContext().removeAttribute(Mapping.STUDENT_DAO);
+        sce.getServletContext().removeAttribute(Mapping.LECTURER_DAO);
     }
 
 }
