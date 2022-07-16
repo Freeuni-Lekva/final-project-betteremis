@@ -1,6 +1,7 @@
 package emis.betteremis;
 
 
+import DAO.Mapping;
 import DAO.UserDAO;
 import Helper.Utils;
 import Model.*;
@@ -18,7 +19,7 @@ public class loginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Contains email and password hash
         Map<String, String> map = Utils.parseJson(req);
-        UserDAO usrDAO = (UserDAO) req.getServletContext().getAttribute("usrdao");
+        UserDAO usrDAO = (UserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
         User usr = usrDAO.isValidUser(map.get("email"), map.get("passhash"));
         if(usr != null)
             System.out.println(usr.getEmail());
