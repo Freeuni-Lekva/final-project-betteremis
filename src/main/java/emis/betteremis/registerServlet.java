@@ -15,6 +15,7 @@ import java.util.Map;
 
 @WebServlet(name = "registerServlet", value = "/registerServlet")
 public class registerServlet extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*map contains all the necessary information needed for registration
@@ -33,8 +34,8 @@ public class registerServlet extends HttpServlet {
             school: empty if type === false, else contains school name
         * */
         Map<String, Object> map = Utils.parseJson(req);
-        for(String key : map.keySet()){
-            System.out.println(key + " : " + map.get(key));
+        if((boolean) map.get(Mapping.IS_STUDENT)){
+
         }
     }
 }
