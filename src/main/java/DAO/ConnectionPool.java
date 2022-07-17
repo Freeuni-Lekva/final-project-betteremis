@@ -23,7 +23,7 @@ public class ConnectionPool {
             try {
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:" + PORT, USERNAME, PASSWORD);
                 Statement stm = con.createStatement();
-                stm.execute("USE DATABASE " + DATABASE_NAME+";");
+                stm.execute("USE " + DATABASE_NAME+";");
                 queue.add(con);
             } catch (SQLException e) {
                 throw new RuntimeException(e);

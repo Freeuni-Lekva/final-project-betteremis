@@ -18,9 +18,9 @@ public class loginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Contains email and password hash
-        Map<String, String> map = Utils.parseJson(req);
+        Map<String, Object> map = Utils.parseJson(req);
         UserDAO usrDAO = (UserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
-        User usr = usrDAO.getUser(map.get("email"), map.get("passhash"));
+        User usr = usrDAO.getUser((String)map.get("email"), (String)map.get("passhash"));
         if(usr != null)
             System.out.println(usr.getEmail());
     }
