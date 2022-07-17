@@ -7,14 +7,14 @@ import java.io.*;
 import java.util.*;
 
 public class Utils {
-    public static Map<String, String> parseJson(HttpServletRequest request){
-        Map<String, String> map = new HashMap<>();
+    public static Map<String, Object> parseJson(HttpServletRequest request){
+        Map<String, Object> map = new HashMap<>();
         JSONObject obj = new JSONObject(getBody(request));
 
         Iterator<String> it = obj.keys();
         while(it.hasNext()) {
             String key = it.next(); // get key
-            String o = (String)obj.get(key); // get value
+            Object o = (Object) obj.get(key); // get value
             map.put(key, o);
         }
         return map;
