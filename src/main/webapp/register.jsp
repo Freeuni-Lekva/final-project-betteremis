@@ -23,14 +23,16 @@
     $(document).ready(function(){
         $('input[name="type"]').click(function(){
             const inputValue = $(this).attr("value");
-            $("div.desc").hide();
-            $("#"+inputValue).show();
+            // $("div.desc").hide();
+            $('div.desc').hide().find(':input').attr('required', false);
+            // $("#"+inputValue).show();
+            $("#"+inputValue).show().find(':input').attr('required', true);
         });
     });
 </script>
     <h1>Please fill the Registration form</h1>
     <div style="display: inline-block; overflow: hidden;">
-        <form>
+        <form class="reg-form">
             <div style="display: inline-block; text-align: center; float: left;">
 
                 <a>First Name</a>
@@ -64,11 +66,6 @@
                 <input type="text" id="profession" required>
                 </br>
                 </br>
-                <a>Nationality</a>
-                </br>
-                <input type="text" id="nationality" required>
-                </br>
-                </br>
                 <a>Date of Birth</a>
                 </br>
                 <input type="date" id="dateofbirth" required>
@@ -87,6 +84,11 @@
             </div>
 
             <div style="text-align:center ; margin-left: 320px;">
+                <a>Group Name</a>
+                </br>
+                <input type="text" id="groupname">
+                </br>
+                </br>
                 <a>Select User type</a>
                 <input type="radio" name="type" value="student" checked> <label>Student</label>
                 <input type="radio" name="type" value="lecturer"> <label>Lecturer</label>
@@ -100,7 +102,7 @@
                 <div class="desc" style="display: none" id="lecturer">
                     </br>
                 </div>
-                <input type="button" value="Register" id="registerButton">
+                <input type="submit" value="Register" id="registerButton">
             </div>
         </form>
     </div>
