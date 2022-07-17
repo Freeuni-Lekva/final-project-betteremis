@@ -48,7 +48,7 @@ public class ConnectionPool {
         }
     }
 
-    public void close(Connection conn){
+    public void close(){
         while(!queue.isEmpty()){
             try {
                 queue.poll().close();
