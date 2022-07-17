@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class Student {
+
+    private int userID;
     private String firstName, lastName, profession, address, school, group;
     private int currentSemester, creditsDone;
     private double gpa;
@@ -12,9 +14,10 @@ public class Student {
     private STATUS status;
     private Date birthDate;
 
-    public Student(String firstName, String lastName, String profession, int currentSemester, GENDER gender,
+    public Student(int userID, String firstName, String lastName, String profession, int currentSemester, GENDER gender,
                    Date birthDate, String address, STATUS status, String school,
                    int creditsDone, double gpa, BigInteger phone, String group) {
+        this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.profession = profession;
@@ -29,6 +32,12 @@ public class Student {
         this.status = status;
         this.birthDate = birthDate;
     }
+
+
+    public int getUserID() {
+        return userID;
+    }
+
     public String getFirstName() {
         return firstName;
     }

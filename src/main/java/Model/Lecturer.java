@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Lecturer  {
 
+    private int userID;
     private String firstname;
     private String lastname;
     private String field;
@@ -13,8 +14,9 @@ public class Lecturer  {
     private STATUS status;
     private Number phone;
 
-    public Lecturer(String firstName, String lastName,String field,
+    public Lecturer(int userID, String firstName, String lastName,String field,
                 GENDER gender,Date birthDate, String location,STATUS status, Number phone) {
+        this.userID = userID;
         this.firstname = firstName;
         this.lastname = lastName;
         this.field = field;
@@ -24,6 +26,15 @@ public class Lecturer  {
         this.status = status;
         this.phone = phone;
     }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
     public String getFirstname(){
         return firstname;
     }
@@ -37,9 +48,6 @@ public class Lecturer  {
         return gender;
     }
 
-    public Date getBornDate(){
-        return birthDate;
-    }
     public String getLocation(){
         return location;
     }
