@@ -1,8 +1,6 @@
 window.onload = function () {
 
-    const button = document.getElementById("registerButton");
-    button.onclick = async function () {
-
+    $(".reg-form").on('submit', async function () {
         try {
             const passHash = await dcodeIO.bcrypt.hash(document.getElementById("pass").value, 10);
             const gender = document.getElementsByName("Gender");
@@ -24,7 +22,7 @@ window.onload = function () {
                     break;
                 }
             }
-            if(isStudent){
+            if(isStudent) {
                 school = document.getElementById("school").value;
             }
             postData('registerServlet', {
@@ -34,10 +32,10 @@ window.onload = function () {
                 passhash: passHash,
                 male: isMale,
                 profession: document.getElementById("profession").value,
-                nationality: document.getElementById("nationality").value,
                 birthdate: document.getElementById("dateofbirth").value,
                 address: document.getElementById("address").value,
                 phone: document.getElementById("number").value,
+                groupname: document.getElementById("groupname").value,
                 type: isStudent,
                 school: school
             });
@@ -45,7 +43,7 @@ window.onload = function () {
         catch {
             console.log('something happened while hashing or sending the login data');
         }
-    }
+    });
 }
 async function postData(url = '', data = {}){
     const response = await fetch(url, {

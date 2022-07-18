@@ -14,7 +14,7 @@ public class Utils {
         Iterator<String> it = obj.keys();
         while(it.hasNext()) {
             String key = it.next(); // get key
-            Object o = (Object) obj.get(key); // get value
+            Object o = obj.get(key); // get value
             map.put(key, o);
         }
         return map;
