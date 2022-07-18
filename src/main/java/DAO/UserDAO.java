@@ -3,10 +3,7 @@ package DAO;
 import Model.USERTYPE;
 import Model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDAO {
 
@@ -21,24 +18,47 @@ public class UserDAO {
      * @param user user to be added
      * @return true if the user has been added successfully, false otherwise.
      */
-    public boolean addUser(User user) {
+    public int addUser(User user) {
         Connection conn = pool.getConnection();
         PreparedStatement stm;
+        int userID = 0;
         try {
-            stm = conn.prepareStatement("INSERT INTO USERS (Email, PasswordHash, Privilege) VALUES (?, ?, ?)");
+            stm = conn.prepareStatement("INSERT INTO USERS (Email, PasswordHash, Privilege) VALUES (?, ?, ?)")
             stm.setString(1, user.getEmail());
             stm.setString(2, user.getPasswordHash());
             stm.setString(3, user.getType().toString());
             int added = stm.executeUpdate();
             pool.releaseConnection(conn);
-            return added == 1;
+            userID = idOfUser(user);
+        } catch (SQLException e) {
+            userID = -1;
+        }
+        try {
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             pool.releaseConnection(conn);
             return false;
         }
+        return userID;
     }
 
+    public int idOfUser(User user){
+        try {
+            Connection conn = pool.getConnection();
+            PreparedStatement stm = conn.prepareStatement("SELECT ID FROM USERS WHERE Email = ?");
+            stm.setString(1, user.getEmail());
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                return rs.getInt(1);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
+
+    }
     /**
      * Removes the user from the database, if it's present.
      * @param user user to be removed
