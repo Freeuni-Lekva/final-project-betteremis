@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Student {
+
+    private int userID;
     private String firstName, lastName, profession, address, school, group;
     private int currentSemester, creditsDone, userID;
     private double gpa;
@@ -15,7 +17,6 @@ public class Student {
     private GENDER gender;
     private STATUS status;
     private Date birthDate;
-
     public Student(Map<String, Object> data, int userID){
         this.firstName = (String)data.get(Mapping.FIRST_NAME);
         this.lastName = (String) data.get(Mapping.LAST_NAME);
@@ -54,6 +55,12 @@ public class Student {
         this.birthDate = birthDate;
         this.userID = userID;
     }
+
+
+    public int getUserID() {
+        return userID;
+    }
+
     public String getFirstName() {
         return firstName;
     }

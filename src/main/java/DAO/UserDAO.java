@@ -23,11 +23,12 @@ public class UserDAO {
         PreparedStatement stm;
         int userID = 0;
         try {
-            stm = conn.prepareStatement("INSERT  USERS (Email, PasswordHash, Privilege) VALUES (?, ?, ?)");
+            stm = conn.prepareStatement("INSERT INTO USERS (Email, PasswordHash, Privilege) VALUES (?, ?, ?)")
             stm.setString(1, user.getEmail());
             stm.setString(2, user.getPasswordHash());
             stm.setString(3, user.getType().toString());
             int added = stm.executeUpdate();
+            pool.releaseConnection(conn);
             userID = idOfUser(user);
         } catch (SQLException e) {
             userID = -1;
@@ -35,7 +36,9 @@ public class UserDAO {
         try {
             conn.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            return false;
         }
         return userID;
     }
@@ -69,9 +72,12 @@ public class UserDAO {
             stm = conn.prepareStatement("DELETE FROM USERS WHERE Email=?;");
             stm.setString(1, user.getEmail());
             int added = stm.executeUpdate();
+            pool.releaseConnection(conn);
             return added == 1;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            return false;
         }
     }
 
@@ -90,14 +96,18 @@ public class UserDAO {
             stm.setString(1, email);
             stm.setString(2, passHash);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()){
-                String privilege = rs.getString(3);
+            if(rs.next()){
+                String privilege = rs.getString(4);
                 USERTYPE type = USERTYPE.toUserType(privilege);
+                pool.releaseConnection(conn);
                 return new User(email, passHash, type);
             }
+            pool.releaseConnection(conn);
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            return null;
         }
     }
 }
