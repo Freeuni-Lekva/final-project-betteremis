@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubjectDAO {
 
@@ -41,7 +43,7 @@ public class SubjectDAO {
      * @param lecturerUserID lecturer's UserID needed for search.
      * @return Pair which is (false, -1) if lecturer could not be found or (true, ID) if lecturer could be found.
      */
-    public Pair getLecturerID(int lecturerUserID) {
+    private Pair getLecturerID(int lecturerUserID) {
         Connection conn = pool.getConnection();
         int ID = -1;
         try{
@@ -95,10 +97,115 @@ public class SubjectDAO {
             pool.releaseConnection(conn);
         }catch (SQLException e){
             e.printStackTrace();
-            throw new RuntimeException();
+            result = false;
         }
 
         return result;
+    }
+
+    /**
+     * This method removes the subject with a given name. Since the subject is unique in table only name is sufficient.
+     * @param subjectName Name of the subject.
+     * @return true if subject was removed successfully, false otherwise.
+     */
+    public boolean removeSubject(String subjectName){
+        Connection conn = pool.getConnection();
+        boolean result = false;
+        try{
+            String statement = "DELETE FROM SUBJECTS WHERE SUBJECTNAME = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setString(1, subjectName);
+            int updateResult = ps.executeUpdate();
+            result = updateResult == 1? true : false;
+        }catch (SQLException e){
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            result = false;
+        }
+
+        pool.releaseConnection(conn);
+        return result;
+    }
+
+    /**
+     * Given the subject name, this method returns the subject information.
+     * @param subjectName Name of the subject.
+     * @return Subject object containing the information. If subject could not be retrieved null is returned.
+     */
+    public Subject getSubject(String subjectName){
+        Connection conn = pool.getConnection();
+        Subject result = null;
+        try{
+            String statement = "SELECT * FROM SUBJECTS WHERE SUBJECTNAME = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setString(1, subjectName);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                result = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            return null;
+        }
+
+        pool.releaseConnection(conn);
+        return result;
+    }
+
+    /**
+     * This method returns the list of subjects taught by the lecturer. Since lecturer's UserID is unique in table,
+     * it is sufficient for searching the lecturer.
+     * @param lecturerUserID UserID of the lecturer.
+     * @return List of subjects taught by this lecturer. Empty list is returned if this lecturer doesn't teach any subject.
+     * null is returned if the lecturer could not be found or if error occurred.
+     */
+    public List<Subject> listSubjects(int lecturerUserID){
+        Connection conn = pool.getConnection();
+        List<Subject> result = new ArrayList<>();
+        try{
+            pool.releaseConnection(conn);
+            Pair p = getLecturerID(lecturerUserID);
+            conn = pool.getConnection();
+
+            if(!p.first){
+                return null;
+            }
+
+            int ID = p.second;
+
+            String statement = "SELECT * FROM SUBJECTS WHERE LECTURERID = ?";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, ID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Subject toAdd = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
+                result.add(toAdd);
+            }
+
+            pool.releaseConnection(conn);
+        }catch (SQLException e){
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            return null;
+        }
+        return result;
+    }
+
+    public void removeAll(){
+
+        Connection conn = pool.getConnection();
+        int updateResult;
+        try {
+            String statement = "DELETE FROM SUBJECTS;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            pool.releaseConnection(conn);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+        }
     }
 
 }
