@@ -5,6 +5,10 @@
 <head>
     <title>Emis</title>
     <script src="https://unpkg.com/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -20,7 +24,7 @@
         Welcome to BetterEmis.
     </h1>
     <div style="position:relative;text-align: left; zoom: 125%;display: inline-block">
-        <form>
+        <form class="login-form">
             <a>Email:</a>
             </br>
             <input type="text" name="mail" id="mail" required>
@@ -33,7 +37,7 @@
             <a style="position: absolute; zoom: 80%; right: -4rem" href="resetPass.jsp">Forgot Password?</a>
             </br>
             </br>
-            <input style="position:absolute; right: -4rem" type="button" value="Login" id="loginButton">
+            <input style="position:absolute; right: -4rem" type="submit" value="Login" id="loginButton">
         </form>
     </div>
     <script type="module" src="loginHashing.js"></script>

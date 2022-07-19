@@ -23,9 +23,7 @@
     $(document).ready(function(){
         $('input[name="type"]').click(function(){
             const inputValue = $(this).attr("value");
-            // $("div.desc").hide();
             $('div.desc').hide().find(':input').attr('required', false);
-            // $("#"+inputValue).show();
             $("#"+inputValue).show().find(':input').attr('required', true);
         });
     });

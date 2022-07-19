@@ -11,6 +11,7 @@ import java.util.Map;
 public class Lecturer  {
 
     private int userID;
+
     private String firstName;
     private String lastName;
     private String profession;
@@ -18,7 +19,7 @@ public class Lecturer  {
     private Date birthDate;
     private String address;
     private STATUS status;
-    private Number phone;
+    private BigInteger phone;
 
     public Lecturer(Map<String, Object> data, int userID){
         this.firstName = (String)data.get(Mapping.FIRST_NAME);
@@ -37,7 +38,7 @@ public class Lecturer  {
         }
     }
     public Lecturer(int userID, String firstName, String lastName, String profession,
-                    GENDER gender, Date birthDate, String address, STATUS status, Number phone) {
+                    GENDER gender, Date birthDate, String address, STATUS status, BigInteger phone) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -77,8 +78,12 @@ public class Lecturer  {
         return status;
     }
 
-    public Number getPhone() {
+    public BigInteger getPhone() {
         return phone;
+    }
+
+    public int getUserID() {
+        return userID;
     }
 
 

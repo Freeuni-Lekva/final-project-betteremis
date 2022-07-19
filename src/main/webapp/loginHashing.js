@@ -1,7 +1,7 @@
 window.onload = function () {
 
-    const button = document.getElementById("loginButton");
-    button.onclick = async function () {
+    $(".login-form").on('submit', async function () {
+        console.log("skajdkwuqdias");
         let mail = document.getElementById("mail").value;
 
         try {
@@ -14,7 +14,7 @@ window.onload = function () {
         catch {
             console.log('something happened while hashing or sending the login data');
         }
-    }
+    })
 }
 async function postData(url = '', data = {}){
     const response = await fetch(url, {
