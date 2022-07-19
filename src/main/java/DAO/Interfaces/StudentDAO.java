@@ -23,4 +23,11 @@ public interface StudentDAO {
      * @return Student with the given ID.
      */
     Student getStudentByUser(User user);
+
+    /**
+     * Sets student's status to INACTIVE.
+     * @param student student to Deactivate.
+     * @return true - if student status was ACTIVE before the change, false - otherwise.
+     */
+    boolean terminateStatus(Student student);
 }
