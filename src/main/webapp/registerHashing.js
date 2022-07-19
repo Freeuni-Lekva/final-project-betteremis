@@ -8,6 +8,7 @@ window.onload = function () {
             let isMale = false;
             let isStudent = false;
             let school = "";
+            let groupname = "";
             for(let i = 0; i < gender.length; i++) {
                 if(gender[i].checked){
                     if(gender[i].value === "Male")
@@ -24,6 +25,7 @@ window.onload = function () {
             }
             if(isStudent) {
                 school = document.getElementById("school").value;
+                groupname = document.getElementById("groupname").value;
             }
             postData('registerServlet', {
                 firstname: document.getElementById("firstname").value,
@@ -35,7 +37,7 @@ window.onload = function () {
                 birthdate: document.getElementById("dateofbirth").value,
                 address: document.getElementById("address").value,
                 phone: document.getElementById("number").value,
-                groupname: document.getElementById("groupname").value,
+                groupname: groupname,
                 type: isStudent,
                 school: school
             });
