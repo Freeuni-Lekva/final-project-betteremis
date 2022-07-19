@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Student {
+public class Student extends User{
 
     private int userID;
     private String firstName, lastName, profession, address, school, group;
@@ -18,6 +18,7 @@ public class Student {
     private STATUS status;
     private Date birthDate;
     public Student(Map<String, Object> data, int userID){
+        super(data);
         this.firstName = (String)data.get(Mapping.FIRST_NAME);
         this.lastName = (String) data.get(Mapping.LAST_NAME);
         this.profession = (String) data.get(Mapping.PROFESSION);
@@ -37,9 +38,11 @@ public class Student {
             throw new RuntimeException(e);
         }
     }
-    public Student(String firstName, String lastName, String profession, int currentSemester, GENDER gender,
+    public Student(String email, String passwordHash, USERTYPE usertype,
+                   String firstName, String lastName, String profession, int currentSemester, GENDER gender,
                    Date birthDate, String address, STATUS status, String school,
                    int creditsDone, double gpa, BigInteger phone, String group, int userID) {
+        super(email, passwordHash, usertype);
         this.firstName = firstName;
         this.lastName = lastName;
         this.profession = profession;

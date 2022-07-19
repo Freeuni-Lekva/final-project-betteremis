@@ -1,9 +1,9 @@
 package emis.betteremis;
 
-import DAO.LecturerDAO;
+import DAO.SqlLecturerDAO;
 import DAO.Mapping;
-import DAO.StudentDAO;
-import DAO.UserDAO;
+import DAO.SqlStudentDAO;
+import DAO.SqlUserDAO;
 import Helper.Utils;
 import Model.Lecturer;
 import Model.Student;
@@ -25,7 +25,7 @@ public class registerServlet extends HttpServlet {
 //        map contains all the necessary information needed for registration
         Map<String, Object> map = Utils.parseJson(req);
         User newUser = new User(map);
-        UserDAO uDAO = (UserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
+        SqlUserDAO uDAO = (SqlUserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
         int userID = uDAO.addUser(newUser);
         if(userID == -1){
             System.out.println("Not registered");
@@ -33,10 +33,10 @@ public class registerServlet extends HttpServlet {
         }
         else {
             if ((boolean) map.get(Mapping.IS_STUDENT)) {
-                StudentDAO sDAO = (StudentDAO) req.getServletContext().getAttribute(Mapping.STUDENT_DAO);
+                SqlStudentDAO sDAO = (SqlStudentDAO) req.getServletContext().getAttribute(Mapping.STUDENT_DAO);
                 sDAO.addStudent(new Student(map, userID));
             } else {
-                LecturerDAO lDAO = (LecturerDAO) req.getServletContext().getAttribute(Mapping.LECTURER_DAO);
+                SqlLecturerDAO lDAO = (SqlLecturerDAO) req.getServletContext().getAttribute(Mapping.LECTURER_DAO);
                 lDAO.addLecturer(new Lecturer(map, userID));
             }
             System.out.println("registered " + userID);

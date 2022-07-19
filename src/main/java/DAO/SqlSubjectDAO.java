@@ -1,6 +1,7 @@
 package DAO;
 
-import Model.Lecturer;
+import DAO.Interfaces.SubjectDAO;
+import Model.Student;
 import Model.Subject;
 
 import java.sql.Connection;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectDAO {
+public class SqlSubjectDAO implements SubjectDAO {
 
     /**
      * Class for storing boolean integer pair.
@@ -34,7 +35,7 @@ public class SubjectDAO {
     }
     private final ConnectionPool pool;
 
-    public SubjectDAO(ConnectionPool pool) {
+    public SqlSubjectDAO(ConnectionPool pool) {
         this.pool = pool;
     }
 
@@ -64,43 +65,38 @@ public class SubjectDAO {
         return new Pair(false, -1);
     }
 
-    /**
-     * Here a new subject is added. If there already exists a subject with this name error will be thrown.
-     * This is because subject's name is unique. For this reason information for two lecturers' teaching the same subject
-     * cannot be saved in this table.
-     * @param subject Subject to be added.
-     * @param lecturerUserID Subject's lecturere's user id for determining who teaches the subject.
-     * @return ture if added successfully, false otherwise.
-     */
-    public boolean addSubject(Subject subject, int lecturerUserID){
-        Connection conn = pool.getConnection();
-        boolean result = false;
-        try{
-            pool.releaseConnection(conn);
-            Pair p = getLecturerID(lecturerUserID);
-            conn = pool.getConnection();
 
-            if(!p.first){
-                return false;
-            }
-
-            int ID = p.second;
-
-            String statement = "INSERT INTO SUBJECTS (SubjectName, Credits, SubjectSemester, LecturerID) VALUES (?, ?, ?, ?);";
-            PreparedStatement ps = conn.prepareStatement(statement);
-            ps.setString(1, subject.getName());
-            ps.setInt(2, subject.getNumCredits());
-            ps.setInt(3, subject.getSemester());
-            ps.setInt(4, ID);
-            if (ps.executeUpdate() == 1)
-                result = true;
-            pool.releaseConnection(conn);
-        }catch (SQLException e){
-            e.printStackTrace();
-            result = false;
-        }
-
-        return result;
+    public boolean addSubject(Subject subject){
+//        Connection conn = pool.getConnection();
+//        boolean result = false;
+//        try{
+//            pool.releaseConnection(conn);
+//
+//            Pair p = getLecturerID(lecturerUserID);
+//            conn = pool.getConnection();
+//
+//            if(!p.first){
+//                return false;
+//            }
+//
+//            int ID = p.second;
+//
+//            String statement = "INSERT INTO SUBJECTS (SubjectName, Credits, SubjectSemester, LecturerID) VALUES (?, ?, ?, ?);";
+//            PreparedStatement ps = conn.prepareStatement(statement);
+//            ps.setString(1, subject.getName());
+//            ps.setInt(2, subject.getNumCredits());
+//            ps.setInt(3, subject.getSemester());
+//            ps.setInt(4, ID);
+//            if (ps.executeUpdate() == 1)
+//                result = true;
+//            pool.releaseConnection(conn);
+//        }catch (SQLException e){
+//            e.printStackTrace();
+//            result = false;
+//        }
+//
+//        return result;
+        return false;
     }
 
     /**
@@ -127,12 +123,7 @@ public class SubjectDAO {
         return result;
     }
 
-    /**
-     * Given the subject name, this method returns the subject information.
-     * @param subjectName Name of the subject.
-     * @return Subject object containing the information. If subject could not be retrieved null is returned.
-     */
-    public Subject getSubject(String subjectName){
+    public Subject getSubjectByName(String subjectName){
         Connection conn = pool.getConnection();
         Subject result = null;
         try{
@@ -141,7 +132,7 @@ public class SubjectDAO {
             ps.setString(1, subjectName);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                result = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
+                result = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -153,44 +144,9 @@ public class SubjectDAO {
         return result;
     }
 
-    /**
-     * This method returns the list of subjects taught by the lecturer. Since lecturer's UserID is unique in table,
-     * it is sufficient for searching the lecturer.
-     * @param lecturerUserID UserID of the lecturer.
-     * @return List of subjects taught by this lecturer. Empty list is returned if this lecturer doesn't teach any subject.
-     * null is returned if the lecturer could not be found or if error occurred.
-     */
-    public List<Subject> listSubjects(int lecturerUserID){
-        Connection conn = pool.getConnection();
-        List<Subject> result = new ArrayList<>();
-        try{
-            pool.releaseConnection(conn);
-            Pair p = getLecturerID(lecturerUserID);
-            conn = pool.getConnection();
-
-            if(!p.first){
-                return null;
-            }
-
-            int ID = p.second;
-
-            String statement = "SELECT * FROM SUBJECTS WHERE LECTURERID = ?";
-            PreparedStatement ps = conn.prepareStatement(statement);
-            ps.setInt(1, ID);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()){
-                Subject toAdd = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
-                result.add(toAdd);
-            }
-
-            pool.releaseConnection(conn);
-        }catch (SQLException e){
-            e.printStackTrace();
-            pool.releaseConnection(conn);
-            return null;
-        }
-        return result;
+    @Override
+    public List<Student> getEnrolledStudents(int subject_id) {
+        return null;
     }
 
     public void removeAll(){

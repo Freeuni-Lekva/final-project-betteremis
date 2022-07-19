@@ -8,10 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-public class Lecturer  {
+public class Lecturer extends User{
 
     private int userID;
-
     private String firstName;
     private String lastName;
     private String profession;
@@ -22,6 +21,7 @@ public class Lecturer  {
     private BigInteger phone;
 
     public Lecturer(Map<String, Object> data, int userID){
+        super(data);
         this.firstName = (String)data.get(Mapping.FIRST_NAME);
         this.lastName = (String) data.get(Mapping.LAST_NAME);
         this.profession = (String) data.get(Mapping.PROFESSION);
@@ -37,8 +37,10 @@ public class Lecturer  {
             throw new RuntimeException(e);
         }
     }
-    public Lecturer(int userID, String firstName, String lastName, String profession,
+    public Lecturer(String email, String passwordHash, USERTYPE usertype,
+                    int userID, String firstName, String lastName, String profession,
                     GENDER gender, Date birthDate, String address, STATUS status, BigInteger phone) {
+        super(email, passwordHash, usertype);
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -78,12 +80,8 @@ public class Lecturer  {
         return status;
     }
 
-    public BigInteger getPhone() {
+    public Number getPhone() {
         return phone;
-    }
-
-    public int getUserID() {
-        return userID;
     }
 
 
