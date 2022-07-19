@@ -30,12 +30,12 @@ public class SqlUserDAO implements UserDAO {
 
             if(rs.next())
                 userID = rs.getInt(1);
-
-            pool.releaseConnection(conn);
         } catch (SQLException e) {
-            e.printStackTrace();
-            pool.releaseConnection(conn);
+//            e.printStackTrace();
             return -1;
+        }
+        finally {
+            pool.releaseConnection(conn);
         }
         return userID;
     }
@@ -48,12 +48,13 @@ public class SqlUserDAO implements UserDAO {
             stm = conn.prepareStatement("DELETE FROM USERS WHERE Email=?;");
             stm.setString(1, user.getEmail());
             int added = stm.executeUpdate();
-            pool.releaseConnection(conn);
             return added == 1;
         } catch (SQLException e) {
-            e.printStackTrace();
-            pool.releaseConnection(conn);
+//            e.printStackTrace();
             return false;
+        }
+        finally {
+            pool.releaseConnection(conn);
         }
     }
 
@@ -69,15 +70,15 @@ public class SqlUserDAO implements UserDAO {
                 String privilege = rs.getString(4);
                 String passHash = rs.getString(3);
                 USERTYPE type = USERTYPE.toUserType(privilege);
-                pool.releaseConnection(conn);
                 return new User(email, passHash, type);
             }
-            pool.releaseConnection(conn);
             return null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            pool.releaseConnection(conn);
+//            e.printStackTrace();
             return null;
+        }
+        finally {
+            pool.releaseConnection(conn);
         }
     }
 

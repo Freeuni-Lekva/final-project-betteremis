@@ -39,7 +39,7 @@ public class registerServlet extends HttpServlet {
                 SqlLecturerDAO lDAO = (SqlLecturerDAO) req.getServletContext().getAttribute(Mapping.LECTURER_DAO);
                 lDAO.addLecturer(new Lecturer(map, userID));
             }
-            System.out.println("registered");
+            System.out.println("registered " + userID);
             //TODO: print corresponding information.
         }
     }

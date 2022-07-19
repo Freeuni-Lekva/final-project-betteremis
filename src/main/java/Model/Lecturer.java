@@ -18,7 +18,7 @@ public class Lecturer extends User{
     private Date birthDate;
     private String address;
     private STATUS status;
-    private Number phone;
+    private BigInteger phone;
 
     public Lecturer(Map<String, Object> data, int userID){
         super(data);
@@ -39,7 +39,7 @@ public class Lecturer extends User{
     }
     public Lecturer(String email, String passwordHash, USERTYPE usertype,
                     int userID, String firstName, String lastName, String profession,
-                    GENDER gender, Date birthDate, String address, STATUS status, Number phone) {
+                    GENDER gender, Date birthDate, String address, STATUS status, BigInteger phone) {
         super(email, passwordHash, usertype);
         this.userID = userID;
         this.firstName = firstName;
@@ -85,4 +85,7 @@ public class Lecturer extends User{
     }
 
 
+    public int getUserID() {
+        return userID;
+    }
 }
