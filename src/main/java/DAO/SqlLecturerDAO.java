@@ -88,12 +88,6 @@ public class SqlLecturerDAO implements LecturerDAO {
         }
     }
 
-    /**
-     *
-     * @param user
-     * @return A Lecturer specified in user.
-     * If successfully found USER_ID , it finds appropriate lecturer using this ID.
-     */
 
     private int getIdByUser(User user){
         if(user.getType() != USERTYPE.LECTURER) {
@@ -108,7 +102,7 @@ public class SqlLecturerDAO implements LecturerDAO {
             PreparedStatement stm = conn.prepareStatement(query);
             set = stm.executeQuery();
             while(set.next()){
-                oneID.add(set.getInt(0));
+                oneID.add(set.getInt(1));
             }
         }catch (Exception e){
             System.out.println("Error while getting user from USERS");
@@ -124,6 +118,13 @@ public class SqlLecturerDAO implements LecturerDAO {
         return oneID.get(0);
     }
 
+    /**
+     *
+     * @param user
+     * @return Lecturer specified in user.
+     * If successfully found USER_ID , it finds appropriate lecturer using this ID.
+     */
+
     @Override
     public Lecturer getLecturerByUser(User user) {
         Connection conn = pool.getConnection();
@@ -132,7 +133,7 @@ public class SqlLecturerDAO implements LecturerDAO {
             pool.releaseConnection(conn);
             return null;
         }
-        String qeuery2 = "SELECT * FROM LECTURERS WHERE UserID = " + Integer.toString(id) + ";";
+        String qeuery2 = "SELECT * FROM LECTURERS WHERE UserID = " + id + ";";
         ResultSet resultSet = null;
         ArrayList<Lecturer> oneLecturer = new ArrayList<>();
         try{
@@ -144,7 +145,7 @@ public class SqlLecturerDAO implements LecturerDAO {
                         resultSet.getString(4), resultSet.getString(5),
                         resultSet.getString(6).equals(Mapping.IS_MALE) ? GENDER.MALE : GENDER.FEMALE,
                         resultSet.getDate(7), resultSet.getString(8),
-                        resultSet.getString(9).equals(Mapping.IS_ACTIVE) ? STATUS.ACTIVE : STATUS.INACTIVE,
+                        resultSet.getString(9).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE,
                         new BigInteger(resultSet.getBytes(10))));
             }
         }catch (Exception e){
@@ -173,7 +174,7 @@ public class SqlLecturerDAO implements LecturerDAO {
         if(id == -1){
             return null;
         }
-        String query = "SELECT * FROM SUBJECTS WHERE LecturerID != " + Integer.toString(id) + ";";
+        String query = "SELECT * FROM SUBJECTS WHERE LecturerID != " + id + ";";
         Connection conn = pool.getConnection();
         try {
             List<Subject> res = new ArrayList<>();

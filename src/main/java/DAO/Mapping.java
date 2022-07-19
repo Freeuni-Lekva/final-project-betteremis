@@ -20,6 +20,4 @@ public interface Mapping {
     String IS_STUDENT = "type";
     String SCHOOL = "school";
 
-    //Added
-    String IS_ACTIVE = "Active";
 }

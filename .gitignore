@@ -2,6 +2,7 @@
 **/.mvn
 **/target
 **/.iml
+package-lock.json
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
