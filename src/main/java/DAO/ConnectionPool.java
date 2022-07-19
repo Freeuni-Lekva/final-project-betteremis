@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import static DAO.DatabaseInfo.*;
-
+// komentari
 public class ConnectionPool {
 
     private BlockingQueue<Connection> queue;
