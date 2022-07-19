@@ -2,10 +2,9 @@ package emis.betteremis;
 
 
 import DAO.Mapping;
-import DAO.UserDAO;
+import DAO.SqlUserDAO;
 import Helper.Utils;
 import Model.*;
-import org.json.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +18,7 @@ public class loginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Contains email and password hash
         Map<String, Object> map = Utils.parseJson(req);
-        UserDAO usrDAO = (UserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
+        SqlUserDAO usrDAO = (SqlUserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
         User usr = usrDAO.getUser((String)map.get("email"), (String)map.get("passhash"));
         if(usr != null)
             System.out.println(usr.getEmail());
