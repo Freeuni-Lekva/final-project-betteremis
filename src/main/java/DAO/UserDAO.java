@@ -14,51 +14,38 @@ public class UserDAO {
     }
 
     /**
-     * Adds the user into the database.
+     * Adds the user into the database and returns the ID it got added to the table.
      * @param user user to be added
-     * @return true if the user has been added successfully, false otherwise.
+     * @return -1 if some kind of error occurred or user could not be found. returns ID otherwise.
      */
     public int addUser(User user) {
         Connection conn = pool.getConnection();
         PreparedStatement stm;
-        int userID = 0;
+        int userID = -1;
         try {
-            stm = conn.prepareStatement("INSERT INTO USERS (Email, PasswordHash, Privilege) VALUES (?, ?, ?)")
+            stm = conn.prepareStatement("INSERT INTO USERS (Email, PasswordHash, Privilege) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, user.getEmail());
             stm.setString(2, user.getPasswordHash());
             stm.setString(3, user.getType().toString());
             int added = stm.executeUpdate();
+
+            if(added != 1)
+                return -1;
+
+            ResultSet rs = stm.getGeneratedKeys();
+
+            if(rs.next())
+                userID = rs.getInt(1);
+
             pool.releaseConnection(conn);
-            userID = idOfUser(user);
-        } catch (SQLException e) {
-            userID = -1;
-        }
-        try {
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             pool.releaseConnection(conn);
-            return false;
+            return -1;
         }
         return userID;
     }
 
-    public int idOfUser(User user){
-        try {
-            Connection conn = pool.getConnection();
-            PreparedStatement stm = conn.prepareStatement("SELECT ID FROM USERS WHERE Email = ?");
-            stm.setString(1, user.getEmail());
-            ResultSet rs = stm.executeQuery();
-            while(rs.next()){
-                return rs.getInt(1);
-            }
-            conn.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return -1;
-
-    }
     /**
      * Removes the user from the database, if it's present.
      * @param user user to be removed
