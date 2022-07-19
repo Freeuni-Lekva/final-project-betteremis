@@ -58,6 +58,7 @@ public class SqlStudentDAO implements StudentDAO {
         }
         return studentID;
     }
+    @Override
     public boolean terminateStatus(Student student){
         int studID = student.getUserID();
         Connection conn = pool.getConnection();

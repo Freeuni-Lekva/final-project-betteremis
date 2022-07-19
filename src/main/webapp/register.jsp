@@ -82,15 +82,15 @@
             </div>
 
             <div style="text-align:center ; margin-left: 320px;">
-                <a>Group Name</a>
-                </br>
-                <input type="text" id="groupname">
-                </br>
-                </br>
                 <a>Select User type</a>
                 <input type="radio" name="type" value="student" checked> <label>Student</label>
                 <input type="radio" name="type" value="lecturer"> <label>Lecturer</label>
                 <div class="desc" id="student">
+                    <a>Group Name</a>
+                    </br>
+                    <input type="text" id="groupname">
+                    </br>
+                    </br>
                     <a>School</a>
                     </br>
                     <input type="text" id="school" required>
