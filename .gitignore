@@ -12,6 +12,9 @@ package-lock.json
 *.iml
 *.ipr
 
+node_modules
+package-lock.json
+
 ### Eclipse ###
 .apt_generated
 .classpath
