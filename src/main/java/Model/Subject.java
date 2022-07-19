@@ -6,13 +6,13 @@ public class Subject {
     private String name;
     private int numCredits;
     private int semester;
-    private int lecturer_id;
+    private int lecturerID;
 
-    public Subject(String name, int numCredits, int semester, int lecturer_id) {
+    public Subject(String name, int numCredits, int semester, int lecturerID) {
         this.name = name;
         this.numCredits = numCredits;
         this.semester = semester;
-        this.lecturer_id = lecturer_id;
+        this.lecturerID = lecturerID;
     }
 
     public String getName() {
@@ -26,4 +26,9 @@ public class Subject {
     public int getSemester() {
         return semester;
     }
+
+    public int getLecturerID() {
+        return lecturerID;
+    }
 }
+

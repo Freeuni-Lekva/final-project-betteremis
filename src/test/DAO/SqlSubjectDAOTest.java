@@ -1,4 +1,4 @@
-package java.dao;
+package DAO;
 
 import DAO.ConnectionPool;
 import DAO.SqlSubjectDAO;
@@ -65,20 +65,24 @@ public class SqlSubjectDAOTest {
     public void SubjectDAOTest1(){
         sqlSubjectDAO.removeAll();
         Subject subject = new Subject("Math", 6, 1, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject));
+        int res = sqlSubjectDAO.addSubject(subject);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Math"), res);
 
         Subject subject2 = new Subject("Math2", 6, 2, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject2));
+        res = sqlSubjectDAO.addSubject(subject2);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Math2"), res);
     }
 
     @Test
     public void SubjectDAOTest2(){
         sqlSubjectDAO.removeAll();
         Subject subject = new Subject("Computer Science 1", 6, 1, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject));
+        int res = sqlSubjectDAO.addSubject(subject);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 1"), res);
 
         Subject subject2 = new Subject("Computer Science 2", 6, 2, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject2));
+        res = sqlSubjectDAO.addSubject(subject2);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 2"), res);
 
         Assert.assertTrue(sqlSubjectDAO.removeSubject("Computer Science 1"));
         Assert.assertFalse(sqlSubjectDAO.removeSubject("Computer Science 1"));
@@ -90,7 +94,8 @@ public class SqlSubjectDAOTest {
     public void SubjectDAOTest3(){
         sqlSubjectDAO.removeAll();
         Subject subject = new Subject("Computer Science 3", 6, 1, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject));
+        int res =  sqlSubjectDAO.addSubject(subject);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 3"), res);
 
         Subject returned = sqlSubjectDAO.getSubjectByName("computer science 3");
         Assert.assertEquals(subject.getName(), returned.getName());
@@ -105,13 +110,16 @@ public class SqlSubjectDAOTest {
     public void SubjectDAOTest4(){
         sqlSubjectDAO.removeAll();
         Subject subject = new Subject("Computer Science 3", 6, 1, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject));
+        int res = sqlSubjectDAO.addSubject(subject);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 3"), res);
 
         Subject subject2 = new Subject("Computer Science 4", 6, 1, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject2));
+        res = sqlSubjectDAO.addSubject(subject2);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 4"), res);
 
         Subject subject3 = new Subject("Computer Science 5", 6, 1, ID);
-        Assert.assertTrue(sqlSubjectDAO.addSubject(subject3));
+        res =  sqlSubjectDAO.addSubject(subject3);
+        assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 5"), res);
 
         Assert.assertTrue(sqlSubjectDAO.removeSubject("computer science 3"));
         Assert.assertTrue(sqlSubjectDAO.removeSubject("computer science 4"));
