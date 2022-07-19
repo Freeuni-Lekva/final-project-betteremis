@@ -80,7 +80,13 @@ public class SqlStudentDAO implements StudentDAO {
     }
     @Override
     public boolean removeStudent(Student student) {
-        return false;
+        Connection conn = pool.getConnection();
+        try {
+            PreparedStatement stm = conn.prepareStatement("DELETE FROM STUDENTS WHERE UserID = ?");
+            stm.
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
