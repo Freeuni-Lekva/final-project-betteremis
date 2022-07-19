@@ -85,4 +85,7 @@ public class Lecturer extends User{
     }
 
 
+    public int getUserID() {
+        return userID;
+    }
 }
