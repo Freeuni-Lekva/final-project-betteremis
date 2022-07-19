@@ -19,9 +19,9 @@ public class loginServlet extends HttpServlet {
         //Contains email and password hash
         Map<String, Object> map = Utils.parseJson(req);
         SqlUserDAO usrDAO = (SqlUserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
-        User usr = usrDAO.getUser((String)map.get("email"), (String)map.get("passhash"));
-        if(usr != null)
-            System.out.println(usr.getEmail());
+        //User usr = usrDAO.getUser((String)map.get("email"), (String)map.get("passhash"));
+        //if(usr != null)
+        //    System.out.println(usr.getEmail());
     }
 
 

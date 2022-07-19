@@ -11,9 +11,9 @@ public interface SubjectDAO {
      * This is because subject's name is unique. For this reason information for two lecturers' teaching the same subject
      * cannot be saved in this table.
      * @param subject Subject to be added.
-     * @return ture if added successfully, false otherwise.
+     * @return returns ID of added subject if added successfully, -1 otherwise.
      */
-    boolean addSubject(Subject subject);
+    int addSubject(Subject subject);
 
     /**
      * Removes the subject with a given name. Since the subject is unique in table only name is sufficient.
@@ -35,4 +35,11 @@ public interface SubjectDAO {
      * @return List of students enrolled in this subject.
      */
     List<Student> getEnrolledStudents(int subject_id);
+
+    /**
+     * Given the subject name, gets subjects ID from the table.
+     * @param name Name of the subject
+     * @return ID or the subject if found, -1 otherwise.
+     */
+    int getSubjectIDByName(String name);
 }
