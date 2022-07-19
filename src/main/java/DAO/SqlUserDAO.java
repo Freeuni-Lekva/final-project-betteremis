@@ -22,19 +22,15 @@ public class SqlUserDAO implements UserDAO {
             stm.setString(2, user.getPasswordHash());
             stm.setString(3, user.getType().toString());
             int added = stm.executeUpdate();
-
             if(added != 1)
                 return -1;
-
             ResultSet rs = stm.getGeneratedKeys();
-
             if(rs.next())
                 userID = rs.getInt(1);
         } catch (SQLException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             return -1;
-        }
-        finally {
+        }finally{
             pool.releaseConnection(conn);
         }
         return userID;
@@ -50,12 +46,11 @@ public class SqlUserDAO implements UserDAO {
             int added = stm.executeUpdate();
             return added == 1;
         } catch (SQLException e) {
-//            e.printStackTrace();
-            return false;
-        }
-        finally {
+            e.printStackTrace();
+        }finally{
             pool.releaseConnection(conn);
         }
+        return false;
     }
 
     @Override
@@ -70,20 +65,34 @@ public class SqlUserDAO implements UserDAO {
                 String privilege = rs.getString(4);
                 String passHash = rs.getString(3);
                 USERTYPE type = USERTYPE.toUserType(privilege);
+                pool.releaseConnection(conn);
                 return new User(email, passHash, type);
             }
+            pool.releaseConnection(conn);
             return null;
         } catch (SQLException e) {
-//            e.printStackTrace();
-            return null;
-        }
-        finally {
+            e.printStackTrace();
             pool.releaseConnection(conn);
+            return null;
         }
     }
 
     @Override
     public boolean isValidUser(String email, String passHash) {
-        return false; //TODO
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM USERS WHERE Email=? AND PasswordHash=?;");
+            stm.setString(1, email);
+            stm.setString(2, passHash);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        }catch (SQLException ex){
+        }finally{
+            pool.releaseConnection(conn);
+        }
+        return false;
     }
 }
