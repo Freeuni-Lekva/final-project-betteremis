@@ -11,7 +11,7 @@ public class Student {
 
     private int userID;
     private String firstName, lastName, profession, address, school, group;
-    private int currentSemester, creditsDone, userID;
+    private int currentSemester, creditsDone;
     private double gpa;
     private BigInteger phone;
     private GENDER gender;
@@ -99,10 +99,6 @@ public class Student {
 
     public BigInteger getPhone() {
         return phone;
-    }
-
-    public int getUserID() {
-        return userID;
     }
 
     public GENDER getGender() {

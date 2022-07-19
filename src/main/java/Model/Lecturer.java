@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class Lecturer  {
 
+    private int userID;
     private String firstName;
     private String lastName;
     private String profession;
@@ -18,7 +19,6 @@ public class Lecturer  {
     private String address;
     private STATUS status;
     private Number phone;
-    private int userID;
 
     public Lecturer(Map<String, Object> data, int userID){
         this.firstName = (String)data.get(Mapping.FIRST_NAME);
@@ -36,8 +36,9 @@ public class Lecturer  {
             throw new RuntimeException(e);
         }
     }
-    public Lecturer(String firstName, String lastName, String profession,
-                    GENDER gender, Date birthDate, String address, STATUS status, Number phone, int userID) {
+    public Lecturer(int userID, String firstName, String lastName, String profession,
+                    GENDER gender, Date birthDate, String address, STATUS status, Number phone) {
+        this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.profession = profession;
@@ -46,7 +47,6 @@ public class Lecturer  {
         this.address = address;
         this.status = status;
         this.phone = phone;
-        this.userID = userID;
     }
 
     public String getFirstName() {
