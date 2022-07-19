@@ -20,5 +20,7 @@ public interface LecturerDAO {
     boolean removeLecturer(Lecturer lecturer);
 
     Lecturer getLecturerByUser(User user);
+
     List<Subject> getAllSubjects(Lecturer lecturer);
+
 }
