@@ -102,7 +102,7 @@ public class SqlLecturerDAO implements LecturerDAO {
         Connection conn = pool.getConnection();
         String query = "SELECT U.Email, U.PasswordHash, U.Privilege, S.UserID , S.FirstName," +
                 "S.LastName, S.Profession, S.Gender, S.DateOfBirth, S.Address, S.GroupName" +
-                "FROM USERS U JOIN STUDENTS S on U.ID = S.UserID HAVING U.Email = ?;";
+                "FROM USERS U JOIN LECTURERS S on U.ID = S.UserID HAVING U.Email = ?;";
         ResultSet resultSet = null;
         ArrayList<Lecturer> oneLecturer = new ArrayList<>();
         try{
@@ -150,8 +150,8 @@ public class SqlLecturerDAO implements LecturerDAO {
             stm.setString(1,email);
             ResultSet set = stm.executeQuery();
             while(set.next()){
-                res.add(new Subject(set.getString(2), set.getInt(3),
-                        set.getInt(4),set.getInt(5)));
+                res.add(new Subject(set.getString(1), set.getInt(2),
+                        set.getInt(3),set.getInt(4)));
             }
             return res;
         } catch (SQLException e) {
