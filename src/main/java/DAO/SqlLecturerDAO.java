@@ -2,6 +2,7 @@ package DAO;
 
 import DAO.Interfaces.LecturerDAO;
 import Model.*;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 import java.math.BigInteger;
 import java.sql.Connection;
@@ -89,64 +90,34 @@ public class SqlLecturerDAO implements LecturerDAO {
     }
 
 
-    private int getIdByUser(User user){
-        if(user.getType() != USERTYPE.LECTURER) {
-            System.out.println("Expected lecturer, got other.");
-            //return null;
-        }
-        Connection conn = pool.getConnection();
-        String query = "SELECT ID FROM USERS WHERE Email = '" + user.getEmail() + "';";
-        ResultSet set = null;
-        ArrayList<Integer> oneID = new ArrayList<>();
-        try{
-            PreparedStatement stm = conn.prepareStatement(query);
-            set = stm.executeQuery();
-            while(set.next()){
-                oneID.add(set.getInt(1));
-            }
-        }catch (Exception e){
-            System.out.println("Error while getting user from USERS");
-            pool.releaseConnection(conn);
-            return -1;
-        }
-        if(oneID.size()!=1){
-            System.out.println("Email is not correct");
-            pool.releaseConnection(conn);
-            return -1;
-        }
-        pool.releaseConnection(conn);
-        return oneID.get(0);
-    }
-
     /**
      *
-     * @param user
+     * @param email
      * @return Lecturer specified in user.
      * If successfully found USER_ID , it finds appropriate lecturer using this ID.
      */
 
     @Override
-    public Lecturer getLecturerByUser(User user) {
+    public Lecturer getLecturerWithEmail(String email) {
         Connection conn = pool.getConnection();
-        int id = getIdByUser(user);
-        if(id == -1 ){
-            pool.releaseConnection(conn);
-            return null;
-        }
-        String qeuery2 = "SELECT * FROM LECTURERS WHERE UserID = " + id + ";";
+        String query = "SELECT U.Email, U.PasswordHash, U.Privilege, S.UserID , S.FirstName," +
+                "S.LastName, S.Profession, S.Gender, S.DateOfBirth, S.Address, S.GroupName" +
+                "FROM USERS U JOIN STUDENTS S on U.ID = S.UserID HAVING U.Email = ?;";
         ResultSet resultSet = null;
         ArrayList<Lecturer> oneLecturer = new ArrayList<>();
         try{
-            PreparedStatement stm = conn.prepareStatement(qeuery2);
+            PreparedStatement stm = conn.prepareStatement(query);
+            stm.setString(1,email);
             resultSet = stm.executeQuery();
             while(resultSet.next()){
-                oneLecturer.add(new Lecturer(user.getEmail(),user.getPasswordHash(),USERTYPE.LECTURER,
-                        resultSet.getInt(2),  resultSet.getString(3),
-                        resultSet.getString(4), resultSet.getString(5),
-                        resultSet.getString(6).equals(Mapping.IS_MALE) ? GENDER.MALE : GENDER.FEMALE,
-                        resultSet.getDate(7), resultSet.getString(8),
-                        resultSet.getString(9).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE,
-                        new BigInteger(resultSet.getBytes(10))));
+                oneLecturer.add(new Lecturer(resultSet.getString(1),resultSet.getString(2),
+                        USERTYPE.LECTURER,
+                        resultSet.getInt(4),  resultSet.getString(5),
+                        resultSet.getString(6), resultSet.getString(7),
+                        resultSet.getString(8).equals(Mapping.IS_MALE) ? GENDER.MALE : GENDER.FEMALE,
+                        resultSet.getDate(9), resultSet.getString(10),
+                        resultSet.getString(11).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE,
+                        new BigInteger(resultSet.getBytes(12))));
             }
         }catch (Exception e){
             System.out.println("Error while getting user from USERS");
@@ -164,53 +135,25 @@ public class SqlLecturerDAO implements LecturerDAO {
 
     /**
      *
-     * @param lecturer
+     * @param email
      * @return TODO:
      */
 
     @Override
-    public List<Subject> getAllSubjects(Lecturer lecturer) {
-        int id = getIdByLecturer(lecturer);
-        if(id == -1){
-            return null;
-        }
-        String query = "SELECT * FROM SUBJECTS WHERE LecturerID != " + id + ";";
+    public List<Subject> getAllSubjects(String email) {
+        String query = "SELECT S.SubjectName, S.Credits, S.SubjectSemester, S.LecturerID" +
+                "FROM SUBJECTS S JOIN LECTURERS L on S.LecturerID = L.ID HAVING L.Email = ?;";
         Connection conn = pool.getConnection();
         try {
             List<Subject> res = new ArrayList<>();
             PreparedStatement stm = conn.prepareStatement(query);
+            stm.setString(1,email);
             ResultSet set = stm.executeQuery();
             while(set.next()){
                 res.add(new Subject(set.getString(2), set.getInt(3),
                         set.getInt(4),set.getInt(5)));
             }
             return res;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }finally {
-            pool.releaseConnection(conn);
-        }
-    }
-
-    private int getIdByLecturer(Lecturer lecturer) {
-        Connection conn = pool.getConnection();
-        String query = "SELECT ID FROM LECTURERS WHERE Email = '" + lecturer.getEmail() + "';";
-        PreparedStatement stm = null;
-        try {
-            stm = conn.prepareStatement(query);
-            ResultSet set = stm.executeQuery();
-            int counter = 0;
-            int id = 0;
-            while(set.next()){
-                counter++;
-                id = set.getInt(1);
-            }
-            pool.releaseConnection(conn);
-            if(counter == 1){
-                return id;
-            }else{
-                return -1;
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }finally {

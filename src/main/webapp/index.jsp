@@ -17,6 +17,7 @@
 <br />
 <a style="position:absolute;right:1rem" href="https://freeuni.edu.ge/"> Go to University WebPage</a>
 <br />
+<a style="position:absolute;right:1rem" href="profile.jsp"> Go to Profile WebPage</a>
 <br />
 
 <div style="text-align: center">

@@ -20,4 +20,5 @@ public interface Mapping {
     String IS_STUDENT = "type";
     String SCHOOL = "school";
 
+    String USER_OBJECT = "usrobj";
 }
