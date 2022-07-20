@@ -80,17 +80,17 @@ public class SqlStudentDAO implements StudentDAO {
     }
 
     @Override
-    public Student getStudentByUser(User user) {
+    public Student getStudentWithEmail(String email) {
         Connection conn = pool.getConnection();
         try{
             PreparedStatement stm = conn.prepareStatement("SELECT U.Email, U.PasswordHash, U.Privilege, S.FirstName," +
                     "S.LastName, S.Profession, S.CurrentSemester, S.Gender, S.DateOfBirth, S.Address," +
                     "S.StudentStatus, S.School, S.Credits, S.GPA, S.PhoneNumber, S.GroupName, S.UserID  " +
                     "FROM USERS U JOIN STUDENTS S on U.ID = S.UserID HAVING U.Email = ?");
-            stm.setString(1, user.getEmail());
+            stm.setString(1, email);
             ResultSet rs = stm.executeQuery();
             if(rs.next()){
-                String email = rs.getString(1), hash = rs.getString(2);
+                String newEmail = rs.getString(1), hash = rs.getString(2);
                 USERTYPE priv = rs.getString(3).equals(USERTYPE.STUDENT.toString()) ? USERTYPE.STUDENT : USERTYPE.LECTURER;
                 String fName = rs.getString(4), lName = rs.getString(5), prof = rs.getString(6);
                 int curSem = rs.getInt(7);
@@ -104,8 +104,10 @@ public class SqlStudentDAO implements StudentDAO {
                 BigInteger phone = new BigInteger(rs.getString(15));
                 String group = rs.getString(16);
                 int userID = rs.getInt(17);
-                Student newStud = new Student(email, hash, priv, fName, lName, prof, curSem, gender, date, address,
+
+                Student newStud = new Student(newEmail, hash, priv, fName, lName, prof, curSem, gender, date, address,
                         status, school, credits, gpa, phone, group, userID);
+
                 return newStud;
             }
             else return null;
