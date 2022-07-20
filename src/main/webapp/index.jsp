@@ -25,7 +25,7 @@
         Welcome to BetterEmis.
     </h1>
     <div style="position:relative;text-align: left; zoom: 125%;display: inline-block">
-        <form class="login-form">
+        <form class="login-form" action="loginServlet" method="post">
             <a>Email:</a>
             </br>
             <input type="text" name="mail" id="mail" required>
@@ -41,7 +41,6 @@
             <input style="position:absolute; right: -4rem" type="submit" value="Login" id="loginButton">
         </form>
     </div>
-    <script type="module" src="loginHashing.js"></script>
 </div>
 </body>
 
