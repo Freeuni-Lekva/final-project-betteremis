@@ -1,6 +1,8 @@
 package DAO;
 import DAO.Interfaces.*;
 import Model.*;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 import java.sql.*;
 
 public class SqlUserDAO implements UserDAO {
@@ -78,21 +80,12 @@ public class SqlUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean isValidUser(String email, String passHash) {
-        Connection conn = pool.getConnection();
-        PreparedStatement stm;
-        try{
-            stm = conn.prepareStatement("SELECT * FROM USERS WHERE Email=? AND PasswordHash=?;");
-            stm.setString(1, email);
-            stm.setString(2, passHash);
-            ResultSet rs = stm.executeQuery();
-            if(rs.next()){
-                return true;
-            }
-        }catch (SQLException ex){
-        }finally{
-            pool.releaseConnection(conn);
-        }
-        return false;
+    public boolean isValidUser(String email, String password) {
+        User usr = getUserByEmail(email);
+        if(usr == null) return false;
+
+        BCrypt.Verifyer verifier = BCrypt.verifyer();
+        BCrypt.Result res = verifier.verify(password.toCharArray(), usr.getPasswordHash().toCharArray());
+        return res.verified;
     }
 }
