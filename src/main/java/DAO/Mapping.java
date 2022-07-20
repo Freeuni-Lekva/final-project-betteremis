@@ -19,4 +19,5 @@ public interface Mapping {
     String GROUP_NAME = "groupname";
     String IS_STUDENT = "type";
     String SCHOOL = "school";
+
 }
