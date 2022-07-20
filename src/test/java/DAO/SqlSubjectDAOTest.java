@@ -121,9 +121,9 @@ public class SqlSubjectDAOTest {
         res =  sqlSubjectDAO.addSubject(subject3);
         assertEquals(sqlSubjectDAO.getSubjectIDByName("Computer Science 5"), res);
 
-        Assert.assertTrue(sqlSubjectDAO.removeSubject("computer science 3"));
-        Assert.assertTrue(sqlSubjectDAO.removeSubject("computer science 4"));
-        Assert.assertTrue(sqlSubjectDAO.removeSubject("computer science 5"));
+        assertTrue(sqlSubjectDAO.removeSubject("computer science 3"));
+        assertTrue(sqlSubjectDAO.removeSubject("computer science 4"));
+        assertTrue(sqlSubjectDAO.removeSubject("computer science 5"));
     }
 
 
