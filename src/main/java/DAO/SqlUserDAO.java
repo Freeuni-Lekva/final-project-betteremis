@@ -30,7 +30,8 @@ public class SqlUserDAO implements UserDAO {
             if(rs.next())
                 userID = rs.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            // No need to print the error here
+            //e.printStackTrace();
             return -1;
         }finally{
             pool.releaseConnection(conn);
@@ -48,7 +49,8 @@ public class SqlUserDAO implements UserDAO {
             int added = stm.executeUpdate();
             return added == 1;
         } catch (SQLException e) {
-            e.printStackTrace();
+            // No need to print the error here
+            //e.printStackTrace();
         }finally{
             pool.releaseConnection(conn);
         }
@@ -73,7 +75,8 @@ public class SqlUserDAO implements UserDAO {
             pool.releaseConnection(conn);
             return null;
         } catch (SQLException e) {
-            e.printStackTrace();
+            // No need to print the error here
+            //e.printStackTrace();
             pool.releaseConnection(conn);
             return null;
         }
