@@ -34,7 +34,9 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
     private int addSubjectAndPrerequisites(String subjectName,String prerequisites) throws SQLException {
         Connection conn = pool.getConnection();
         int result = -1;
-
+        /*
+        TODO: here we first need to make Prerequisites names into IDs and then continue;
+         */
         String statement = "INSERT INTO PREREQUISITES (SubjectID, Prerequisites) VALUES (?, ?);";
         PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
         SqlSubjectDAO dao=new SqlSubjectDAO(pool);
@@ -76,6 +78,9 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         }
 
         pool.releaseConnection(conn);
+        /*
+        TODO: first we need to transform IDs into Names;
+         */
         return answer;
     }
     private boolean notNumber(int i,String s){
