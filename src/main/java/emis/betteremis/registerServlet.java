@@ -40,7 +40,7 @@ public class registerServlet extends HttpServlet {
                 lDAO.addLecturer(new Lecturer(map, userID));
             }
             System.out.println("registered " + userID);
-            //TODO: print corresponding information.
+            resp.sendRedirect("index.jsp");
         }
     }
 }

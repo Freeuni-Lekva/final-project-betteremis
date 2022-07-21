@@ -2,18 +2,15 @@ package DAO;
 import DAO.Interfaces.UserDAO;
 import Model.User;
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import junit.framework.TestCase;
-import org.apache.ibatis.jdbc.ScriptRunner;
+import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
-import java.sql.Connection;
 
+import static DAO.TestingUtils.emptyTables;
 import static Model.USERTYPE.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SqlUserDAOTest extends TestCase {
+public class SqlUserDAOTest {
 
     /**
      * User objects that will be used in the tests.
@@ -26,10 +23,8 @@ public class SqlUserDAOTest extends TestCase {
     /**
      * Creates instances of all the objects needed.
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        ConnectionPool pool = new ConnectionPool(5);
+    public SqlUserDAOTest() throws FileNotFoundException {
+        ConnectionPool pool = new ConnectionPool(5, true);
         userDAO = new SqlUserDAO(pool);
         student = new User("student@gmail.com", BCrypt.withDefaults().hashToString(12, "hash".toCharArray()), STUDENT); //hash
         student2 = new User("student2@gmail.com", BCrypt.withDefaults().hashToString(12, "xAE12$#%".toCharArray()), STUDENT); //xAE12$#%
@@ -38,20 +33,8 @@ public class SqlUserDAOTest extends TestCase {
         emptyTables(pool.getConnection());
     }
 
-    /**
-     * Utility to empty all tables in the database before each test.
-     * This makes sure that tests should not interfere with each other.
-     */
-    private void emptyTables(Connection conn) throws FileNotFoundException {
-        ScriptRunner runner = new ScriptRunner(conn);
-        // Disable log writer, we don't want to see console full of sql scripts.
-        runner.setLogWriter(null);
-        Reader reader = new BufferedReader(new FileReader("TableScripts/sql_script.sql"));
-        // Run the script!
-        runner.runScript(reader);
-    }
-
     // simple add/contains test
+    @Test
     public void testAddAndIsValid(){
         int first = userDAO.addUser(student);
         assertEquals(true, userDAO.isValidUser(student.getEmail(), "hash"));
@@ -73,6 +56,7 @@ public class SqlUserDAOTest extends TestCase {
     }
 
 
+    @Test
     public void testGetUserByEmail(){
         userDAO.addUser(student);
         User user = userDAO.getUserByEmail(student.getEmail());
@@ -95,6 +79,7 @@ public class SqlUserDAOTest extends TestCase {
         assertEquals(LECTURER, leqtori.getType());
     }
 
+    @Test
     public void testRemove1(){
         int id = userDAO.addUser(student);
         assertNotSame(-1, id);
@@ -106,6 +91,7 @@ public class SqlUserDAOTest extends TestCase {
     }
 
 
+    @Test
     public void testRemove2(){
         userDAO.addUser(student);
         assertNotSame(-1, userDAO.addUser(student2));
@@ -133,6 +119,7 @@ public class SqlUserDAOTest extends TestCase {
     }
 
 
+    @Test
     // Tests every single method of SqlUserDAO class.
     public void testMiscellaneous(){
         // add everyone first
