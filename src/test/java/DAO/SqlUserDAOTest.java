@@ -1,6 +1,7 @@
 package DAO;
 import DAO.Interfaces.UserDAO;
 import Model.User;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import junit.framework.TestCase;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
@@ -30,10 +31,10 @@ public class SqlUserDAOTest extends TestCase {
         super.setUp();
         ConnectionPool pool = new ConnectionPool(5);
         userDAO = new SqlUserDAO(pool);
-        student = new User("student@gmail.com", "hash", STUDENT);
-        student2 = new User("student2@gmail.com", "xAE12$#%", STUDENT);
-        lecturer = new User("lecturer@gmail.com", "dzlierihashi123", LECTURER);
-        admin = new User("admin@gmail.com", "vergatexav123", ADMIN);
+        student = new User("student@gmail.com", BCrypt.withDefaults().hashToString(12, "hash".toCharArray()), STUDENT); //hash
+        student2 = new User("student2@gmail.com", BCrypt.withDefaults().hashToString(12, "xAE12$#%".toCharArray()), STUDENT); //xAE12$#%
+        lecturer = new User("lecturer@gmail.com", BCrypt.withDefaults().hashToString(12, "dzlierihashi123".toCharArray()), LECTURER); //dzlierihashi123
+        admin = new User("admin@gmail.com", BCrypt.withDefaults().hashToString(12, "vergatexav123".toCharArray()), ADMIN); //vergatexav123
         emptyTables(pool.getConnection());
     }
 
@@ -45,7 +46,7 @@ public class SqlUserDAOTest extends TestCase {
         ScriptRunner runner = new ScriptRunner(conn);
         // Disable log writer, we don't want to see console full of sql scripts.
         runner.setLogWriter(null);
-        Reader reader = new BufferedReader(new FileReader(".\\.\\.\\.\\TableScripts\\sql_script.sql"));
+        Reader reader = new BufferedReader(new FileReader("TableScripts/sql_script.sql"));
         // Run the script!
         runner.runScript(reader);
     }
@@ -53,14 +54,14 @@ public class SqlUserDAOTest extends TestCase {
     // simple add/contains test
     public void testAddAndIsValid(){
         int first = userDAO.addUser(student);
-        assertEquals(true, userDAO.isValidUser(student.getEmail(), student.getPasswordHash()));
-        assertEquals(false, userDAO.isValidUser(student.getEmail(), "wrongHash"));
-        assertEquals(false, userDAO.isValidUser("wrongEmail", student.getPasswordHash()));
+        assertEquals(true, userDAO.isValidUser(student.getEmail(), "hash"));
+        assertEquals(false, userDAO.isValidUser(student.getEmail(), "wrongpass"));
+        assertEquals(false, userDAO.isValidUser("wrongEmail", "hash"));
         int second = userDAO.addUser(student2);
         int third = userDAO.addUser(lecturer);
-        assertEquals(true, userDAO.isValidUser(student2.getEmail(), student2.getPasswordHash()));
-        assertEquals(true, userDAO.isValidUser(lecturer.getEmail(), lecturer.getPasswordHash()));
-        assertEquals(false, userDAO.isValidUser(student2.getEmail(), lecturer.getPasswordHash()));
+        assertEquals(true, userDAO.isValidUser(student2.getEmail(), "xAE12$#%"));
+        assertEquals(true, userDAO.isValidUser(lecturer.getEmail(), "dzlierihashi123"));
+        assertEquals(false, userDAO.isValidUser(student2.getEmail(), "dzlierihashi123"));
         assertEquals(false, userDAO.isValidUser("admin@gmail.com", "vergatexav123"));
         assertNotSame(-1, first);
         assertNotSame(-1, second);
@@ -144,8 +145,8 @@ public class SqlUserDAOTest extends TestCase {
 
         // now remove one of them
         assertTrue(userDAO.removeUser(student));
-        assertFalse(userDAO.isValidUser(student.getEmail(), student.getPasswordHash()));
-        assertTrue(userDAO.isValidUser(admin.getEmail(), admin.getPasswordHash()));
+        assertFalse(userDAO.isValidUser(student.getEmail(), "hash"));
+        assertTrue(userDAO.isValidUser(admin.getEmail(), "vergatexav123"));
 
         // can't remove student anymore
         assertFalse(userDAO.removeUser(student));
