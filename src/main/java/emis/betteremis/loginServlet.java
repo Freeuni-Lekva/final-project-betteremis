@@ -27,7 +27,7 @@ public class loginServlet extends HttpServlet {
             }
             else{
                 SqlLecturerDAO lecDAO = (SqlLecturerDAO) req.getServletContext().getAttribute(Mapping.LECTURER_DAO);
-                Lecturer lec = lecDAO.getLecturerByUser(usr);
+                Lecturer lec = lecDAO.getLecturerWithEmail(email);
                 req.getSession().setAttribute(Mapping.USER_OBJECT, lec);
             }
             //TODO: Redirect to another servlet which will print data about user accordingly.
