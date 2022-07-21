@@ -19,7 +19,7 @@ public class SqlStudentDAO implements StudentDAO {
         PreparedStatement stm;
         int studentID = 0;
         try {
-            stm = conn.prepareStatement("INSERT INTO STUDENTS (UserID, FirstName, LastName, Profession, CurrentSemester, " +
+            stm = conn.prepareStatement("INSERT IGNORE INTO STUDENTS (UserID, FirstName, LastName, Profession, CurrentSemester, " +
                     "Gender, DateOfBirth, Address, StudentStatus, School, Credits, GPA, PhoneNumber, GroupName) VALUES" +
                     "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, user.getUserID());
@@ -42,7 +42,7 @@ public class SqlStudentDAO implements StudentDAO {
             if(added != 1) throw new IllegalArgumentException();
 
             if(rs.next()) studentID = rs.getInt(1);
-
+            return studentID;
 
 
 
@@ -51,13 +51,12 @@ public class SqlStudentDAO implements StudentDAO {
             return -1;
         }
         catch (IllegalArgumentException e){
-            System.out.println("Something went wrong adding student in the database!");
+            System.out.println("Given student already exists in the database.");
             return -1;
         }
         finally {
             pool.releaseConnection(conn);
         }
-        return studentID;
     }
     @Override
     public boolean terminateStatus(Student student){

@@ -6,7 +6,7 @@ public interface StudentDAO {
     /**
      * Adds the student into the database.
      * @param student
-     * @return true if added successfully, and false otherwise.
+     * @return StudentID if added to the database, -1 - otherwise.
      */
     int addStudent(Student student);
 
