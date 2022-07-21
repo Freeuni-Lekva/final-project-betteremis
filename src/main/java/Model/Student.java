@@ -116,6 +116,21 @@ public class Student extends User{
         return birthDate;
     }
 
-
-
+    /** compares two student objects
+     * @param o Student object to compare with.
+     * @return true if identical, false - otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        Student student = (Student) o;
+        return getUserID() == student.getUserID() && getCurrentSemester() == student.getCurrentSemester() && 
+                getCreditsDone() == student.getCreditsDone() && Double.compare(student.getGpa(), getGpa()) == 0 && 
+                getFirstName().equals(student.getFirstName()) && getLastName().equals(student.getLastName()) && 
+                getProfession().equals(student.getProfession()) && getAddress().equals(student.getAddress()) && 
+                getSchool().equals(student.getSchool()) && getGroup().equals(student.getGroup()) && 
+                getPhone().equals(student.getPhone()) && getGender() == student.getGender() && 
+                getStatus() == student.getStatus() && getBirthDate().equals(student.getBirthDate());
+    }
 }

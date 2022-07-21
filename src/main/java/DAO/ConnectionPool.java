@@ -11,8 +11,16 @@ import static DAO.DatabaseInfo.*;
 public class ConnectionPool {
 
     private BlockingQueue<Connection> queue;
+    public ConnectionPool(int numConnections){
+       this(numConnections, false);
+    }
 
-    public ConnectionPool(int numConnections) {
+    /**
+     *
+     * @param numConnections number of allowed connections.
+     * @param test default value is false.
+     */
+    public ConnectionPool(int numConnections, boolean test) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -23,7 +31,8 @@ public class ConnectionPool {
             try {
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:" + PORT, USERNAME, PASSWORD);
                 Statement stm = con.createStatement();
-                stm.execute("USE " + DATABASE_NAME+";");
+                String db = test ? TEST_DATABASE_NAME : DATABASE_NAME;
+                stm.execute("USE " + db +";");
                 queue.add(con);
             } catch (SQLException e) {
                 throw new RuntimeException(e);

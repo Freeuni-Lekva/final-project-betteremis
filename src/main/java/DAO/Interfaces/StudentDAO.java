@@ -6,16 +6,16 @@ public interface StudentDAO {
     /**
      * Adds the student into the database.
      * @param student
-     * @return true if added successfully, and false otherwise.
+     * @return StudentID if added to the database, -1 - otherwise.
      */
     int addStudent(Student student);
 
     /**
      * Finds the student with the given id and returns it as a Student object.
-     * @param user id of a student.
+     * @param email email of a student.
      * @return Student with the given ID.
      */
-    Student getStudentByUser(User user);
+    Student getStudentWithEmail(String email);
 
     /**
      * Sets student's status to INACTIVE.

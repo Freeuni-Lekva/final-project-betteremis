@@ -1,10 +1,10 @@
 package emis.betteremis;
 
 
-import DAO.Mapping;
-import DAO.SqlUserDAO;
+import DAO.*;
 import Helper.Utils;
 import Model.*;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,12 +16,25 @@ import java.util.Map;
 public class loginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Contains email and password hash
-        Map<String, Object> map = Utils.parseJson(req);
+        String email = (String)req.getParameter(Mapping.EMAIL), password = (String)req.getParameter(Mapping.PASSWORD);
         SqlUserDAO usrDAO = (SqlUserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
-        //User usr = usrDAO.getUser((String)map.get("email"), (String)map.get("passhash"));
-        //if(usr != null)
-        //    System.out.println(usr.getEmail());
+        User usr = usrDAO.getUserByEmail(email);
+        if(usrDAO.isValidUser(email, password)){
+            if(usr.getType() == USERTYPE.STUDENT){
+                SqlStudentDAO studDAO = (SqlStudentDAO) req.getServletContext().getAttribute(Mapping.STUDENT_DAO);
+                Student stud = studDAO.getStudentWithEmail(email);
+                req.getSession().setAttribute(Mapping.USER_OBJECT, stud);
+            }
+            else{
+                SqlLecturerDAO lecDAO = (SqlLecturerDAO) req.getServletContext().getAttribute(Mapping.LECTURER_DAO);
+                Lecturer lec = lecDAO.getLecturerWithEmail(email);
+                req.getSession().setAttribute(Mapping.USER_OBJECT, lec);
+            }
+            //TODO: Redirect to another servlet which will print data about user accordingly.
+        }
+        else{
+            //TODO: Print that provided information is not correct, ask them to try again.
+        }
     }
 
 
