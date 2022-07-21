@@ -25,11 +25,6 @@ public class SqlLecturerDAO implements LecturerDAO {
         this.pool = pool;
     }
 
-    /**
-     *
-     * @param lecturer
-     * @return true if lecturer has added successfully, otherwise returns false.
-     */
 
     @Override
     public boolean addLecturer(Lecturer lecturer){
@@ -67,10 +62,6 @@ public class SqlLecturerDAO implements LecturerDAO {
         }
     }
 
-    /**
-     * @param lecturer
-     * @return true if the given lecturer has been deleted successfully.
-     */
     @Override
     public boolean removeLecturer(Lecturer lecturer){
         Connection conn = pool.getConnection();
@@ -88,14 +79,6 @@ public class SqlLecturerDAO implements LecturerDAO {
             pool.releaseConnection(conn);
         }
     }
-
-
-    /**
-     *
-     * @param email
-     * @return Lecturer specified in user.
-     * If successfully found USER_ID , it finds appropriate lecturer using this ID.
-     */
 
     @Override
     public Lecturer getLecturerWithEmail(String email) {
@@ -132,12 +115,6 @@ public class SqlLecturerDAO implements LecturerDAO {
         pool.releaseConnection(conn);
         return oneLecturer.get(0);
     }
-
-    /**
-     *
-     * @param email
-     * @return TODO:
-     */
 
     @Override
     public List<Subject> getAllSubjects(String email) {
