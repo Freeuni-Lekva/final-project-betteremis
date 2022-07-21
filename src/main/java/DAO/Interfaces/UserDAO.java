@@ -28,9 +28,9 @@ public interface UserDAO {
     /**
      * Returns true if the user with given email and password is present in the database.
      * @param email
-     * @param passHash
+     * @param password
      */
-    boolean isValidUser(String email, String passHash);
+    boolean isValidUser(String email, String password);
 
 
 }

@@ -19,8 +19,8 @@ public interface LecturerDAO {
      */
     boolean removeLecturer(Lecturer lecturer);
 
-    Lecturer getLecturerByUser(User user);
+    Lecturer getLecturerWithEmail(String email);
 
-    List<Subject> getAllSubjects(Lecturer lecturer);
+    List<Subject> getAllSubjects(String email);
 
 }
