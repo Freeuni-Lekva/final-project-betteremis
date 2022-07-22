@@ -10,14 +10,8 @@ public interface LecturerDAO {
      * @param lecturer
      * @return true if added successfully, and false otherwise.
      */
-    boolean addLecturer(Lecturer lecturer);
+    int addLecturer(Lecturer lecturer);
 
-    /**
-     * Removes the lecturer from the database.
-     * @param lecturer
-     * @return true if removed successfully, false otherwise.
-     */
-    boolean removeLecturer(Lecturer lecturer);
 
     /**
      * Finds the lecturer in the database given his/her email,
