@@ -34,7 +34,7 @@ public class SqlSubjectDAO implements SubjectDAO {
                 result = keys.getInt(1);
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            //e.printStackTrace();
             result = -1;
         }
         pool.releaseConnection(conn);
@@ -56,12 +56,12 @@ public class SqlSubjectDAO implements SubjectDAO {
             int updateResult = ps.executeUpdate();
             result = updateResult == 1? true : false;
         }catch (SQLException e){
-            e.printStackTrace();
-            pool.releaseConnection(conn);
+            //e.printStackTrace();
             result = false;
         }
-
-        pool.releaseConnection(conn);
+        finally{
+            pool.releaseConnection(conn);
+        }
         return result;
     }
 
@@ -77,12 +77,13 @@ public class SqlSubjectDAO implements SubjectDAO {
                 result = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
             }
         }catch (SQLException e){
-            e.printStackTrace();
-            pool.releaseConnection(conn);
+            //e.printStackTrace();
             return null;
         }
+        finally{
+            pool.releaseConnection(conn);
+        }
 
-        pool.releaseConnection(conn);
         return result;
     }
 
@@ -104,7 +105,7 @@ public class SqlSubjectDAO implements SubjectDAO {
                 result = rs.getInt(1);
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            //e.printStackTrace();
             result = -1;
         }
         pool.releaseConnection(conn);
@@ -112,16 +113,16 @@ public class SqlSubjectDAO implements SubjectDAO {
     }
 
     public void removeAll(){
-
         Connection conn = pool.getConnection();
         int updateResult;
         try {
             String statement = "DELETE FROM SUBJECTS;";
             PreparedStatement ps = conn.prepareStatement(statement);
-            pool.releaseConnection(conn);
             ps.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
+        }catch (SQLException e) {
+            // e.printStackTrace();
+        }
+        finally{
             pool.releaseConnection(conn);
         }
     }
