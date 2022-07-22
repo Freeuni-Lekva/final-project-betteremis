@@ -9,7 +9,7 @@ public interface PrerequisitesDAO {
     boolean canThisSubjectChosenByStudent(String email,String subjectName);
 
     /**
-     * This function gives String of prerequisites;( P.S. currently ID's have to change it into Names)
+     * This function gives String of prerequisites;
      * @param subjectName  is name of subject for which we are interested to know it's prerequisites;
      */
     String getSubjectPrerequisitesByName(String subjectName);
@@ -17,7 +17,7 @@ public interface PrerequisitesDAO {
     /**
      * This function updates prerequisites of subject;
      * @param subjectName  Name of subject for which we are interested to update it's prerequisites;
-     * @param prerequisites  String of prerequisites written with names; (P.S. must transform into IDs)
+     * @param prerequisites  String of prerequisites written with names;
      */
     void updatePrerequisite(String subjectName,String prerequisites);
 }

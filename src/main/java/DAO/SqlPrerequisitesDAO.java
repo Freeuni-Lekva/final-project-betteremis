@@ -13,6 +13,16 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         this.pool = pool;
     }
 
+    class Pair{
+        int first;
+        int second;
+
+        public Pair(int i, int id) {
+            first=i;
+            second=id;
+        }
+
+    }
     private boolean removeSubjectAndPrerequisite(String subjectName){
         Connection conn = pool.getConnection();
         boolean result = false;
@@ -34,14 +44,38 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
     private int addSubjectAndPrerequisites(String subjectName,String prerequisites) throws SQLException {
         Connection conn = pool.getConnection();
         int result = -1;
-        /*
-        TODO: here we first need to make Prerequisites names into IDs and then continue;
-         */
+        String prerequisitesInIDs="";
+        for(int i=0;i<prerequisites.length();i++){
+            if(notNumberAndNotChar(i,prerequisites)==false){
+                String currentName="";
+                int currentID=0;
+                while(i<prerequisites.length()&&((prerequisites.charAt(i)>='A'&&prerequisites.charAt(i)<='Z')||
+                        (prerequisites.charAt(i)>='a'&&prerequisites.charAt(i)<='z'))){
+                    currentName+=prerequisites.charAt(i);
+                    i++;
+                }
+                try{
+                    String statement = "SELECT S.ID FROM SUBJECTS S WHERE S.SubjectName = ?;";
+                    PreparedStatement ps = conn.prepareStatement(statement);
+                    ps.setString(1, currentName);
+                    ResultSet rs = ps.executeQuery();
+                    while(rs.next()){
+                        currentID=rs.getInt(1);
+                    }
+                }catch (SQLException e){
+                    e.printStackTrace();
+                    pool.releaseConnection(conn);
+                }
+                prerequisitesInIDs+=((Integer)currentID).toString();
+            }else{
+                prerequisitesInIDs+=prerequisites.charAt(i);
+            }
+        }
         String statement = "INSERT INTO PREREQUISITES (SubjectID, Prerequisites) VALUES (?, ?);";
         PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
         SqlSubjectDAO dao=new SqlSubjectDAO(pool);
         ps.setInt(1, dao.getSubjectIDByName(subjectName));
-        ps.setString(2, prerequisites);
+        ps.setString(2, prerequisitesInIDs);
         if (ps.executeUpdate() == 1) {
             ResultSet keys = ps.getGeneratedKeys();
             keys.next();
@@ -49,7 +83,6 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         }
         pool.releaseConnection(conn);
         return result;
-
     }
     public void updatePrerequisite(String subjectName,String prerequisites) {
         removeSubjectAndPrerequisite(subjectName);
@@ -76,39 +109,74 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
             pool.releaseConnection(conn);
             return null;
         }
-
+        String answerInNames="";
+        for(int i=0;i<answer.length();i++){
+            if(notNumberAndNotChar(i,answer)){
+                answerInNames+=answer.charAt(i);
+            }else {
+                int id=0;
+                Pair iAndID=parsedID(i,answer,id);
+                id=iAndID.second;
+                i=iAndID.first;
+                String currentName=idToName(conn, id);
+                answerInNames+=currentName;
+            }
+        }
         pool.releaseConnection(conn);
-        /*
-        TODO: first we need to transform IDs into Names;
-         */
-        return answer;
+        return answerInNames;
     }
-    private boolean notNumber(int i,String s){
+
+    private String idToName(Connection conn, int id) {
+        String currentName = "";
+        try {
+            String statement = "SELECT S.subkectName FROM SUBJECTS S WHERE S.ID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                currentName = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+        }
+        return currentName;
+    }
+
+    private boolean notNumberAndNotChar(int i,String s){
         if(s.charAt(i)=='|'||s.charAt(i)=='&'||
                 s.charAt(i)=='('||s.charAt(i)==')'||delim(s.charAt(i))){
             return true;
         }
         return false;
     }
+    private Pair parsedID(int i, String s, int id){
+        while(i<s.length()&&notNumberAndNotChar(i,s)==false){
+            id*=10;
+            id+=s.charAt(i)-'0';
+            i++;
+        }
+        Pair answer=new Pair(i,id);
+        return answer;
+    }
     public boolean canThisSubjectChosenByStudent(String email,String subjectName){
         String prerequisitesOriginal=getSubjectPrerequisitesByName(subjectName);
         String prerequisitesBinaryForm="";
         for(int i=0;i<prerequisitesOriginal.length();i++){
-            if(notNumber(i,prerequisitesOriginal)==true){
+            if(notNumberAndNotChar(i,prerequisitesOriginal)==true){
                 prerequisitesBinaryForm+=prerequisitesOriginal.charAt(i);
             }else{
                 int id=0;
-                while(i<prerequisitesOriginal.length()){
-                    id*=10;
-                    id+=prerequisitesOriginal.charAt(i)-'0';
-                    i++;
-                }
+                Pair iAndID=parsedID(i,prerequisitesOriginal,id);
+                id=iAndID.second;
+                i=iAndID.first;
                 Connection conn = pool.getConnection();
+                String currentName=idToName(conn, id);
                 boolean x=false;
                 try{
                     String statement = "SELECT SH.IsCompleted FROM USERS U JOIN STUDENTS ST ON U.ID=ST.UserID JOIN SUBJECTS_HISTORY SH ON ST.ID=SH.UserID JOIN SUBJECTS S ON SH.SubjectID=S.ID HAVING S.SubjectName = ? and ST.email = ?;";
                     PreparedStatement ps = conn.prepareStatement(statement);
-                    ps.setString(1, subjectName);
+                    ps.setString(1, currentName);
                     ps.setString(2, email);
                     ResultSet rs = ps.executeQuery();
                     while(rs.next()){
@@ -177,7 +245,6 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
                     i++;
                 }
                 --i;
-//            cout<<number<<endl;
                 st.push(number);
             }
         }
