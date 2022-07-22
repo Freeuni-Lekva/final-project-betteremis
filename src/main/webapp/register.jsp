@@ -30,7 +30,7 @@
 </script>
     <h1>Please fill the Registration form</h1>
     <div style="display: inline-block; overflow: hidden;">
-        <form class="reg-form">
+        <form class="reg-form" action="index.jsp" method="post">
             <div style="display: inline-block; text-align: center; float: left;">
 
                 <a>First Name</a>
