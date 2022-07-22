@@ -2,7 +2,6 @@ package DAO;
 
 import DAO.Interfaces.PrerequisitesDAO;
 import Model.Subject;
-import jdk.internal.net.http.common.Pair;
 
 import java.sql.*;
 import java.util.Stack;
