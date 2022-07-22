@@ -12,7 +12,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
-<script src="registerHashing.js"></script>
 <script src="https://unpkg.com/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
 <html>
 <head>
@@ -30,7 +29,7 @@
 </script>
     <h1>Please fill the Registration form</h1>
     <div style="display: inline-block; overflow: hidden;">
-        <form class="reg-form" action="index.jsp" method="post">
+        <form class="reg-form">
             <div style="display: inline-block; text-align: center; float: left;">
 
                 <a>First Name</a>
@@ -104,5 +103,6 @@
             </div>
         </form>
     </div>
+<script src="./registerHashing.js" type="text/javascript"></script>
 </body>
 </html>
