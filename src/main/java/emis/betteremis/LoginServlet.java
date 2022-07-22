@@ -2,18 +2,20 @@ package emis.betteremis;
 
 
 import DAO.*;
-import Helper.Utils;
 import Model.*;
-import at.favre.lib.crypto.bcrypt.BCrypt;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Map;
 
-@WebServlet(name = "loginServlet", value = "/loginServlet")
-public class loginServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", value = "/LoginServlet")
+public class LoginServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.sendRedirect("index.jsp");
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter(Mapping.EMAIL), password = req.getParameter(Mapping.PASSWORD);
@@ -30,7 +32,7 @@ public class loginServlet extends HttpServlet {
                 Lecturer lec = lecDAO.getLecturerWithEmail(email);
                 req.getSession().setAttribute(Mapping.USER_OBJECT, lec);
             }
-            resp.sendRedirect("profile.jsp");
+            resp.sendRedirect("studentProfile.jsp");
         }
         else{
             req.setAttribute("incorrect", true);
