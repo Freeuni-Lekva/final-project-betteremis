@@ -33,4 +33,12 @@ public class User {
         return email;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        User user = (User) o;
+        return user.getEmail().equals(this.email) && user.getPasswordHash().equals(this.passwordHash)
+                && user.getType().equals(this.type);
+    }
 }

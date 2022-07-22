@@ -5,10 +5,7 @@ import Model.*;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -25,21 +22,31 @@ public class SqlLecturerDAO implements LecturerDAO {
         this.pool = pool;
     }
 
+    /**
+     *
+     * @param lecturer
+     * @return the ID of a new lecturer.
+     */
 
     @Override
-    public boolean addLecturer(Lecturer lecturer){
+    public int addLecturer(Lecturer lecturer){
         Connection conn = pool.getConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO LECTURERS (UserID, FirstName, LastName, " +
+            PreparedStatement stm = conn.prepareStatement("INSERT IGNORE INTO LECTURERS (UserID, FirstName, LastName, " +
                     "Profession, Gender, DateOfBirth, Address, LecturerStatus, PhoneNumber) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?)");
+                    "VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             setFields(stm,lecturer);
             int added = stm.executeUpdate();
             if(added != 1) throw new SQLException();
-            return true;
+            ResultSet set = stm.getGeneratedKeys();
+            int lecturerID = -1;
+            if(set.next()){
+                lecturerID = set.getInt(1);
+            }
+            return lecturerID;
         } catch (SQLException e) {
             System.out.println("Something happened while adding lecturer!");
-            return false;
+            return -1;
         }
         finally {
             pool.releaseConnection(conn);
@@ -62,64 +69,50 @@ public class SqlLecturerDAO implements LecturerDAO {
         }
     }
 
-    @Override
-    public boolean removeLecturer(Lecturer lecturer){
-        Connection conn = pool.getConnection();
-        try{
-            PreparedStatement stm = conn.prepareStatement("DELETE FROM LECTURERS WHERE UserID = ?");
-            stm.setInt(1, lecturer.getUserID());
-            int removed = stm.executeUpdate();
-            if(removed != 1) throw new SQLException();
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Could not find lecturer with given ID or something happened while removing from database!");
-            return false;
-        }
-        finally {
-            pool.releaseConnection(conn);
-        }
-    }
-
+    /**
+     *
+     * @param email Email of the lecturer
+     * @return the Lecturer having the given email.
+     */
     @Override
     public Lecturer getLecturerWithEmail(String email) {
         Connection conn = pool.getConnection();
         String query = "SELECT U.Email, U.PasswordHash, U.Privilege, S.UserID , S.FirstName," +
-                "S.LastName, S.Profession, S.Gender, S.DateOfBirth, S.Address, S.GroupName" +
-                "FROM USERS U JOIN LECTURERS S on U.ID = S.UserID HAVING U.Email = ?;";
-        ResultSet resultSet = null;
-        ArrayList<Lecturer> oneLecturer = new ArrayList<>();
+                "S.LastName, S.Profession, S.Gender, S.DateOfBirth, S.Address, S.LecturerStatus ,S.PhoneNumber " +
+                "FROM USERS U JOIN LECTURERS S on U.ID = S.UserID WHERE U.Email = ?";
         try{
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setString(1,email);
-            resultSet = stm.executeQuery();
-            while(resultSet.next()){
-                oneLecturer.add(new Lecturer(resultSet.getString(1),resultSet.getString(2),
+            ResultSet resultSet = stm.executeQuery();
+            if(resultSet.next()){
+                return new Lecturer(resultSet.getString(1),resultSet.getString(2),
                         USERTYPE.LECTURER,
                         resultSet.getInt(4),  resultSet.getString(5),
                         resultSet.getString(6), resultSet.getString(7),
                         resultSet.getString(8).equals(Mapping.IS_MALE) ? GENDER.MALE : GENDER.FEMALE,
                         resultSet.getDate(9), resultSet.getString(10),
                         resultSet.getString(11).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE,
-                        new BigInteger(resultSet.getBytes(12))));
+                        new BigInteger(resultSet.getBytes(12)));
             }
+            return null;
         }catch (Exception e){
             System.out.println("Error while getting user from USERS");
-            pool.releaseConnection(conn);
             return null;
-        }
-        if(oneLecturer.size()!=1){
-            System.out.println("More than one lecturer encountered");
+        }finally {
             pool.releaseConnection(conn);
-            return null;
         }
-        pool.releaseConnection(conn);
-        return oneLecturer.get(0);
     }
+
+    /**
+     *
+     * @param email Email of the lecturer
+     * @return the list of all subjects of the Lecturer having the given email.
+     */
 
     @Override
     public List<Subject> getAllSubjects(String email) {
-        String query = "SELECT S.SubjectName, S.Credits, S.SubjectSemester, S.LecturerID" +
-                "FROM SUBJECTS S JOIN LECTURERS L on S.LecturerID = L.ID HAVING L.Email = ?;";
+        String query = "SELECT S.SubjectName, S.Credits, S.SubjectSemester, S.LecturerID " +
+                "FROM SUBJECTS S JOIN LECTURERS L on S.LecturerID = L.ID JOIN USERS U on U.ID = L.UserID WHERE U.Email = ?";
         Connection conn = pool.getConnection();
         try {
             List<Subject> res = new ArrayList<>();
