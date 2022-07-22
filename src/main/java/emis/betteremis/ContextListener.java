@@ -1,6 +1,7 @@
 package emis.betteremis;
 
 import DAO.*;
+import DAO.Interfaces.*;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
@@ -11,10 +12,10 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         pool = new ConnectionPool(5);
-        SqlUserDAO sqlUserDAO = new SqlUserDAO(pool);
-        SqlStudentDAO sqlStudentDAO = new SqlStudentDAO(pool);
-        SqlLecturerDAO sqlLecturerDAO = new SqlLecturerDAO(pool);
-        SqlSubjectDAO sqlSubjectDAO = new SqlSubjectDAO(pool);
+        UserDAO sqlUserDAO = new SqlUserDAO(pool);
+        StudentDAO sqlStudentDAO = new SqlStudentDAO(pool);
+        LecturerDAO sqlLecturerDAO = new SqlLecturerDAO(pool);
+        SubjectDAO sqlSubjectDAO = new SqlSubjectDAO(pool);
         sce.getServletContext().setAttribute(Mapping.USER_DAO, sqlUserDAO);
         sce.getServletContext().setAttribute(Mapping.STUDENT_DAO, sqlStudentDAO);
         sce.getServletContext().setAttribute(Mapping.LECTURER_DAO, sqlLecturerDAO);
