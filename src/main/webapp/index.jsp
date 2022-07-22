@@ -24,11 +24,19 @@
     <h1 style="text-align: center">
         Welcome to BetterEmis.
     </h1>
+    <%
+        if(request.getAttribute("incorrect") != null && (boolean) request.getAttribute("incorrect")){
+    %>
+            <a style="color: red">* Provided Email or the Password is incorrect.</a>
+            </br>
+    <%
+        }
+    %>
     <div style="position:relative;text-align: left; zoom: 125%;display: inline-block">
         <form class="login-form" action="loginServlet" method="post">
             <a>Email:</a>
             </br>
-            <input type="text" name="mail" id="mail" required>
+            <input type="text" name="email" id="email" required>
             <p style="margin:8px;"></p>
             <a>Password:</a>
             </br>
