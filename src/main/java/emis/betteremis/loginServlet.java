@@ -16,7 +16,7 @@ import java.util.Map;
 public class loginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = (String)req.getParameter(Mapping.EMAIL), password = (String)req.getParameter(Mapping.PASSWORD);
+        String email = req.getParameter(Mapping.EMAIL), password = req.getParameter(Mapping.PASSWORD);
         SqlUserDAO usrDAO = (SqlUserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
         User usr = usrDAO.getUserByEmail(email);
         if(usrDAO.isValidUser(email, password)){
@@ -30,10 +30,11 @@ public class loginServlet extends HttpServlet {
                 Lecturer lec = lecDAO.getLecturerWithEmail(email);
                 req.getSession().setAttribute(Mapping.USER_OBJECT, lec);
             }
-            //TODO: Redirect to another servlet which will print data about user accordingly.
+            resp.sendRedirect("profile.jsp");
         }
         else{
-            //TODO: Print that provided information is not correct, ask them to try again.
+            req.setAttribute("incorrect", true);
+            req.getRequestDispatcher("index.jsp").forward(req, resp);
         }
     }
 
