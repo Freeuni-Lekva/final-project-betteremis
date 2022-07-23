@@ -1,4 +1,4 @@
-package emis.betteremis;
+package Servlets;
 
 import DAO.*;
 import DAO.Interfaces.*;

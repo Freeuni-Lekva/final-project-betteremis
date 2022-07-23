@@ -27,7 +27,7 @@ public class SqlSubectHistoryDAO implements SubjectHistoryDAO {
             PreparedStatement stm = conn.prepareStatement("SELECT S.Semester, SU.SubjectName, " +
                     " SU.Credits, SU.SubjectSemester, SU.LecturerID " +
                     " FROM STUDENTS U JOIN SUBJECTS_HISTORY S on U.ID = S.UserID " +
-                    " JOIN SUBJECTS SU ON S.SubjectID = SU.ID HAVING U.UserID = ?");
+                    " JOIN SUBJECTS SU ON S.SubjectID = SU.ID WHERE U.UserID = ?");
             stm.setInt(1, student.getUserID() );
             ResultSet set = stm.executeQuery();
             Map<Integer, ArrayList<Subject> > result = new HashMap<>();
@@ -35,7 +35,7 @@ public class SqlSubectHistoryDAO implements SubjectHistoryDAO {
                 int semester = set.getInt(1);
                 String name = set.getString(2); int credits = set.getInt(3);
                 int semesterS = set.getInt(4); int lecID = set.getInt(5);
-                Subject subject = new Subject(name,credits,semesterS,lecID);
+                Subject subject = new Subject(name,credits,lecID);
                 if(result.containsKey(semester)){
                     result.get(semester).add(subject);
                 }else{
