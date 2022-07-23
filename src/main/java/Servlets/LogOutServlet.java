@@ -1,4 +1,4 @@
-package emis.betteremis;
+package Servlets;
 
 import DAO.Mapping;
 
@@ -20,7 +20,7 @@ public class LogOutServlet extends HttpServlet {
         while(attributes.hasMoreElements()){
             session.removeAttribute(attributes.nextElement());
         }
-        response.sendRedirect("homepage");
+        response.sendRedirect("index.jsp");
         return;
     }
 }

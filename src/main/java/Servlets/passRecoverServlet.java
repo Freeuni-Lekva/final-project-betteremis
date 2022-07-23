@@ -1,4 +1,4 @@
-package emis.betteremis;
+package Servlets;
 
 import javax.servlet.annotation.WebServlet;
 

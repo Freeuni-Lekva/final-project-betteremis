@@ -75,11 +75,9 @@ CREATE TABLE SUBJECTS (
 	ID int NOT NULL AUTO_INCREMENT,
     SubjectName CHAR(255) NOT NULL UNIQUE,
     Credits int NOT NULL,
-	SubjectSemester int NOT NULL,
 	LecturerID int NOT NULL,
 	
-	
-	CHECK (SubjectSemester >= 0),
+
 	CHECK (Credits >= 0),
 	
 	FOREIGN KEY (LecturerID) REFERENCES LECTURERS(ID) ON DELETE CASCADE,

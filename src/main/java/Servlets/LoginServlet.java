@@ -1,4 +1,4 @@
-package emis.betteremis;
+package Servlets;
 
 
 import DAO.*;
@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
                 Lecturer lec = lecDAO.getLecturerWithEmail(email);
                 req.getSession().setAttribute(Mapping.USER_OBJECT, lec);
             }
-            resp.sendRedirect("studentProfile.jsp");
+            resp.sendRedirect("studentPages/studentProfile.jsp");
         }
         else{
             req.setAttribute("incorrect", true);

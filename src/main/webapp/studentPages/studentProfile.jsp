@@ -17,7 +17,7 @@
 <html>
 <head>
     <title>User Profile</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
@@ -64,11 +64,11 @@
         <ul>
             <li style="--i:7;" > <a href="studentProfile.jsp"> Personal Info</a></li>
             <li style="--i:6;"> <a href="studyingCard.jsp"> Studying Card </a> </li>
-            <li style="--i:5;"> <a href="registration.jsp"> Academic Registration</a> </li>
+            <li style="--i:5;"> <a href="../registration.jsp"> Academic Registration</a> </li>
             <li style="--i:4;"> <a href="records.jsp"> Academic Records</a> </li>
             <li style="--i:3;"> <a href="finances.jsp"> Finances</a> </li>
             <li style="--i:2;"> <a href="library.jsp"> Library</a> </li>
-            <li style="--i:1;"> <a href="LogOutServlet"> Log Out</a> </li>
+            <li style="--i:1;"> <a href="../LogOutServlet"> Log Out</a> </li>
         </ul>
     </div>
 </body>

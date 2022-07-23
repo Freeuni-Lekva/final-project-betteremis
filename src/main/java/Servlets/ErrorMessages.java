@@ -1,4 +1,4 @@
-package emis.betteremis;
+package Servlets;
 
 /**
  * Class used for constant strings, which are error messages,
