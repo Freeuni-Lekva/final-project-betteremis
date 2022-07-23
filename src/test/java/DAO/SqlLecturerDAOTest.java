@@ -64,8 +64,8 @@ public class SqlLecturerDAOTest {
         lecturer2 = new Lecturer(user2.getEmail(),user2.getPasswordHash(),user2.getType(),2,"nikolozi","tsimaka",
                 "developer",GENDER.MALE,Date.valueOf("2002-04-12"),"tbilisi",STATUS.ACTIVE,new BigInteger("597"));
 
-        subject1 = new Subject("mathematics",6,5,1);
-        subject2 = new Subject("programming",6,5,2);
+        subject1 = new Subject("mathematics",6,1);
+        subject2 = new Subject("programming",6,2);
 
     }
 
@@ -154,7 +154,7 @@ public class SqlLecturerDAOTest {
         //Now add more subjects
         String[] stA = new String[]{"A","B","C","D"};
         for (int i = 0; i < stA.length; i++){
-            subjectDAO.addSubject(new Subject(stA[i],6,5,1));
+            subjectDAO.addSubject(new Subject(stA[i],6,1));
         }
         res = lecturerDAO.getAllSubjects(lecturer1.getEmail());
         assertTrue(res.size() == stA.length+1);
