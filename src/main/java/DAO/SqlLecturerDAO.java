@@ -111,7 +111,7 @@ public class SqlLecturerDAO implements LecturerDAO {
 
     @Override
     public List<Subject> getAllSubjects(String email) {
-        String query = "SELECT S.SubjectName, S.Credits, S.SubjectSemester, S.LecturerID " +
+        String query = "SELECT S.SubjectName, S.Credits, S.LecturerID " +
                 "FROM SUBJECTS S JOIN LECTURERS L on S.LecturerID = L.ID JOIN USERS U on U.ID = L.UserID WHERE U.Email = ?";
         Connection conn = pool.getConnection();
         try {
@@ -121,7 +121,7 @@ public class SqlLecturerDAO implements LecturerDAO {
             ResultSet set = stm.executeQuery();
             while(set.next()){
                 res.add(new Subject(set.getString(1), set.getInt(2),
-                        set.getInt(3),set.getInt(4)));
+                        set.getInt(3)));
             }
             return res;
         } catch (SQLException e) {

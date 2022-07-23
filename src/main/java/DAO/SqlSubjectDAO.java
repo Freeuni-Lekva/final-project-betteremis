@@ -22,12 +22,11 @@ public class SqlSubjectDAO implements SubjectDAO {
         try{
             int ID = subject.getLecturerID();
 
-            String statement = "INSERT INTO SUBJECTS (SubjectName, Credits, SubjectSemester, LecturerID) VALUES (?, ?, ?, ?);";
+            String statement = "INSERT INTO SUBJECTS (SubjectName, Credits, LecturerID) VALUES (?, ?, ?);";
             PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, subject.getName());
             ps.setInt(2, subject.getNumCredits());
-            ps.setInt(3, subject.getSemester());
-            ps.setInt(4, ID);
+            ps.setInt(3, ID);
             if (ps.executeUpdate() == 1) {
                 ResultSet keys = ps.getGeneratedKeys();
                 keys.next();
@@ -74,7 +73,7 @@ public class SqlSubjectDAO implements SubjectDAO {
             ps.setString(1, subjectName);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                result = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+                result = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
             }
         }catch (SQLException e){
             //e.printStackTrace();

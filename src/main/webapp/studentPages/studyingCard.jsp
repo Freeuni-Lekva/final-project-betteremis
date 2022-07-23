@@ -13,7 +13,7 @@
 <html>
 <head>
     <title>Card</title>
-    <link rel="stylesheet" href="cardStyle.css">
+    <link rel="stylesheet" href="../css/cardStyle.css">
 </head>
 <body>
 
