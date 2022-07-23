@@ -13,6 +13,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+<script src="registerHashing.js"></script>
 <html>
 <head>
     <title>Registration</title>

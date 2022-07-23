@@ -25,4 +25,6 @@ public interface SubjectHistoryDAO {
      */
     void addStudentAndSubject(Student st, Subject sb);
 
+
+    void updateStudentGrade(Student st, Subject sb, int grade);
 }

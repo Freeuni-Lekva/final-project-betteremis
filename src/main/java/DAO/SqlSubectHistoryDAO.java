@@ -60,4 +60,9 @@ public class SqlSubectHistoryDAO implements SubjectHistoryDAO {
     public void addStudentAndSubject(Student st, Subject sb) {
 
     }
+
+    @Override
+    public void updateStudentGrade(Student st, Subject sb, int grade) {
+
+    }
 }
