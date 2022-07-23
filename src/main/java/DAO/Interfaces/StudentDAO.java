@@ -2,6 +2,9 @@ package DAO.Interfaces;
 
 import Model.*;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public interface StudentDAO {
     /**
      * Adds the student into the database.
@@ -23,4 +26,5 @@ public interface StudentDAO {
      * @return true - if student status was ACTIVE before the change, false - otherwise.
      */
     boolean terminateStatus(Student student);
+
 }
