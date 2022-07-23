@@ -88,4 +88,18 @@ public class Lecturer extends User{
     public int getUserID() {
         return userID;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        Lecturer lecturer = (Lecturer) o;
+        return getUserID() == lecturer.getUserID() &&
+                getFirstName().equals(lecturer.getFirstName()) && getLastName().equals(lecturer.getLastName()) &&
+                getProfession().equals(lecturer.getProfession()) && getAddress().equals(lecturer.getAddress()) &&
+                getPhone().equals(lecturer.getPhone()) && getGender() == lecturer.getGender() &&
+                getStatus() == lecturer.getStatus() && getBirthDate().equals(lecturer.getBirthDate());
+    }
+
 }

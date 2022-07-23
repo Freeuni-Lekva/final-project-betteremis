@@ -78,6 +78,7 @@ public class SqlStudentDAO implements StudentDAO {
         }
     }
 
+
     @Override
     public Student getStudentWithEmail(String email) {
         Connection conn = pool.getConnection();
