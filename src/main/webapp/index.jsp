@@ -18,6 +18,11 @@
 <a style="position:absolute;right:1rem" href="https://freeuni.edu.ge/"> Go to University WebPage</a>
 <br />
 <br />
+<a style="position:absolute;right:1rem" href="pageNotFound.jsp"> temp</a>
+<br />
+<a style="position:absolute;right:1rem" href="welcome.jsp"> temp</a>
+<br />
+<br />
 
 <div style="text-align: center">
     <h1 style="text-align: center">
