@@ -23,11 +23,15 @@ body {
 input[type="radio"] {
   margin: 4px 0px 20px -105px;
 }
+.ur-frontend-form label.radio input {
+  position: relative;
+}
 
 .gend {
   display: flex;
   margin-left: 64px;
 }
+
 
 .dgend {
   text-align: center;
