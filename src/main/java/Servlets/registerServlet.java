@@ -44,7 +44,7 @@ public class registerServlet extends HttpServlet {
             return;
         }
         String firstName = req.getParameter("firstname"); String lastname = req.getParameter("lastname");
-        GENDER gender = req.getParameter("Gender").equals("Male")?GENDER.MALE:GENDER.FEMALE;
+        GENDER gender = req.getParameter("Gender").equals("M")?GENDER.MALE:GENDER.FEMALE;
         String profession = req.getParameter("profession");
 
         String birth = req.getParameter("dateofbirth");
