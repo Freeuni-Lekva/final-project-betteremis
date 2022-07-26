@@ -21,7 +21,6 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
             first=i;
             second=id;
         }
-
     }
     private boolean removeSubjectAndPrerequisite(String subjectName){
         Connection conn = pool.getConnection();
@@ -129,7 +128,7 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
     private String idToName(Connection conn, int id) {
         String currentName = "";
         try {
-            String statement = "SELECT S.subkectName FROM SUBJECTS S WHERE S.ID = ?;";
+            String statement = "SELECT S.subjectName FROM SUBJECTS S WHERE S.ID = ?;";
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
