@@ -11,11 +11,11 @@
 <head>
     <meta chartset="utf-8">
     <title>Glowing Text Animation</title>
-    <link rel="stylesheet" href="welcome.scss">
+    <link rel="stylesheet" href="css/welcome.scss">
 </head>
 <body>
 <div class="container">
-    <span class="text1">Welcome In</span>
+    <span class="text1">Welcome In Dear <%= request.getAttribute("userMessage") %></span>
     <span class="text2"><a href="index.jsp"> Go To Login Page</a></span>
 </div>
 
