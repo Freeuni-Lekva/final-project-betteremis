@@ -24,8 +24,8 @@
         <div class="form__field">
             <label for="login__username"><svg class="icon">
                 <use xlink:href="#icon-user"></use>
-            </svg><span class="hidden">Username</span></label>
-            <input autocomplete="username" id="login__username" type="text" name="email" class="form__input" placeholder="Username" required>
+            </svg><span class="hidden">Email</span></label>
+            <input autocomplete="Email" id="login__username" type="text" name="email" class="form__input" placeholder="Email" required>
         </div>
 
         <div class="form__field">
