@@ -1,6 +1,6 @@
 body{
-    color:#fff;
-    background-color:#343a40
+    color:#A7A1AE;
+    background-color:#1F2739;
 }
 table th {
     text-align: center;
@@ -17,8 +17,8 @@ table th {
 .table-striped>tbody>tr:hover {
     background: #2982b9;
 }
-.table-striped>tbody>tr{
-    text-align: left;
+.table-striped>tbody>tr>td{
+    text-align: center;
 }
 
 .table-striped>tbody>tr:nth-child(odd) {
