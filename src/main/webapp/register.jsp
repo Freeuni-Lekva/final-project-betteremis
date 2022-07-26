@@ -10,7 +10,7 @@
     <title>Registration</title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="registerStyle.scss">
+    <link rel="stylesheet" href="css/registerStyle.scss">
 </head>
 <body>
 <script>

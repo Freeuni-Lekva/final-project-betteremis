@@ -9,9 +9,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="indexStyle.scss">
+    <link rel="stylesheet" href="css/indexStyle.scss">
 </head>
-<%--<a style="color : #eee ; position:absolute;right:1rem" href="pageNotFound.jsp"> TestingNotFound</a>--%>
+<%--<a style="color : #eee ; position:absolute;right:1rem" href="invalidUser.jsp"> TestingNotFound</a>--%>
 <%--<br />--%>
 <%--<a style="color : #eee; position:absolute;right:1rem" href="welcome.jsp"> TestingWelcome</a>--%>
 <%--<br />--%>
