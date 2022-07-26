@@ -9,6 +9,8 @@ public interface Mapping {
     String STUDENT_DAO = "stdao";
     String LECTURER_DAO = "lecdao";
     String SUBJECT_DAO = "subjdao";
+    String SUBJECT_HISTORY_DAO = "subjhistorydao";
+    String PREREQUISITES_DAO = "predao";
 
     //Mappings used for reading data
     String PASSWORD = "pass";
