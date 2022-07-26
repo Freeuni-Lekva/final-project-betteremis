@@ -10,7 +10,7 @@
 <html>
 <head>
     <meta chartset="utf-8">
-    <title>Glowing Text Animation</title>
+    <title>Welcome</title>
     <link rel="stylesheet" href="css/welcome.scss">
 </head>
 <body>
