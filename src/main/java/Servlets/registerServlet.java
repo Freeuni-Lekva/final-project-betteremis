@@ -40,11 +40,12 @@ public class registerServlet extends HttpServlet {
         SqlUserDAO uDAO = (SqlUserDAO) req.getServletContext().getAttribute(Mapping.USER_DAO);
         int userID = uDAO.addUser(newUser);
         if(userID == -1){
-            resp.sendRedirect("pageNotFound.jsp");
+            req.setAttribute("mess","Email already exists, Please try again.");
+            req.getRequestDispatcher("invalidUser.jsp").forward(req, resp);
             return;
         }
         String firstName = req.getParameter("firstname"); String lastname = req.getParameter("lastname");
-        GENDER gender = req.getParameter("Gender").equals("Male")?GENDER.MALE:GENDER.FEMALE;
+        GENDER gender = req.getParameter("Gender").equals("M")?GENDER.MALE:GENDER.FEMALE;
         String profession = req.getParameter("profession");
 
         String birth = req.getParameter("dateofbirth");
@@ -69,6 +70,7 @@ public class registerServlet extends HttpServlet {
             lDAO.addLecturer(new Lecturer(email,passHash,usertype,userID, firstName, lastname, profession,gender, date ,
                     address, STATUS.ACTIVE, new BigInteger(phone)));
         }
-        resp.sendRedirect("welcome.jsp");
+        req.setAttribute("userMessage", firstName + " " + lastname);
+        req.getRequestDispatcher("welcome.jsp").forward(req, resp);
     }
 }

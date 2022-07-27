@@ -85,7 +85,9 @@ public class SqlUserDAO implements UserDAO {
     @Override
     public boolean isValidUser(String email, String password) {
         User usr = getUserByEmail(email);
-        if(usr == null) return false;
+        if(usr == null) {
+            return false;
+        }
 
         BCrypt.Verifyer verifier = BCrypt.verifyer();
         BCrypt.Result res = verifier.verify(password.toCharArray(), usr.getPasswordHash().toCharArray());

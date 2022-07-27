@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="notFound.css">
+    <link rel="stylesheet" href="css/notFound.css">
 </head>
 <body>
     <header class="top-header">
@@ -34,7 +34,7 @@
         <!-- Content -->
         <div class="error__content">
             <div class="error__message message">
-                <h1 class="message__title">Page Not Found</h1>
+                <h1 class="message__title"> <%=request.getAttribute("mess")%> </h1>
             </div>
             <div class="error__nav e-nav">
                 <a href="index.jsp" target="_blanck" class="e-nav__link"></a>
