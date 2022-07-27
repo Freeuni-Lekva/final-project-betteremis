@@ -25,7 +25,9 @@ public class SqlFriendsDao {
         }catch (SQLException e){
             e.printStackTrace();
             pool.releaseConnection(conn);
+            return friendList;
         }
+        pool.releaseConnection(conn);
         return friendList;
     }
     public boolean removeFriend(int userID,int friendID){
@@ -42,6 +44,7 @@ public class SqlFriendsDao {
             e.printStackTrace();
             pool.releaseConnection(conn);
             result = false;
+            return result;
         }
 
         pool.releaseConnection(conn);
