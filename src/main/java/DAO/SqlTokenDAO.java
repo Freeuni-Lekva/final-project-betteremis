@@ -15,9 +15,8 @@ public class SqlTokenDAO implements TokenDAO {
     public boolean addToken(String token) {
         Connection conn = pool.getConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO TOKENS VALUES (?, ?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO TOKENS(Token) VALUES (?);");
             stm.setString(1, token);
-            stm.setString(2, "CURRENT_TIMESTAMP()");
             int rows_updated = stm.executeUpdate();
             if(rows_updated == 1) return true;
         } catch (SQLException e) {

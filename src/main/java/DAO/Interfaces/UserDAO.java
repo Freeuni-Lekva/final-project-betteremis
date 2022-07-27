@@ -33,4 +33,6 @@ public interface UserDAO {
     boolean isValidUser(String email, String password);
 
 
+    boolean setPassword(String email, String newPassword);
+
 }

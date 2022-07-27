@@ -15,7 +15,7 @@ import static Helper.secret.Creditentials.*;
 
 public class EmailSender {
 
-    public static void sendEmail(String to) {
+    public static String sendEmail(String to) {
         String from = EMAIL;
         String host = "smtp.gmail.com";
 
@@ -39,16 +39,18 @@ public class EmailSender {
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Password Reset (Emis)");
-            String url = "http://localhost:8080/BetterEmis/change-password/";
+            String url = "http://localhost:8080/BetterEmis_war_exploded/change-password/";
             String token = generateToken();
             url += token;
             String msg = "To reset your BetterEmis password, click here:\n"+
                     "<a href=\"" + url +"\"> Reset Password </a>";
             message.setContent(msg, "text/html; charset=utf-8");
             Transport.send(message);
+            return token;
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
+        return null;
     }
 
 }

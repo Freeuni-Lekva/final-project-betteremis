@@ -24,7 +24,7 @@
 </head>
 <body class="align">
 <div class="grid">
-    <h2 style="width: 200%">Enter your email in the field below, and we'll send the verification link on your email address.</h2>
+    <h2 style="width: 200%">Enter your email in the field below.</h2>
 
     <form action="ResetPassword" method="get" class="form login">
         <div class="form__field">

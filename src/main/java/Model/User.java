@@ -27,10 +27,6 @@ public class User {
         return passwordHash;
     }
 
-    public void setPasswordHash(String password) {
-        // TODO hash password and save it
-        this.passwordHash = password;
-    }
 
 
     public USERTYPE getType(){

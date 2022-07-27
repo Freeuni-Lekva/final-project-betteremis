@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static DAO.Mapping.EMAIL;
 import static DAO.Mapping.TOKEN_DAO;
 
 @WebServlet(name = "TokenHandler", value = "/change-password/*")
@@ -19,7 +20,7 @@ public class TokenHandler extends HttpServlet {
         String token = getTokenFromURL(url);
         TokenDAO dao = (TokenDAO) req.getServletContext().getAttribute(TOKEN_DAO);
         if(dao.isValidToken(token)){
-            resp.sendRedirect("changePassword.jsp");
+            resp.sendRedirect("../changePassword.jsp");
         }else{
             req.setAttribute("incorrect", true);
             req.setAttribute("mess", "404 Page not found");
