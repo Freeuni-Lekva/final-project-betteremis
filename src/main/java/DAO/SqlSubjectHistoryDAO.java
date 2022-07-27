@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.Interfaces.StudentDAO;
 import DAO.Interfaces.SubjectDAO;
 import DAO.Interfaces.SubjectHistoryDAO;
 import Model.Student;
@@ -21,11 +22,11 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
     }
 
     @Override
-    public Map<Integer, ArrayList<Subject>> getAllSubjects(Student student) {
+    public Map<Integer, ArrayList<Subject>> getAllSubjects(Student student, int mode) {
         Connection conn = pool.getConnection();
         try{
             PreparedStatement stm = conn.prepareStatement("SELECT S.Semester, SU.SubjectName, " +
-                    " SU.Credits, SU.LecturerID " +
+                    " SU.Credits, SU.LecturerID, S.IsCompleted " +
                     " FROM STUDENTS U JOIN SUBJECTS_HISTORY S on U.ID = S.UserID " +
                     " JOIN SUBJECTS SU ON S.SubjectID = SU.ID WHERE U.UserID = ?");
             stm.setInt(1, student.getUserID() );
@@ -36,6 +37,12 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
                 String name = set.getString(2); int credits = set.getInt(3);
                 int lecID = set.getInt(4);
                 Subject subject = new Subject(name,credits,lecID);
+                boolean isCompleted = set.getBoolean(5);
+                if(mode == -1 && isCompleted){
+                    continue;
+                }else if(mode == 1 && !isCompleted){
+                    continue;
+                }
                 if(result.containsKey(semester)){
                     result.get(semester).add(subject);
                 }else{
@@ -55,11 +62,13 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
 
     @Override
     public int addStudentAndSubject(Student st, Subject sb) {
+        StudentDAO stDAO = new SqlStudentDAO(pool);
+        int ID = stDAO.getStudentIDByUserID(st.getUserID());
         Connection conn = pool.getConnection();
         try{
             String statement = "INSERT INTO SUBJECTS_HISTORY (UserID, SubjectID, Semester, Grade, IsCompleted) VALUES (?, ?, ?, ?, ?);";
             PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, st.getUserID());
+            ps.setInt(1, ID);
             SubjectDAO sd = new SqlSubjectDAO(pool);
             pool.releaseConnection(conn);
             ps.setInt(2, sd.getSubjectIDByName(sb.getName()));
@@ -70,8 +79,9 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
             if (ps.executeUpdate() == 1){
                 ResultSet keys = ps.getGeneratedKeys();
                 keys.next();
+                int result = keys.getInt(1);
                 pool.releaseConnection(conn);
-                return keys.getInt(1);
+                return result;
             }
 
         }catch (SQLException e){
@@ -86,18 +96,115 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
     @Override
     public boolean updateStudentGrade(Student st, Subject sb, int grade) {
         SubjectDAO sd = new SqlSubjectDAO(pool);
-        int ID = sd.getSubjectIDByName(sb.getName());
+        int SubjectID = sd.getSubjectIDByName(sb.getName());
+        StudentDAO studDAO = new SqlStudentDAO(pool);
+        int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
         Connection conn = pool.getConnection();
         try{
-            String statement = "UPDATE SUBJECTS_HISTORY SET Grade = ? WHERE SubjectID = ?;";
+            String statement = "UPDATE SUBJECTS_HISTORY SET Grade = ? WHERE UserID = ? AND SubjectID = ?;";
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setInt(1, grade);
-            ps.setInt(2, ID);
+            ps.setInt(2, StudentID);
+            ps.setInt(3, SubjectID);
             if (ps.executeUpdate() == 1){
                 pool.releaseConnection(conn);
                 return true;
             }
         }catch(SQLException e){
+            pool.releaseConnection(conn);
+            return false;
+        }
+        pool.releaseConnection(conn);
+        return false;
+    }
+
+    @Override
+    public Map<Integer, ArrayList<Subject>> getCompletedSubjects(Student st) {
+        return getAllSubjects(st, 1);
+    }
+
+    @Override
+    public Map<Integer, ArrayList<Subject>> getIncompleteSubjects(Student st) {
+        return getAllSubjects(st, -1);
+    }
+
+    @Override
+    public boolean isCompleted(Student st, Subject sb) {
+        SubjectDAO sd = new SqlSubjectDAO(pool);
+        int SubjectID = sd.getSubjectIDByName(sb.getName());
+        StudentDAO studDAO = new SqlStudentDAO(pool);
+        int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT * FROM SUBJECTS_HISTORY WHERE UserID = ? AND SubjectID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, StudentID);
+            ps.setInt(2, SubjectID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                boolean result = rs.getBoolean(6);
+                pool.releaseConnection(conn);
+                return result;
+            }
+
+        }catch (SQLException e){
+            System.out.println("SQLException happened.");
+            pool.releaseConnection(conn);
+            return false;
+        }
+        pool.releaseConnection(conn);
+        return false;
+    }
+
+    @Override
+    public double getGrade(Student st, Subject sb) {
+        SubjectDAO sd = new SqlSubjectDAO(pool);
+        int SubjectID = sd.getSubjectIDByName(sb.getName());
+        StudentDAO studDAO = new SqlStudentDAO(pool);
+        int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT * FROM SUBJECTS_HISTORY WHERE UserID = ? AND SubjectID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, StudentID);
+            ps.setInt(2, SubjectID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                double result = rs.getDouble(5);
+                pool.releaseConnection(conn);
+                return result;
+            }
+
+        }catch (SQLException e){
+            System.out.println("SQLException happened.");
+            pool.releaseConnection(conn);
+            return -1;
+        }
+        pool.releaseConnection(conn);
+        return -1;
+    }
+
+    @Override
+    public boolean updateCompletedColumn(Student st, Subject sb, boolean flag) {
+        SubjectDAO sd = new SqlSubjectDAO(pool);
+        int SubjectID = sd.getSubjectIDByName(sb.getName());
+        StudentDAO studDAO = new SqlStudentDAO(pool);
+        int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "UPDATE SUBJECTS_HISTORY SET IsCompleted = ? WHERE UserID = ? AND SubjectID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setBoolean(1, flag);
+            ps.setInt(2, StudentID);
+            ps.setInt(3, SubjectID);
+            if (ps.executeUpdate() == 1){
+                pool.releaseConnection(conn);
+                return true;
+            }
+
+        }catch (SQLException e){
+            System.out.println("SQLException happened.");
+            //e.printStackTrace();
             pool.releaseConnection(conn);
             return false;
         }
