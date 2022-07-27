@@ -1,0 +1,33 @@
+body{
+    color:#A7A1AE;
+    background-color:#1F2739;
+}
+table th {
+    text-align: center;
+}
+
+.table {
+    margin: auto;
+    width: 120% !important;
+}
+.container p{
+    text-align: center;
+}
+
+.table-striped>tbody>tr:hover {
+    background: #2982b9;
+}
+.table-striped>tbody>tr>td{
+    text-align: center;
+}
+
+.table-striped>tbody>tr:nth-child(odd) {
+    background-color: #323C50;
+}
+
+
+.table-striped>tbody>tr:nth-child(even) {
+
+}
+
+.table-striped>tbody>td { background-color: #FB667A; }

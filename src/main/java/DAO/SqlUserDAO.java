@@ -93,4 +93,28 @@ public class SqlUserDAO implements UserDAO {
         BCrypt.Result res = verifier.verify(password.toCharArray(), usr.getPasswordHash().toCharArray());
         return res.verified;
     }
+
+    @Override
+    public boolean setPassword(String email, String newPassword){
+        BCrypt.Hasher hasher = BCrypt.withDefaults();
+        char[] chars = new char[newPassword.length()];
+        for(int i = 0; i < newPassword.length(); i++ ){
+            chars[i] = newPassword.charAt(i);
+        }
+        String passHash = hasher.hashToString(10,chars);
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("UPDATE USERS SET PasswordHash = ? WHERE Email = ? ;");
+            stm.setString(1, passHash);
+            stm.setString(2,email);
+            int updated = stm.executeUpdate();
+            if(updated == 1) return true;
+            return false;
+        } catch (SQLException e) {
+            return false;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
 }

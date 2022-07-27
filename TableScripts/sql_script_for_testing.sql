@@ -102,3 +102,13 @@ CREATE TABLE SUBJECTS_HISTORY (
     FOREIGN KEY (SubjectID) REFERENCES SUBJECTS(ID) ON DELETE CASCADE,
 	PRIMARY KEY (ID)
 );
+
+DROP TABLE IF EXISTS TOKENS;
+-- remove table if it already exists and start from scratch
+
+CREATE TABLE TOKENS(
+                       ID int NOT NULL AUTO_INCREMENT,
+                       Token CHAR(64) NOT NULL,
+                       DateAdded TIMESTAMP,
+                       PRIMARY KEY (ID)
+);
