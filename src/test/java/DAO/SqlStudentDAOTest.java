@@ -117,4 +117,15 @@ class SqlStudentDAOTest {
         assertEquals(false, usrDAO.removeUser(stud3));
 
     }
+
+    @Test
+    @Order(4)
+    public void testGetStudentIDByUserID(){
+        User user = new User("garse20@freeuni.edu.ge", BCrypt.withDefaults().hashToString(12, "arsena33".toCharArray()), USERTYPE.STUDENT);
+        int ID = usrDAO.addUser(user);
+        Student st = new Student(stud2.getEmail(), stud2.getPasswordHash(), stud2.getType(), "giorgi", "arsenadze", "macs", 4, GENDER.MALE, Date.valueOf("2002-02-12"),
+                "apple street", STATUS.ACTIVE, "1231 public", 35, 3.99, new BigInteger("599777779"), "Kings", ID);
+
+        assertEquals(studDAO.addStudent(st), studDAO.getStudentIDByUserID(ID));
+    }
 }

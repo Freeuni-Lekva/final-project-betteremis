@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class SqlLecturerDAOTest {
     private static Lecturer lecturer1, lecturer2;
 
     private static Subject subject1, subject2;
-
+    private static ConnectionPool pool;
 
     /**
      * Stores private variables of DAO classes and creates users, lecturers and subjects.
@@ -37,7 +38,7 @@ public class SqlLecturerDAOTest {
 
     @BeforeAll
     static void initAll(){
-        ConnectionPool pool = new ConnectionPool(10, true);
+        pool = new ConnectionPool(10, true);
         try {
             TestingUtils.emptyTables(pool.getConnection());
         } catch (FileNotFoundException e) {
@@ -161,6 +162,31 @@ public class SqlLecturerDAOTest {
         for (int i = 0; i < stA.length; i++){
             assertEquals(res.get(i+1).getName(), stA[i]);
         }
+    }
+
+    @Test
+    public void testGetByID() throws FileNotFoundException {
+        Connection conn = pool.getConnection();
+        TestingUtils.emptyTables(conn);
+        pool.releaseConnection(conn);
+
+        User u1 = new User("dshis20@freeuni.edu.ge", getRandomPassword() ,USERTYPE.LECTURER);
+        User u2 = new User("nitsim@freeuni.edu.ge", getRandomPassword(),USERTYPE.LECTURER);
+
+        int ID1 = userDAO.addUser(u1);
+        int ID2 = userDAO.addUser(u2);
+
+
+        Lecturer l1 = new Lecturer(user1.getEmail(),user2.getPasswordHash(),user1.getType(),ID1,"dimitri","shishniashvili",
+                "developer",GENDER.MALE,Date.valueOf("2002-02-12"),"tbilisi",STATUS.ACTIVE,new BigInteger("599"));
+        Lecturer l2 = new Lecturer(user2.getEmail(),user2.getPasswordHash(),user2.getType(),ID2,"nikolozi","tsimaka",
+                "developer",GENDER.MALE,Date.valueOf("2002-04-12"),"tbilisi",STATUS.ACTIVE,new BigInteger("597"));
+
+        int LID1 = lecturerDAO.addLecturer(l1);
+        int LID2 = lecturerDAO.addLecturer(l2);
+
+        assertEquals(l1.getEmail(), lecturerDAO.getLecturerWithID(LID1).getEmail());
+        assertEquals(l2.getEmail(), lecturerDAO.getLecturerWithID(LID2).getEmail());
     }
 
 }

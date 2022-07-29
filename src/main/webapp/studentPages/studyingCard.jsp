@@ -1,5 +1,12 @@
 <%@ page import="Model.Student" %>
-<%@ page import="DAO.Mapping" %><%--
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.Subject" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="DAO.Interfaces.SubjectHistoryDAO" %>
+<%@ page import="DAO.SqlSubjectHistoryDAO" %>
+<%@ page import="DAO.Interfaces.LecturerDAO" %>
+<%@ page import="Model.Lecturer" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 21.07.22
@@ -9,6 +16,67 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
+    SubjectHistoryDAO shDAO = (SubjectHistoryDAO) application.getAttribute(Mapping.SUBJECT_HISTORY_DAO);
+    LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
+    Map<Integer, ArrayList<Subject>> completed = shDAO.getCompletedSubjects(student);
+    Map<Integer, ArrayList<Subject>> incomplete = shDAO.getIncompleteSubjects(student);
+%>
+
+<%!
+    public String getGrade(double mark){
+        if(91 <= mark && mark <= 100)
+            return "A";
+        if(81 <= mark && mark < 91)
+            return "B";
+        if(71 <= mark && mark < 81)
+            return "C";
+        if(61 <= mark && mark < 71)
+            return "D";
+        if(51 <= mark && mark < 61)
+            return "E";
+        if(mark < 51)
+            return "F";
+        return "FX";
+    }
+%>
+
+<%!
+    public String decorate (Map<Integer, ArrayList<Subject>> map, Student student, SubjectHistoryDAO shDAO, LecturerDAO lecDAO){
+        String result = "";
+        for(int semester : map.keySet()){
+            result += " <table> " +
+                    "     <thead>\n" +
+                    "        <th>Semester " + semester + "</th>\n" +
+                    "        <tr >\n" +
+                    "            <th><h1>Subject Name</h1></th>\n" +
+                    "            <th><h1>Lecturer</h1></th>\n" +
+                    "            <th><h1>Credits</h1></th>\n" +
+                    "            <th><h1>Mark</h1></th>\n" +
+                    "            <th><h1>Grade</h1></th>\n" +
+                    "            <th><h1>Syllabus</h1></th>\n" +
+                    "        </tr>\n" +
+                    "    </thead>";
+            for(Subject sb :  map.get(semester)){
+                double mark = shDAO.getGrade(student, sb);
+                String grade = getGrade(mark);
+                Lecturer lec = lecDAO.getLecturerWithID(sb.getLecturerID());
+                result += "    <tbody>\n" +
+                        "        <tr>\n" +
+                        "            <td>" + sb.getName() + "</td>\n" +
+                        "            <td> " + lec.getFirstName() + " " + lec.getLastName() + "</td>\n" +
+                        "            <td> " + sb.getNumCredits() + "</td>\n" +
+                        "            <td> " + mark + "</td>\n" +
+                        "            <td> " + grade + "</td>\n" +
+                        "            <td>Syllabus is currently unavailable</td>\n" +
+                        "        </tr>\n" +
+                        "\n" +
+                        "    </tbody>";
+            }
+            result += "</table>";
+        }
+        return result;
+    }
+
 %>
 <html>
 <head>
@@ -17,83 +85,15 @@
 </head>
 <body>
 
+<h1>Completed courses</h1>
+<%
+    out.println(decorate(completed, student, shDAO, lecDAO));
+%>
+
+<h1>Incomplete courses</h1>
+<%
+    out.println(decorate(incomplete, student, shDAO, lecDAO));
+%>
 </body>
-
-<table>
-
-    <thead>
-        <th> Unknown Semester </th>
-        <tr >
-            <th><h1>Subject Name</h1></th>
-            <th><h1>Lecturer</h1></th>
-            <th><h1>Credits</h1></th>
-            <th><h1>Mark</h1></th>
-            <th><h1>Grade</h1></th>
-            <th><h1>Syllabus</h1></th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <%--For testing purposes--%>
-        <tr>
-            <td>Mathematics</td>
-            <td>Tsimakuridze</td>
-            <td>6</td>
-            <td>100</td>
-            <td>A</td>
-            <td>Syllabus is currently unavailable</td>
-        </tr>
-
-    </tbody>
-</table>
-
-<table>
-
-    <thead>
-        <th> Known Semester </th>
-
-        <%--For testing purposes--%>
-        <tr >
-            <th><h1>Subject Name</h1></th>
-            <th><h1>Lecturer</h1></th>
-            <th><h1>Credits</h1></th>
-            <th><h1>Mark</h1></th>
-            <th><h1>Grade</h1></th>
-            <th><h1>Syllabus</h1></th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-            <td>Mathematics</td>
-            <td>Tsimakuridze</td>
-            <td>6</td>
-            <td>100</td>
-            <td>A</td>
-            <td>Syllabus is currently unavailable</td>
-        </tr>
-        <tr>
-            <td>Theory of computation</td>
-            <td>Tsimakuridze</td>
-            <td>6</td>
-            <td>100</td>
-            <td>A</td>
-            <td>Syllabus is currently unavailable</td>
-        </tr>
-        <tr>
-            <td>Physics</td>
-            <td>Tsimakuridze</td>
-            <td>6</td>
-            <td>100</td>
-            <td>A</td>
-            <td>Syllabus is currently unavailable</td>
-        </tr>
-
-    </tbody>
-
-</table>
-
 
 </html>

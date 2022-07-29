@@ -78,6 +78,26 @@ public class SqlStudentDAO implements StudentDAO {
         }
     }
 
+    @Override
+    public int getStudentIDByUserID(int UserID) {
+        Connection conn = pool.getConnection();
+        int result = -1;
+        try{
+            String statement = "SELECT * FROM STUDENTS WHERE UserID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, UserID);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                result = rs.getInt(1);
+            }
+        }catch (SQLException e){
+            //e.printStackTrace();
+            result = -1;
+        }
+        pool.releaseConnection(conn);
+        return result;
+    }
+
 
     @Override
     public Student getStudentWithEmail(String email) {
@@ -112,7 +132,7 @@ public class SqlStudentDAO implements StudentDAO {
             }
             else return null;
         } catch (SQLException e) {
-            System.out.println("Something happend while executing query for searching student by user!");
+            System.out.println("Something happened while executing query for searching student by user!");
             return null;
         }
         finally {
