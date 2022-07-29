@@ -117,4 +117,23 @@ public class SqlUserDAO implements UserDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public int getIDByEmail(String email){
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("SELECT ID FROM USERS WHERE Email=?;");
+            stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+               return rs.getInt(1);
+            }
+            return -1;
+        } catch (SQLException e) {
+            return -1;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
 }
