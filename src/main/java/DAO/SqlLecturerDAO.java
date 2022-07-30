@@ -130,4 +130,33 @@ public class SqlLecturerDAO implements LecturerDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public Lecturer getLecturerWithID(int ID) {
+        Connection conn = pool.getConnection();
+        String query = "SELECT U.Email, U.PasswordHash, U.Privilege, S.ID, S.UserID , S.FirstName," +
+                "S.LastName, S.Profession, S.Gender, S.DateOfBirth, S.Address, S.LecturerStatus ,S.PhoneNumber " +
+                "FROM USERS U JOIN LECTURERS S on U.ID = S.UserID WHERE S.ID = ?";
+        try{
+            PreparedStatement stm = conn.prepareStatement(query);
+            stm.setInt(1, ID);
+            ResultSet resultSet = stm.executeQuery();
+            if(resultSet.next()){
+                return new Lecturer(resultSet.getString(1),resultSet.getString(2),
+                        USERTYPE.LECTURER,
+                        resultSet.getInt(5),  resultSet.getString(6),
+                        resultSet.getString(7), resultSet.getString(8),
+                        resultSet.getString(9).equals(Mapping.IS_MALE) ? GENDER.MALE : GENDER.FEMALE,
+                        resultSet.getDate(10), resultSet.getString(11),
+                        resultSet.getString(12).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE,
+                        new BigInteger(resultSet.getBytes(13)));
+            }
+            return null;
+        }catch (Exception e){
+            System.out.println("Error while getting user from USERS");
+            return null;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
 }

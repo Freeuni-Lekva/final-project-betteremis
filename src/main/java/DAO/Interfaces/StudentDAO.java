@@ -27,4 +27,11 @@ public interface StudentDAO {
      */
     boolean terminateStatus(Student student);
 
+    /**
+     * This method gets ID of a student with student's UserID.
+     * @param UserID of a student
+     * @return ID of a student
+     */
+    int getStudentIDByUserID(int UserID);
+
 }
