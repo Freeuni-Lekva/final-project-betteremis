@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.sql.*;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +45,7 @@ public class SqlSubjectDAOTest {
                     " values (?, 'a', 'b', 'c', 'Male', '2000-01-01', 'a', 'Active', '2' )";
             ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
             /** Here an error is occurring (For some reason I don't know), but it doesn't stop program for running. */
-            ps.setInt(1, ID);
+            ps.setInt((int)1, ID);
             result = ps.executeUpdate();
             assertEquals(1, result);
             ResultSet keys = ps.getGeneratedKeys();
@@ -123,6 +124,22 @@ public class SqlSubjectDAOTest {
         assertTrue(sqlSubjectDAO.removeSubject("computer science 5"));
     }
 
+    @Test
+    public void SubjectDAOTest5(){
+        sqlSubjectDAO.removeAll();
+        Subject subject = new Subject("Computer Science 1", 6, ID);
+        sqlSubjectDAO.addSubject(subject);
+
+        Subject subject2 = new Subject("Computer Science 2", 6, ID);
+        sqlSubjectDAO.addSubject(subject2);
+
+        Subject subject3 = new Subject("Computer Science 3", 6, ID);
+
+        List<Subject> result = sqlSubjectDAO.getAllSubjects();
+        assertTrue(result.contains(subject));
+        assertTrue(result.contains(subject2));
+        assertFalse(result.contains(subject3));
+    }
 
 
 }

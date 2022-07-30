@@ -3,6 +3,7 @@ package DAO;
 import DAO.Interfaces.SubjectDAO;
 import Model.Student;
 import Model.Subject;
+import org.apache.ibatis.jdbc.SQL;
 
 
 import java.sql.*;
@@ -124,6 +125,29 @@ public class SqlSubjectDAO implements SubjectDAO {
         finally{
             pool.releaseConnection(conn);
         }
+    }
+
+    @Override
+    public List<Subject> getAllSubjects() {
+        List<Subject> result = new ArrayList<>();
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT * FROM SUBJECTS;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
+                result.add(s);
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+            pool.releaseConnection(conn);
+            return null;
+        }
+
+        pool.releaseConnection(conn);
+        return result;
     }
 
 }

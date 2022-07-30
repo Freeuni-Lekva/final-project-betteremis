@@ -97,7 +97,7 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         Subject result = null;
         String answer="";
         try{
-            String statement = "SELECT P.prerequisits FROM PREREQUISITES P JOIN SUBJECTS S ON P.subjectID=S.ID HAVING S.SubjectName = ?;";
+            String statement = "SELECT P.Prerequisites FROM PREREQUISITES P JOIN SUBJECTS S ON P.subjectID=S.ID WHERE S.SubjectName = ?;";
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setString(1, subjectName);
             ResultSet rs = ps.executeQuery();
