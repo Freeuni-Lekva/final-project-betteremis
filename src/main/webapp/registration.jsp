@@ -10,22 +10,6 @@
 <%
   SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
   LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
-  UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
-  User user1 = new User("dshis20@freeuni.edu.ge", "bla" , USERTYPE.LECTURER);
-  int ID = userDAO.addUser(user1);
-  Lecturer lecturer1 = new Lecturer(user1.getEmail(),user1.getPasswordHash(),user1.getType(),ID,"dimitri","shishniashvili",
-          "developer", GENDER.MALE, Date.valueOf("2002-02-12"),"tbilisi",STATUS.ACTIVE,new BigInteger("599"));
-  ID = lecDAO.addLecturer(lecturer1);
-
-  Subject subject1 = new Subject("Computer Science 1", 6, ID);
-  subjectDAO.addSubject(subject1);
-
-  Subject subject2 = new Subject("Computer Science 2", 6, ID);
-  subjectDAO.addSubject(subject2);
-
-  Subject subject3 = new Subject("Computer Science 3", 6, ID);
-  subjectDAO.addSubject(subject2);
-
   List<Subject> allSubjects = subjectDAO.getAllSubjects();
 %>
 
