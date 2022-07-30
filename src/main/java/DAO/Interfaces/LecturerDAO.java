@@ -28,4 +28,11 @@ public interface LecturerDAO {
      */
     List<Subject> getAllSubjects(String email);
 
+    /**
+     * Finds the lecturer in the database given the ID.
+     * @return Lecturer's retrieved from database or
+     * null if either error has happened or lecturer doesn't exist with given id.
+     */
+    Lecturer getLecturerWithID(int ID);
+
 }

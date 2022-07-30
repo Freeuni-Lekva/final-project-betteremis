@@ -35,4 +35,6 @@ public interface UserDAO {
 
     boolean setPassword(String email, String newPassword);
 
+
+    int getIDByEmail(String email);
 }

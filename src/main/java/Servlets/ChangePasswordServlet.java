@@ -1,7 +1,6 @@
 package Servlets;
 
-import DAO.Interfaces.TokenDAO;
-import DAO.Interfaces.UserDAO;
+import DAO.Interfaces.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
