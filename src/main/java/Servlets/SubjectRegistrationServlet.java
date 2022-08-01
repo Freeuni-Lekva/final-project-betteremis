@@ -31,7 +31,6 @@ public class SubjectRegistrationServlet extends HttpServlet {
         boolean canRegister = pDAO.canThisSubjectChosenByStudent(student.getEmail(), subjectName);
         if(canRegister){
             int result = shDAO.addStudentAndSubject(student, subject);
-            System.out.println(result);
             if(result == -1)
                 request.getRequestDispatcher("failedToRegisterOnSubject.jsp").forward(request, response);
             else

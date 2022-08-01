@@ -36,7 +36,7 @@
             return "E";
         if(mark < 51)
             return "F";
-        return "FX";
+        return "";
     }
 %>
 
@@ -67,10 +67,16 @@
                         "            <td> " + sb.getNumCredits() + "</td>\n" +
                         "            <td> " + mark + "</td>\n" +
                         "            <td> " + grade + "</td>\n" +
-                        "            <td>Syllabus is currently unavailable</td>\n" +
-                        "        </tr>\n" +
-                        "\n" +
-                        "    </tbody>";
+                        "            <td>Syllabus is currently unavailable</td>\n";
+                if (!shDAO.isCompleted(student, sb))
+                    result += "            <td>\n" +
+                            "               <form action = \"CancelRegistrationServlet\" method = \"POST\">\n" +
+                            "                   <input type = \"hidden\" name = \"subjectToRemove\" value = \""+ sb.getName() + "\"/>\n" +
+                            "                   <input type = \"submit\" value = \"Cancel\"/>\n" +
+                            "               </form>\n" +
+                            "            </td>\n";
+                result += "         </tr>\n" +
+                        "     </tbody>";
             }
             result += "</table>";
         }
@@ -82,6 +88,12 @@
 <head>
     <title>Card</title>
     <link rel="stylesheet" href="../css/cardStyle.css">
+    <style>
+        a {
+            color: white;
+            alignment: left;
+        }
+    </style>
 </head>
 <body>
 
@@ -94,6 +106,9 @@
 <%
     out.println(decorate(incomplete, student, shDAO, lecDAO));
 %>
+
+<a href="studentProfile.jsp">Profile</a>
+
 </body>
 
 </html>

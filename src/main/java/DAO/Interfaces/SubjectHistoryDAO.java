@@ -81,4 +81,12 @@ public interface SubjectHistoryDAO {
      */
     boolean updateCompletedColumn(Student st, Subject sb, boolean flag);
 
+    /**
+     * Removes student and subject from SUBJECTS_HISTORY table.
+     * @param st
+     * @param sb
+     * @return true if removed successfully, false otherwise.
+     */
+    boolean removeStudentAndSubject(Student st, Subject sb);
+
 }

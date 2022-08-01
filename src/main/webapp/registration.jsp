@@ -7,6 +7,7 @@
 <%@ page import="java.sql.Date" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="DAO.Interfaces.UserDAO" %>
+<%@ page import="DAO.Interfaces.SubjectHistoryDAO" %>
 <%
   SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
   LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
@@ -25,7 +26,8 @@
             "           <form action = \"SubjectRegistrationServlet\" method = \"POST\">" +
             "             <input type = \"hidden\" name = \"currentSubject\" value = \""+ subject.getName() + "\"/>" +
             "             <input type = \"submit\" value = \"Register\"/>" +
-            "           </form></td>\n" +
+            "           </form>" +
+            "         </td>\n" +
             "</tr>\n";
   }
 %>
@@ -34,6 +36,12 @@
 <head>
   <title>Registration</title>
   <link rel="stylesheet" href="css/registrationStyle.scss">
+  <style>
+    a {
+      color: white;
+      alignment: left;
+    }
+  </style>
 </head>
 <body>
 
@@ -50,6 +58,8 @@
   }
 %>
 </table>
+
+<a href="studentPages/studentProfile.jsp">Profile</a>
 
 </body>
 

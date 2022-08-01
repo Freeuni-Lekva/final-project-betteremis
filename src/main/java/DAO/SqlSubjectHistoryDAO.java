@@ -211,4 +211,31 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         pool.releaseConnection(conn);
         return false;
     }
+
+    @Override
+    public boolean removeStudentAndSubject(Student st, Subject sb) {
+        SubjectDAO sd = new SqlSubjectDAO(pool);
+        int SubjectID = sd.getSubjectIDByName(sb.getName());
+        StudentDAO studDAO = new SqlStudentDAO(pool);
+        int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "DELETE FROM SUBJECTS_HISTORY WHERE UserID = ? AND SubjectID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, StudentID);
+            ps.setInt(2, SubjectID);
+            if (ps.executeUpdate() == 1){
+                pool.releaseConnection(conn);
+                return true;
+            }
+
+        }catch (SQLException e){
+            System.out.println("SQLException happened.");
+            //e.printStackTrace();
+            pool.releaseConnection(conn);
+            return false;
+        }
+        pool.releaseConnection(conn);
+        return false;
+    }
 }
