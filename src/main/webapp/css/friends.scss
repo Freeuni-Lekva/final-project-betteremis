@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+}
+
+img {
+    cursor: pointer;
+}
+
+#card-list {
+    background-color: #A9A9A9;
+    text-align: center;
+}
+
+#font-style {
+    font-family: 'Montserrat', sans-serif;
+    color: 	#0000FF;
+}
+
+.modal-header {
+    background-color: #F0E68C;
+    color: #00008B;
+}
+
+.modal-body {
+    background-color: #ADD8E6;
+}
+
+.card-body {
+    color: #8B0000;
+}
+
+

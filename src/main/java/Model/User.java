@@ -5,6 +5,9 @@ import DAO.Mapping;
 import java.util.Date;
 import java.util.Map;
 
+import static Model.USERTYPE.LECTURER;
+import static Model.USERTYPE.STUDENT;
+
 public class User {
     private String email;
 
@@ -14,7 +17,7 @@ public class User {
     public User(Map<String, Object> data){
         email = (String) data.get(Mapping.EMAIL);
         passwordHash = (String) data.get(Mapping.PASSWORD_HASH);
-        type = (boolean) data.get(Mapping.IS_STUDENT) ? USERTYPE.STUDENT : USERTYPE.LECTURER;
+        type = (boolean) data.get(Mapping.IS_STUDENT) ? STUDENT : LECTURER;
     }
 
     public User(String email, String passwordHash, USERTYPE usertype) {
@@ -36,6 +39,22 @@ public class User {
     public String getEmail(){
         return email;
     }
+
+    public String getFirstName(){
+        if(type == STUDENT)
+            return ((Student)this).getFirstName();
+        else if(type == LECTURER)
+            return ((Lecturer)this).getFirstName();
+        return null;
+    }
+    public String getLastName(){
+        if(type == STUDENT)
+            return ((Student)this).getLastName();
+        else if(type == LECTURER)
+            return ((Lecturer)this).getLastName();
+        return null;
+    }
+
 
     @Override
     public boolean equals(Object o) {
