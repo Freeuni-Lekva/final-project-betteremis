@@ -36,4 +36,16 @@ public interface FriendsDAO {
      */
     List<User> GetAllFriends(User user, boolean mode);
 
+    /**
+     *
+     * @param user1
+     * @param user2
+     * @param mode is true: returns if user2 is user1's friend
+     *             mode false: returns if user2 is user1's friend request
+     *
+     * @return
+     */
+    public boolean AreFriends(User user1, User user2,boolean mode);
+
+
 }

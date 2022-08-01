@@ -215,6 +215,7 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         }
     }
     private int evaluate(String s) {
+        if(s.length()==0) return 1;
         Stack<Integer> st= new Stack<Integer>();
         Stack<Character> op = new Stack<Character>();
 

@@ -1,8 +1,9 @@
-DROP DATABASE IF EXISTS oopdb;
 
-CREATE DATABASE oopdb;
+DROP DATABASE IF EXISTS testdb;
 
-USE oopdb;
+CREATE DATABASE testdb;
+
+USE testdb;
 
 DROP TABLE IF EXISTS USERS;
 -- remove table if it already exists and start from scratch
