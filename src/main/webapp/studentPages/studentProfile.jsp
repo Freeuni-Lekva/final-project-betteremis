@@ -62,7 +62,8 @@
 <%--            href ლინკავს მხოლოდ ტექტს. გადასაკეთებელია , რომ მთლიანი li ობიექტი იყოს clickable.--%>
 
         <ul>
-            <li style="--i:8;" > <a href="../Chat/Chat.jsp"> Chat</a></li>
+            <li style="--i:9;" > <a href="../Chat/Chat.jsp"> Chat</a></li>
+            <li style="--i:8;"> <a href="friends.jsp">Friends</a></li>
             <li style="--i:7;" > <a href="studentProfile.jsp"> Personal Info</a></li>
             <li style="--i:6;"> <a href="studyingCard.jsp"> Studying Card </a> </li>
             <li style="--i:5;"> <a href="../registration.jsp"> Academic Registration</a> </li>

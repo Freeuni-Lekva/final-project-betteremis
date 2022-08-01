@@ -13,6 +13,11 @@ import java.util.List;
 
 public class SqlFriendsDAO implements FriendsDAO {
 
+
+    /*
+    Updated tsima's freindsDAO and refactored names.
+     */
+
     private ConnectionPool pool;
     private SqlUserDAO userDAO;
 
