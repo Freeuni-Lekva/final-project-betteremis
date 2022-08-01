@@ -24,5 +24,11 @@ public class Subject {
     public int getLecturerID() {
         return lecturerID;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Subject s = (Subject) obj;
+        return s.getName().equals(this.getName());
+    }
 }
 
