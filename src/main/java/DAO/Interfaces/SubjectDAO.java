@@ -42,4 +42,12 @@ public interface SubjectDAO {
      * @return ID or the subject if found, -1 otherwise.
      */
     int getSubjectIDByName(String name);
+
+    /**
+     * Gets all the added subjects from the database.
+     * @return The list of the subjects that exist in the database.
+     * If no subjects exist in the database empty list is returned.
+     * If some kind of error happened null is returned.
+     */
+    List<Subject> getAllSubjects();
 }
