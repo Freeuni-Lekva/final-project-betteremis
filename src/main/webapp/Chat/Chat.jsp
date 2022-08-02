@@ -31,7 +31,7 @@
     <div class="buttons-con">
         <div class="action-link-wrap">
             <a href="mail.jsp" class="link-button">Send private message</a>
-            <a href="" class="link-button">Send public message</a>
+            <a href="../all-chat/public-chat.jsp" class="link-button">Send public message</a>
         </div>
     </div>
 </div>
