@@ -1,3 +1,28 @@
+<%@ page import="DAO.Interfaces.UserDAO" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="java.util.List" %>
+<%
+    UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
+    User admin = (User) application.getAttribute(Mapping.USER_OBJECT);
+    List<User> allUsers = userDAO.getAllUsers();
+%>
+
+<%!
+    public String decorate(User user){
+        return  "<tr>\n" +
+                "        <td>" + user.getEmail() + "</td>\n" +
+                "        <td> " + user.getType().toString() + "</td>\n" +
+                "        <td>" +
+                "           <form action = \"../ServletStatus\" method = \"POST\">" +
+                "             <input type = \"hidden\" name = \"email\" value = \""+ user.getEmail() + "\"/>" +
+                "             <input type = \"submit\" value = \"Click to edit\"/>" +
+                "           </form></td>\n" +
+                "</tr>\n";
+    }
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,146 +57,30 @@
 </div>
 
 <div class="main">
-
-    <form class="form-inline" action="/action_page.php">
-        <fieldset style="max-width: 100%;">
-            <h2>Employee Database Refine</h2>
-
-            <label for="position">Position:</label>
-            <select id="position" name="position">
-                <option value=""></option>
-                <option value="javascriptDev">Javascript Developer</option>
-                <option value="supportLead">Support Lead</option>
-                <option value="softwareEng">Software Engineer</option>
-            </select>
-
-            <label for="location">Location:</label>
-            <select id="location" name="location">
-                <option value=""></option>
-                <option value="australia">Australia</option>
-                <option value="canada">Canada</option>
-                <option value="usa">USA</option>
-            </select>
-
-
-            <label for="level">Level:</label>
-            <select id="level" name="level">
-                <option value=""></option>
-                <option value="australia">Beginner (0-2yrs)</option>
-                <option value="canada">Intermediate (2-5yrs)</option>
-                <option value="usa">Expert (5+yrs)</option>
-            </select>
-
-            <div class="multiselect">
-                <label for="location">Skill:</label>
-                <div class="selectBox" onclick="showCheckboxes()">
-                    <select>
-                        <option>Select a skill</option>
-                    </select>
-                    <div class="overSelect"></div>
-                </div>
-                <div id="checkboxes">
-                    <label for="one">
-                        <input type="checkbox" id="one" />Javascript</label>
-                    <label for="two">
-                        <input type="checkbox" id="two" />SQL</label>
-                    <label for="three">
-                        <input type="checkbox" id="three" />C#</label>
-                </div>
-            </div>
-
-            <button type="submit">Search</button>
-
-        </fieldset>
-    </form>
-    <div class="fieldset2">
+    <div class="fieldset2" >
+        <div class="temp">
         <fieldset>
             <table id="example" class="display">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Location</th>
-                    <th>Skill(s)</th>
-                    <th>Level</th>
-                    <th>Manager</th>
+                    <th>Email</th>
+                    <th>Privilege</th>
+                    <th>Edit Profile</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td>Cort B</td>
-                    <td>Front-End Designer</td>
-                    <td>Augusta, GA</td>
-                    <td>HTML, CSS, Javascript</td>
-                    <td>Beginner</td>
-                    <td>Prescott</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Chris Brown</td>
-                    <td>Software Developer</td>
-                    <td>Augusta, GA</td>
-                    <td>C++, SQL</td>
-                    <td>Intermediate</td>
-                    <td>Sepielle</td>
-                </tr>
-
-                <tr>
-                    <td></td>
-                    <td>Colleen Hurst</td>
-                    <td>Javascript Developer</td>
-                    <td>San Francisco</td>
-                    <td>Javascript, Angular</td>
-                    <td>Expert</td>
-                    <td>Prescott</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Sonya Frost</td>
-                    <td>Software Engineer</td>
-                    <td>Edinburgh</td>
-                    <td>C#</td>
-                    <td>Intermediate</td>
-                    <td>Prescott</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Jena Gaines</td>
-                    <td>Office Manager</td>
-                    <td>Grovetown</td>
-                    <td>Dev Ops</td>
-                    <td>Expert</td>
-                    <td>Sepielle</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Quinn Flynn</td>
-                    <td>Support Lead</td>
-                    <td>Augusta, GA</td>
-                    <td>C++, C#, Java</td>
-                    <td>Expert</td>
-                    <td>Prescott</td>
-                </tr>
+                    <%
+                        for(User user : allUsers){
+                            out.println(decorate(user));
+                        }
+                    %>
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Location</th>
-                    <th>Skill(s)</th>
-                    <th>Level</th>
-                    <th>Manager</th>
-                </tr>
-                </tfoot>
+
             </table>
         </fieldset>
+        </div>
     </div>
 
 </div>
-
-
 </body>
 </html>

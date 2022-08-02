@@ -3,6 +3,7 @@ package DAO.Interfaces;
 import Model.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface UserDAO {
     /**
@@ -37,4 +38,6 @@ public interface UserDAO {
 
 
     int getIDByEmail(String email);
+
+    List<User> getAllUsers();
 }

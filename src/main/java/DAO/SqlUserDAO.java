@@ -4,6 +4,8 @@ import Model.*;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlUserDAO implements UserDAO {
 
@@ -58,6 +60,8 @@ public class SqlUserDAO implements UserDAO {
         }
         return false;
     }
+
+
 
     @Override
     public User getUserByEmail(String email){
@@ -138,4 +142,27 @@ public class SqlUserDAO implements UserDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public List<User> getAllUsers(){
+        List<User> res = new ArrayList<>();
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("SELECT * FROM USERS WHERE Privilege != ? ;");
+            stm.setString(1, "Admin");
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()){
+                res.add(new User(rs.getString(2), rs.getString(3),
+                        USERTYPE.toUserType(rs.getString(4))));
+            }
+            return res;
+        } catch (SQLException e) {
+            return null;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+
+    }
+
 }
