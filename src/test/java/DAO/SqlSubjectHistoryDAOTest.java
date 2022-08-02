@@ -291,4 +291,22 @@ public class SqlSubjectHistoryDAOTest {
         assertEquals(null, map.get(1));
         assertEquals(null, map.get(3));
     }
+
+    @Test
+    public void SqlSubjectHistoryDAOTest13(){
+        Student st = new Student("gmail2@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 2, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", ID);
+        Subject subject = new Subject("Computer Science 3", 6, LecID);
+        Subject subject2 = new Subject("Computer Science 4", 6, LecID);
+        Subject subject3 = new Subject("Computer Science 5", 6, LecID);
+
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject2) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject3) != -1);
+
+        assertTrue(subjectHistoryDAO.removeStudentAndSubject(st, subject));
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject) != -1);
+        assertTrue(subjectHistoryDAO.removeStudentAndSubject(st, subject));
+        assertTrue(subjectHistoryDAO.removeStudentAndSubject(st, subject2));
+        assertTrue(subjectHistoryDAO.removeStudentAndSubject(st, subject3));
+    }
 }

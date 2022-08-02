@@ -1,32 +1,40 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="DAO.Interfaces.SubjectDAO" %>
 <%@ page import="DAO.Mapping" %>
 <%@ page import="java.util.List" %>
-<%@ page import="DAO.Interfaces.LecturerDAO" %>
 <%@ page import="Model.*" %>
 <%@ page import="java.sql.Date" %>
 <%@ page import="java.math.BigInteger" %>
-<%@ page import="DAO.Interfaces.UserDAO" %>
+<%@ page import="DAO.Interfaces.*" %>
+<%@ page import="java.sql.SQLException" %>
+
 <%
   SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
   LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
+  RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
   List<Subject> allSubjects = subjectDAO.getAllSubjects();
 %>
 
 <%!
-  public String decorate(Subject subject, LecturerDAO lecDAO){
+  public String decorate(Subject subject, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO){
     Lecturer lec = lecDAO.getLecturerWithID(subject.getLecturerID());
-    return  "<tr>\n" +
+    String result =  "<tr>\n" +
             "        <td>" + subject.getName() + "</td>\n" +
             "        <td> " + lec.getFirstName() + " " + lec.getLastName() + "</td>\n" +
             "        <td> " + subject.getNumCredits() + "</td>\n" +
-            "        <td>Syllabus is currently unavailable</td>\n" +
-            "        <td>" +
-            "           <form action = \"SubjectRegistrationServlet\" method = \"POST\">" +
-            "             <input type = \"hidden\" name = \"currentSubject\" value = \""+ subject.getName() + "\"/>" +
-            "             <input type = \"submit\" value = \"Register\"/>" +
-            "           </form></td>\n" +
-            "</tr>\n";
+            "        <td>Syllabus is currently unavailable</td>\n";
+    try {
+      if(rsDAO.registrationStatus())
+        result +="<td>" +
+                "           <form action = \"SubjectRegistrationServlet\" method = \"POST\">" +
+                "             <input type = \"hidden\" name = \"currentSubject\" value = \""+ subject.getName() + "\"/>" +
+                "             <input type = \"submit\" value = \"Register\"/>" +
+                "           </form>" +
+                "         </td>\n";
+    } catch (SQLException e) {
+
+    }
+    result +="</tr>\n";
+    return result;
   }
 %>
 
@@ -34,6 +42,12 @@
 <head>
   <title>Registration</title>
   <link rel="stylesheet" href="css/registrationStyle.scss">
+  <style>
+    a {
+      color: white;
+      alignment: left;
+    }
+  </style>
 </head>
 <body>
 
@@ -46,10 +60,12 @@
               "   <th><h1>Syllabus</h1></th>\n" +
               "</tr>\n");
   for(Subject subject : allSubjects){
-    out.println(decorate(subject, lecDAO));
+    out.println(decorate(subject, lecDAO, rsDAO));
   }
 %>
 </table>
+
+<a href="studentPages/studentProfile.jsp">Profile</a>
 
 </body>
 

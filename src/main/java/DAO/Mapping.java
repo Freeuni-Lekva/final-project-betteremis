@@ -12,6 +12,7 @@ public interface Mapping {
     String SUBJECT_HISTORY_DAO = "subjhistorydao";
     String PREREQUISITES_DAO = "predao";
     String TOKEN_DAO = "tokdao";
+    String REGISTRATION_STATUS_DAO = "rsdao";
 
     //Mappings used for reading data
     String PASSWORD = "pass";
