@@ -6,7 +6,9 @@
 <%@ page import="DAO.Interfaces.SubjectHistoryDAO" %>
 <%@ page import="DAO.SqlSubjectHistoryDAO" %>
 <%@ page import="DAO.Interfaces.LecturerDAO" %>
-<%@ page import="Model.Lecturer" %><%--
+<%@ page import="Model.Lecturer" %>
+<%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
+<%@ page import="java.sql.SQLException" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 21.07.22
@@ -20,6 +22,7 @@
     LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
     Map<Integer, ArrayList<Subject>> completed = shDAO.getCompletedSubjects(student);
     Map<Integer, ArrayList<Subject>> incomplete = shDAO.getIncompleteSubjects(student);
+    RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
 %>
 
 <%!
@@ -41,7 +44,7 @@
 %>
 
 <%!
-    public String decorate (Map<Integer, ArrayList<Subject>> map, Student student, SubjectHistoryDAO shDAO, LecturerDAO lecDAO){
+    public String decorate (Map<Integer, ArrayList<Subject>> map, Student student, SubjectHistoryDAO shDAO, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO){
         String result = "";
         for(int semester : map.keySet()){
             result += " <table> " +
@@ -68,13 +71,17 @@
                         "            <td> " + mark + "</td>\n" +
                         "            <td> " + grade + "</td>\n" +
                         "            <td>Syllabus is currently unavailable</td>\n";
-                if (!shDAO.isCompleted(student, sb))
-                    result += "            <td>\n" +
-                            "               <form action = \"CancelRegistrationServlet\" method = \"POST\">\n" +
-                            "                   <input type = \"hidden\" name = \"subjectToRemove\" value = \""+ sb.getName() + "\"/>\n" +
-                            "                   <input type = \"submit\" value = \"Cancel\"/>\n" +
-                            "               </form>\n" +
-                            "            </td>\n";
+                try {
+                    if (!shDAO.isCompleted(student, sb) && rsDAO.registrationStatus())
+                        result += "            <td>\n" +
+                                "               <form action = \"CancelRegistrationServlet\" method = \"POST\">\n" +
+                                "                   <input type = \"hidden\" name = \"subjectToRemove\" value = \""+ sb.getName() + "\"/>\n" +
+                                "                   <input type = \"submit\" value = \"Cancel\"/>\n" +
+                                "               </form>\n" +
+                                "            </td>\n";
+                } catch (SQLException e) {
+
+                }
                 result += "         </tr>\n" +
                         "     </tbody>";
             }
@@ -97,14 +104,14 @@
 </head>
 <body>
 
-<h1>Completed courses</h1>
-<%
-    out.println(decorate(completed, student, shDAO, lecDAO));
-%>
-
 <h1>Incomplete courses</h1>
 <%
-    out.println(decorate(incomplete, student, shDAO, lecDAO));
+    out.println(decorate(incomplete, student, shDAO, lecDAO, rsDAO));
+%>
+
+<h1>Completed courses</h1>
+<%
+    out.println(decorate(completed, student, shDAO, lecDAO, rsDAO));
 %>
 
 <a href="studentProfile.jsp">Profile</a>
