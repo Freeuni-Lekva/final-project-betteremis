@@ -35,4 +35,9 @@ public interface LecturerDAO {
      */
     Lecturer getLecturerWithID(int ID);
 
+    boolean terminateStatus(Lecturer lecturer);
+
+    boolean recoverStatus(Lecturer lecturer);
+
+    int getIDByEmail(String email);
 }

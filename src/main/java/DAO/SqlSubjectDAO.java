@@ -23,7 +23,7 @@ public class SqlSubjectDAO implements SubjectDAO {
         try{
             int ID = subject.getLecturerID();
 
-            String statement = "INSERT INTO SUBJECTS (SubjectName, Credits, LecturerID) VALUES (?, ?, ?);";
+            String statement = "INSERT IGNORE INTO SUBJECTS (SubjectName, Credits, LecturerID) VALUES (?, ?, ?);";
             PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, subject.getName());
             ps.setInt(2, subject.getNumCredits());
@@ -136,7 +136,7 @@ public class SqlSubjectDAO implements SubjectDAO {
             PreparedStatement ps = conn.prepareStatement(statement);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
+                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(5));
                 result.add(s);
             }
 

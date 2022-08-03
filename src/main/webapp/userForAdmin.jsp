@@ -1,10 +1,6 @@
-<%@ page import="Model.User" %>
 <%@ page import="DAO.Mapping" %>
-<%@ page import="Model.Student" %>
-<%@ page import="Model.Lecturer" %>
-<%@ page import="Model.USERTYPE" %>
-<%@ page import="DAO.Interfaces.LecturerDAO" %>
-<%@ page import="DAO.Interfaces.StudentDAO" %><%--
+<%@ page import="DAO.Interfaces.*" %>
+<%@ page import="Model.*" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 02.08.22
@@ -14,7 +10,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 
-    User user = (User) request.getAttribute(Mapping.USER_OBJECT);
+    UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
+    String email = (String) request.getSession().getAttribute(Mapping.EMAIL);
+    User user = userDAO.getUserByEmail(email);
+    STATUS status ;
+    String address;
+    Number phone;
+    String firstName;
+    String lastName;
+    if(user.getType() == USERTYPE.STUDENT){
+        StudentDAO studentDAO = (StudentDAO) application.getAttribute(Mapping.STUDENT_DAO);
+        Student student = studentDAO.getStudentWithEmail(email);
+        status = student.getStatus();
+        address = student.getAddress();
+        phone = student.getPhone();
+        firstName = student.getFirstName();
+        lastName = student.getLastName();
+    }else{
+        LecturerDAO lecturerDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
+        Lecturer lecturer = lecturerDAO.getLecturerWithEmail(email);
+        status = lecturer.getStatus();
+        address = lecturer.getAddress();
+        phone = lecturer.getPhone();
+        firstName = lecturer.getFirstName();
+        lastName = lecturer.getLastName();
+    }
 %>
 
 <html>
@@ -31,7 +51,7 @@
             <div class="someone">
                 <img src="https://i.postimg.cc/3xkf5Pmv/woman.png">
                 <div class="text">
-                    <h1><%=user.getFirstName() + " " + user.getLastName()%></h1>
+                    <h1><%=firstName + " " + lastName%></h1>
                     <p><%=user.getType().toString()%></p>
                 </div>
             </div>
@@ -39,15 +59,23 @@
     </nav>
     <section class="about">
         <div class="who">
-            <form action="#" method="post">
+            <form action="ServletChangeStatus" method="POST">
 <%--                TODO : CHECK STATUS AND CREATE FORM--%>
+                <%
+                    String inp1 = "<input type=\"submit\" name=\"ban\" value=\"Ban User\">";
+                    String inp2 = "<input type=\"submit\" name=\"removeBan\" value=\"Remove Ban\">";
+                    if(status == STATUS.ACTIVE){
+                        out.println(inp1);
+                    }else{
+                        out.println(inp2);
+                    }
+                %>
+                <input type="hidden" name = "email" value = <%= user.getEmail() %> >
             </form>
-            <form action="#" method="post">
-<%--                TODO : CHECK REGISTRATION AND CREATE FORM--%>
-            </form>
-            <span><strong>Phone :</strong><%= user.getPhone() %></span>
-            <span><strong>Email :</strong><%= user.getEmail() %> </span>
-            <span><strong>Address :</strong> <%= user.getAddress() %></span>
+            <span><strong>User Currently Is : </strong><%= status.toString() %></span>
+            <span><strong>Phone : </strong><%= phone %></span>
+            <span><strong>Email : </strong><%= user.getEmail() %> </span>
+            <span><strong>Address : </strong> <%= address %></span>
         </div>
     </section>
 </div>

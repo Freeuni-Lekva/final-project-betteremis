@@ -2,8 +2,12 @@
 <%@ page import="DAO.Mapping" %>
 <%@ page import="Model.User" %>
 <%@ page import="java.util.List" %>
+<%@ page import="Model.Subject" %>
+<%@ page import="DAO.Interfaces.SubjectDAO" %>
+<%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
 <%
     UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
+    RegistrationStatusDAO regStatusDAO = (RegistrationStatusDAO) application.getAttribute(Mapping.REGISTRATION_STATUS_DAO);
     User admin = (User) application.getAttribute(Mapping.USER_OBJECT);
     List<User> allUsers = userDAO.getAllUsers();
 %>
@@ -43,18 +47,28 @@
 
 <div class="header">
     <div class="header-right">
-        <a class="active" href="#home">Home</a>
-        <a href="#contact">Contact</a>
-        <a href="#about">About</a>
+        <a class="active" href="adminProfile.jsp">Users</a>
+        <a href="subjectsForAdmin.jsp">Subjects</a>
+        <a href="addSubject.jsp">Add Subject</a>
     </div>
 </div>
 
 <div class="sidenav">
-    <a href="#about">link</a>
-    <a href="#services">link</a>
-    <a href="#clients">link</a>
-    <a href="#contact">link</a>
+    <a href="../LogOutServlet"> Log Out</a>
+    <form action="../ServletChangeRegistration" method="POST">
+        <%
+            String inp1 = "<input type=\"submit\" name=\"Close\" value=\"Close Registration\">";
+            String inp2 = "<input type=\"submit\" name=\"Open\" value=\"Open Registration\">";
+            boolean isOpen = regStatusDAO.registrationStatus();
+            if(isOpen){
+                out.println(inp1);
+            }else{
+                out.println(inp2);
+            }
+        %>
+    </form>
 </div>
+
 
 <div class="main">
     <div class="fieldset2" >
@@ -65,7 +79,7 @@
                 <tr>
                     <th>Email</th>
                     <th>Privilege</th>
-                    <th>Edit Profile</th>
+                    <th>LecturerID</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -159,4 +159,65 @@ public class SqlLecturerDAO implements LecturerDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public boolean terminateStatus(Lecturer lecturer) {
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("UPDATE LECTURERS SET LecturerStatus = ? WHERE UserID = ?");
+            stm.setString(1, STATUS.INACTIVE.toString());
+            stm.setInt(2, lecturer.getUserID());
+            int added = stm.executeUpdate();
+            if(added != 1) throw new SQLException();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Student with given ID either cannot be found or something happened executing query.");
+            return false;
+        }
+        finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
+    @Override
+    public boolean recoverStatus(Lecturer lecturer) {
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("UPDATE LECTURERS SET LecturerStatus = ? WHERE UserID = ?");
+            stm.setString(1, STATUS.ACTIVE.toString());
+            stm.setInt(2, lecturer.getUserID());
+            int added = stm.executeUpdate();
+            if(added != 1) throw new SQLException();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Student with given ID either cannot be found or something happened executing query.");
+            return false;
+        }
+        finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
+    @Override
+    public int getIDByEmail(String email) {
+        Connection conn = pool.getConnection();
+        String query = "SELECT S.ID "+
+                "FROM USERS U JOIN LECTURERS S on U.ID = S.UserID WHERE U.Email = ?";
+        try{
+            PreparedStatement stm = conn.prepareStatement(query);
+            stm.setString(1,email);
+            ResultSet resultSet = stm.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt(1);
+            }
+            return -1;
+        }catch (Exception e){
+            System.out.println("Error while getting user from USERS");
+            return -1;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
 }

@@ -31,7 +31,7 @@ public class ServletStatus extends HttpServlet {
             LecturerDAO lecturerDAO = (LecturerDAO) request.getServletContext().getAttribute(Mapping.LECTURER_DAO);
             user = lecturerDAO.getLecturerWithEmail(email);
         }
-        request.setAttribute(Mapping.USER_OBJECT, user);
+        request.getSession().setAttribute(Mapping.EMAIL, email);
         request.getRequestDispatcher("userForAdmin.jsp").forward(request,response);
     }
 }

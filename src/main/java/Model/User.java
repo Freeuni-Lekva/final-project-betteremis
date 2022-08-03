@@ -54,28 +54,6 @@ public class User {
             return ((Lecturer)this).getLastName();
         return null;
     }
-    public Number getPhone(){
-        if(type == STUDENT)
-            return ((Student)this).getPhone();
-        else if(type == LECTURER)
-            return ((Lecturer)this).getPhone();
-        return null;
-    }
-
-    public String getAddress(){
-        if(type == STUDENT)
-            return ((Student)this).getAddress();
-        else if(type == LECTURER)
-            return ((Lecturer)this).getAddress();
-        return null;
-    }
-    public STATUS getStatus(){
-        if(type == STUDENT)
-            return ((Student)this).getStatus();
-        else if(type == LECTURER)
-            return ((Lecturer)this).getStatus();
-        return null;
-    }
 
 
     @Override
