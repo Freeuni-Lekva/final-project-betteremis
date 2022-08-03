@@ -10,9 +10,10 @@ import org.junit.jupiter.api.*;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SqlFriendsDAOTest {
@@ -20,10 +21,10 @@ public class SqlFriendsDAOTest {
     static UserDAO usrDAO;
     static StudentDAO studDAO;
     static FriendsDAO friendsDAO;
-
+    static private ConnectionPool pool;
     @BeforeAll
     static void initAll() {
-        ConnectionPool pool = new ConnectionPool(10, true);
+        pool = new ConnectionPool(10, true);
         try {
             TestingUtils.emptyTables(pool.getConnection());
         } catch (FileNotFoundException e) {
@@ -56,6 +57,7 @@ public class SqlFriendsDAOTest {
     @Test
     @Order(1)
     public void testAddingFriends() {
+        initAll();
         assertEquals(true, friendsDAO.AddFriend(stud1, stud2, false));
         assertEquals(true, friendsDAO.AddFriend(stud2, stud3, false));
         assertEquals(true, friendsDAO.AddFriend(stud3, stud1, false));
@@ -71,21 +73,30 @@ public class SqlFriendsDAOTest {
     @Test
     @Order(2)
     public void testRemovingFriends() {
-   //     testAddingFriends();
+        initAll();
+        testAddingFriends();
         assertEquals(false, friendsDAO.Remove(stud1, stud2, false));
         assertEquals(false, friendsDAO.Remove(stud1, stud2, false));
-        assertEquals(true, friendsDAO.AddFriend(stud1, stud2, true));
+        assertEquals(false, friendsDAO.AddFriend(stud1, stud2, true));
+        assertEquals(true, friendsDAO.Remove(stud1, stud2, true));
         assertEquals(true, friendsDAO.AddFriend(stud1, stud2, true));
     }
     @Test
     @Order(3)
     public void testFriendList(){
-        testAddingFriends();
-//        assertEquals(,friendsDAO.GetAllFriends(stud1,true));
-  //      assertEquals(,friendsDAO.GetAllFriends(stud1,false));
-        testRemovingFriends();
-        friendsDAO.AddFriend(stud1, stud2, false);
-    //    assertEquals(,friendsDAO.GetAllFriends(stud1,false));
+        initAll();
+        List<String> L=new ArrayList<>();
+        L.add(stud2.getEmail());
+        L.add(stud3.getEmail());
+        friendsDAO.AddFriend(stud1, stud2, true);
+        friendsDAO.AddFriend(stud1, stud3, true);
+        List<User >L1=friendsDAO.GetAllFriends(stud1,true);
+        List<String>L2=new ArrayList<String >();
+        for(int i=0;i<L1.size();i++){
+            L2.add(L1.get(i).getEmail());
+        }
+        assertTrue(L.equals(L2));
+
     }
 }
 

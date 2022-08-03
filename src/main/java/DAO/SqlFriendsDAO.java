@@ -94,8 +94,8 @@ public class SqlFriendsDAO implements FriendsDAO {
         int id = userDAO.getIDByEmail(user.getEmail());
         Connection conn = pool.getConnection();
         try {
-            String query = "SELECT U.Email, U.PasswordHash, U.Privilage FROM USERS U JOIN "+
-                    (mode? " FRIENDS F " : "FRIEND_REQS F ") + " ON U.ID = F.UserID WHERE U.ID = ? ;";
+            String query = "SELECT U.Email, U.PasswordHash, U.Privilege FROM USERS U JOIN "+
+                    (mode? " FRIENDS F " : "FRIEND_REQS F ") + " ON U.ID = F.FriendID WHERE F.UserID = ? ;";
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setInt(1, id);
             ResultSet set = stm.executeQuery();
