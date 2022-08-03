@@ -66,7 +66,7 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         int ID = stDAO.getStudentIDByUserID(st.getUserID());
         Connection conn = pool.getConnection();
         try{
-            String statement = "INSERT INTO SUBJECTS_HISTORY (UserID, SubjectID, Semester, Grade, IsCompleted) VALUES (?, ?, ?, ?, ?);";
+            String statement = "INSERT INTO SUBJECTS_HISTORY (UserID, SubjectID, Semester, QUIZ, HOMEWORK, PROJECT, PRESENTATION, MIDTERM, FINAL, FX, IsCompleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, ID);
             SubjectDAO sd = new SqlSubjectDAO(pool);
@@ -75,7 +75,13 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
             conn = pool.getConnection();
             ps.setInt(3, st.getCurrentSemester());
             ps.setInt(4, 0);
-            ps.setBoolean(5, false);
+            ps.setInt(5, 0);
+            ps.setInt(6, 0);
+            ps.setInt(7, 0);
+            ps.setInt(8, 0);
+            ps.setInt(9, 0);
+            ps.setInt(10, 0);
+            ps.setBoolean(11, false);
             if (ps.executeUpdate() == 1){
                 ResultSet keys = ps.getGeneratedKeys();
                 keys.next();
@@ -93,17 +99,16 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         return -1;
     }
 
-    @Override
-    public boolean updateStudentGrade(Student st, Subject sb, int grade) {
+    private boolean updateScore(Student st, Subject sb, double grade, String type){
         SubjectDAO sd = new SqlSubjectDAO(pool);
         int SubjectID = sd.getSubjectIDByName(sb.getName());
         StudentDAO studDAO = new SqlStudentDAO(pool);
         int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
         Connection conn = pool.getConnection();
         try{
-            String statement = "UPDATE SUBJECTS_HISTORY SET Grade = ? WHERE UserID = ? AND SubjectID = ?;";
+            String statement = "UPDATE SUBJECTS_HISTORY SET " + type + " = ? WHERE UserID = ? AND SubjectID = ?;";
             PreparedStatement ps = conn.prepareStatement(statement);
-            ps.setInt(1, grade);
+            ps.setDouble(1, grade);
             ps.setInt(2, StudentID);
             ps.setInt(3, SubjectID);
             if (ps.executeUpdate() == 1){
@@ -116,6 +121,54 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         }
         pool.releaseConnection(conn);
         return false;
+    }
+
+    @Override
+    public boolean updateStudentQuiz(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "QUIZ");
+    }
+
+    @Override
+    public boolean updateStudentHomework(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "HOMEWORK");
+    }
+
+    @Override
+    public boolean updateStudentProject(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "PROJECT");
+    }
+
+    @Override
+    public boolean updateStudentPresentation(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "PRESENTATION");
+    }
+
+    @Override
+    public boolean updateStudentMidterm(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "MIDTERM");
+    }
+
+    @Override
+    public boolean updateStudentFinal(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "FINAL");
+    }
+
+    @Override
+    public boolean updateStudentFX(Student st, Subject sb, double grade) {
+        return updateScore(st, sb, grade, "FX");
+    }
+
+    @Override
+    public double getSumOfScores(Student st, Subject sb) {
+        Map<String, Double> scores = getGrade(st, sb);
+        if(scores == null)
+            return -1;
+        double result = 0;
+        for (String task : scores.keySet()){
+            double score = scores.get(task);
+            result += score == -1 ? 0 : score;
+        }
+        return result;
     }
 
     @Override
@@ -142,7 +195,7 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
             ps.setInt(2, SubjectID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                boolean result = rs.getBoolean(6);
+                boolean result = rs.getBoolean(12);
                 pool.releaseConnection(conn);
                 return result;
             }
@@ -157,7 +210,7 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
     }
 
     @Override
-    public double getGrade(Student st, Subject sb) {
+    public Map<String, Double> getGrade(Student st, Subject sb) {
         SubjectDAO sd = new SqlSubjectDAO(pool);
         int SubjectID = sd.getSubjectIDByName(sb.getName());
         StudentDAO studDAO = new SqlStudentDAO(pool);
@@ -170,7 +223,15 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
             ps.setInt(2, SubjectID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                double result = rs.getDouble(5);
+                Map<String, Double> result = new HashMap<>();
+                result.put(Mapping.QUIZ, rs.getDouble(5));
+                result.put(Mapping.HOMEWORK, rs.getDouble(6));
+                result.put(Mapping.PROJECT, rs.getDouble(7));
+                result.put(Mapping.PRESENTATION, rs.getDouble(8));
+                result.put(Mapping.MIDTERM, rs.getDouble(9));
+                result.put(Mapping.FINAL, rs.getDouble(10));
+                result.put(Mapping.FX, rs.getDouble(11));
+
                 pool.releaseConnection(conn);
                 return result;
             }
@@ -178,10 +239,10 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         }catch (SQLException e){
             System.out.println("SQLException happened.");
             pool.releaseConnection(conn);
-            return -1;
+            return null;
         }
         pool.releaseConnection(conn);
-        return -1;
+        return null;
     }
 
     @Override

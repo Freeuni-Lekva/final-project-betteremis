@@ -20,7 +20,6 @@ public interface SubjectHistoryDAO {
 
     Map<Integer, ArrayList<Subject>> getAllSubjects(Student student, int mode);
 
-
     /**
      * Adds row in SubjectsHistory table with the given student and subject. By default
      * grade is set to 0 and taken subject is marked as incomplete.
@@ -31,15 +30,82 @@ public interface SubjectHistoryDAO {
     int addStudentAndSubject(Student st, Subject sb);
 
     /**
-     * Updates the grade of the student in a given subject. If method returns false this means SQLException happened.
-     * One of the possible such exceptions is grade check constraint fail.
+     * Updates the quiz grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
      * @param st Student object
      * @param sb Subject object
      * @param grade Grade to be set
      * @return true if row was successfully updated, false otherwise.
      */
-    boolean updateStudentGrade(Student st, Subject sb, int grade);
+    boolean updateStudentQuiz(Student st, Subject sb, double grade);
 
+    /**
+     * Updates the homework grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
+     * @param st Student object
+     * @param sb Subject object
+     * @param grade Grade to be set
+     * @return true if row was successfully updated, false otherwise.
+     */
+    boolean updateStudentHomework(Student st, Subject sb, double grade);
+
+    /**
+     * Updates the project grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
+     * @param st Student object
+     * @param sb Subject object
+     * @param grade Grade to be set
+     * @return true if row was successfully updated, false otherwise.
+     */
+    boolean updateStudentProject(Student st, Subject sb, double grade);
+
+    /**
+     * Updates the presentation grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
+     * @param st Student object
+     * @param sb Subject object
+     * @param grade Grade to be set
+     * @return true if row was successfully updated, false otherwise.
+     */
+    boolean updateStudentPresentation(Student st, Subject sb, double grade);
+
+    /**
+     * Updates the midterm grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
+     * @param st Student object
+     * @param sb Subject object
+     * @param grade Grade to be set
+     * @return true if row was successfully updated, false otherwise.
+     */
+    boolean updateStudentMidterm(Student st, Subject sb, double grade);
+
+    /**
+     * Updates the final grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
+     * @param st Student object
+     * @param sb Subject object
+     * @param grade Grade to be set
+     * @return true if row was successfully updated, false otherwise.
+     */
+    boolean updateStudentFinal(Student st, Subject sb, double grade);
+
+    /**
+     * Updates the fx grade of the student in a given subject. If method returns false this means SQLException happened.
+     * One of the possible such exceptions is grade check constraint fail. Setting -1 here indicates that this part of scoring isn't used.
+     * @param st Student object
+     * @param sb Subject object
+     * @param grade Grade to be set
+     * @return true if row was successfully updated, false otherwise.
+     */
+    boolean updateStudentFX(Student st, Subject sb, double grade);
+
+    /**
+     * returns the total score of a student.
+     * @param st
+     * @param sb
+     * @return total score of a student.
+     */
+    double getSumOfScores(Student st, Subject sb);
 
     /**
      * Wrapper for getting completed subjects.
@@ -64,13 +130,22 @@ public interface SubjectHistoryDAO {
     boolean isCompleted(Student st, Subject sb);
 
     /**
-     * Gets the grade given student has in a given subject.
+     * Gets the grade given student has in a given subject. Since grade is distributed over different tasks, a map is returned
+     * with appropriate key value pairs.
      * @param st
      * @param sb
-     * @return decimal number representing the grade. -1 is returned if either error has happened or
-     * student subject pair could not be found in history.
+     * @return null is returned if either error has happened or
+     * student subject pair could not be found in history. Otherwise, a map is returned which has the following key value pairs :
+     * Mapping.QUIZ - quiz score
+     * Mapping.HOMEWORK - homework score
+     * Mapping.PROJECT - project score
+     * Mapping.PRESENTATION - presentation score
+     * Mapping.MIDTERM - midterm score
+     * Mapping.FINAL - final score
+     * Mapping.FX - fx score
+     * Scores may be -1, which means that kind of task isn't part of the subject's scoring system.
      */
-    double getGrade(Student st, Subject sb);
+    Map<String, Double> getGrade(Student st, Subject sb);
 
     /**
      * Updates the IsCompleted column in SUBJECTS_HISTORY table.
@@ -88,5 +163,4 @@ public interface SubjectHistoryDAO {
      * @return true if removed successfully, false otherwise.
      */
     boolean removeStudentAndSubject(Student st, Subject sb);
-
 }

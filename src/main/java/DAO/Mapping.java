@@ -29,4 +29,13 @@ public interface Mapping {
     String IS_STUDENT = "type";
     String SCHOOL = "school";
 
+    //Grades
+    String QUIZ = "quiz";
+    String HOMEWORK = "homework";
+    String PROJECT = "project";
+    String PRESENTATION = "presentation";
+    String MIDTERM = "midterm";
+    String FINAL = "final";
+    String FX = "fx";
+
 }
