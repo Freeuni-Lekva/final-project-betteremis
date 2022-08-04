@@ -78,6 +78,26 @@ public class SqlStudentDAO implements StudentDAO {
         }
     }
 
+
+    @Override
+    public boolean recoverStatus(Student student){
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("UPDATE STUDENTS SET StudentStatus = ? WHERE UserID = ?");
+            stm.setString(1, STATUS.ACTIVE.toString());
+            stm.setInt(2, student.getUserID());
+            int added = stm.executeUpdate();
+            if(added != 1) throw new SQLException();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Student with given ID either cannot be found or something happened executing query.");
+            return false;
+        }
+        finally {
+            pool.releaseConnection(conn);
+        }
+    }
     @Override
     public int getStudentIDByUserID(int UserID) {
         Connection conn = pool.getConnection();

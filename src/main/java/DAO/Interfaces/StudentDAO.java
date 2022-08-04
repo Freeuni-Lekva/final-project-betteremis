@@ -34,4 +34,6 @@ public interface StudentDAO {
      */
     int getStudentIDByUserID(int UserID);
 
+    boolean recoverStatus(Student student);
+
 }

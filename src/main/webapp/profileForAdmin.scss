@@ -1,0 +1,204 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+body{background-color: #f5f5f5;}
+:root{
+    --mainColor:#484488;
+    --textColor:rgb(102, 102, 101);
+    --bgColor:white;
+}
+.card{
+    background-color: #f5f5f5;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container{
+    padding-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+}
+.navbar{
+    margin: 60px auto;
+    width: 1460px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    background-color: var(--mainColor);
+    color:var(--bgColor);
+    border-radius:10px 10px 0px 0px;
+    box-shadow: 4px 8px 8px #31303030, -4px 7px 8px #31303030;
+}
+.navbar .flex{
+    display: flex;
+    justify-content: space-between;
+}
+.navbar .someone{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.navbar .someone img{
+    background-color: var(--bgColor);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+.navbar .someone .text{
+    padding: 20px;
+}
+.navbar .someone .text h1{
+    font-size: 35px;
+}
+.navbar .someone .text p{
+    padding-top: 2px;
+    font-size: 20px;
+}
+.navbar .follow-me{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.navbar .follow-me p{
+    align-self: flex-start;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    font-size: 18px;
+}
+.navbar .follow-me ul{
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+.navbar .follow-me ul li{
+    background-color: var(--bgColor);
+    width: 40px;
+    padding: 2px;
+    text-align: center;
+    height: 40px;
+    border-radius: 50%;
+    line-height: 40px;
+    margin: 6px;
+
+}
+.navbar .follow-me ul li:hover{
+    background-color: rgba(252, 14, 73, 0.753);
+    transition: 3s all ease;
+}
+.navbar .follow-me ul li i{
+    color: var(--mainColor);
+    font-size: 20px;
+}
+.navbar .follow-me ul li i:hover{
+    color: var(--bgColor);
+}
+.about{
+    width: 1460px;
+    margin: auto;
+    background-color: var(--bgColor);
+    margin-top: -60px;
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    margin-bottom: 60px;
+    box-shadow: 4px 8px 8px #31303030, -4px 7px 8px #31303030;
+}
+.about .navsection{
+    padding-left: 40px;
+    padding-top: 50px;
+    width: 190px;
+}
+.about .navsection ul{
+    list-style: none;
+
+}
+.about .navsection ul li{
+    margin-top: 34px;
+    padding: 2px;
+    position: relative;
+}
+.about .navsection ul li i{
+    font-size: 20px;
+    color: var(--textColor);
+}
+.about .navsection ul li::after{
+    content: '';
+    width: 30px;
+    height: 4px;
+    position: absolute;
+    top: 11px;
+    background-color: var(--mainColor);
+    left: -42px;
+    display: none
+}
+.about .navsection ul li:hover::after{
+    display: block;
+    transition: 3s all ease;
+}
+.about .navsection ul li:hover i{
+    color: var(--mainColor);
+    transition: .2s all ease-in;
+}
+.about .navsection ul li a{
+    text-decoration: none;
+    color: var(--textColor);
+    margin: 17px;
+    font-size: 20px;
+}
+.about .navsection ul li:hover a{
+    color: var(--mainColor);
+    font-weight: 700;
+    transition: .2s all ease-in;
+}
+.about .img {
+    padding-top: 60px;
+}
+.about .img img{
+    width: 710px;
+}
+.about .who{
+    display: flex;
+    flex-direction: column;
+    padding-top: 110px;
+}
+.about .who h1{
+    position: relative;
+}
+.about .who h1::after{
+    content: '';
+    width: 110px;
+    height: 2px;
+    background-color: var(--mainColor);
+    position: absolute;
+    top: 36px;
+    left: 0;
+}
+.about .who h1::before{
+    content: '';
+    width: 44px;
+    height: 12px;
+    border-radius: 20px;
+    background-color: var(--mainColor);
+    position: absolute;
+    top: 30px;
+    left: 0;
+}
+.about .who p{
+    white-space: pre-line;
+    line-height: 1.5;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 20px;
+    color: var(--textColor);
+}
+.about .who span{
+    padding-top: 30px;
+    font-size: 20px;
+    color:var(--textColor);
+}

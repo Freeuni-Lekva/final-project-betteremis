@@ -1,6 +1,31 @@
 body {
     font-family: "Lato", sans-serif;
 }
+table{
+    table-layout: fixed;
+}
+.display header{
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+}
+#main{
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.fieldset2 table {
+    table-layout: fixed;
+    width: 1400px;
+}
+.fieldset2 fieldset{
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
 
 .header {
     background-color: #e5e5e5;
@@ -88,76 +113,12 @@ fieldset {
     position: absolute;
 }
 
-.form-inline {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-}
-
-.form-inline label {
-    margin: 5px 10px 5px 0;
-    font-size: 14px;
-    font-weight: bold;
-    display: inline-block;
-}
-
-.form-inline input, select {
-    vertical-align: middle;
-    margin: 5px 10px 5px 0;
-    padding: 10px;
-    width: 15%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-}
-
-.form-inline button {
-    padding: 10px 20px;
-    background-color: #E30229;
-    border: none;
-    float: right;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-}
-
-.form-inline button:hover {
-    background-color: #FC4F6D;
-}
-
-@media (max-width: 800px) {
-    .form-inline input, select {
-        margin: 10px 0;
-    }
-
-
-    .form-inline {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 25px;}
     .sidenav a {font-size: 18px;}
 
     .fieldset2 {position:absolute;}
 }
-
-/* #myInput {
-  background-image: url('https://img.icons8.com/material-rounded/24/000000/search.png'); /* Add a search icon to input
-  background-size: 20px;
-  background-position: 5px 5px;
-  background-repeat: no-repeat;
-  width: 23%;
-  text-align: right;
-  float: right;
-  font-size: 16px;
-  padding: 5px 20px 5px 5px;
-  border: 1px solid #ddd;
-  margin: 12px 0;
-} */
-
-
 
 .multiselect {
     width: 200px;
