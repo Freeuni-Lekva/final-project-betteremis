@@ -169,7 +169,9 @@ public interface SubjectHistoryDAO {
     /**
      *
      * @param subjectName : given name of the subject
-     * @return  map containing students ordered by semesters. (Key in the map is semester)
+     * @return  map containing students ordered by semesters. (Key in the map is semester).
+     * If some kind of exception happened null is returned.
+     * If no students study or studied that subject empty Map is returned.
      */
     Map<Integer, ArrayList<Student> > getAllStudentsOfSubject(String subjectName);
 

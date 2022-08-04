@@ -353,4 +353,43 @@ public class SqlSubjectHistoryDAOTest {
         assertTrue(subjectHistoryDAO.removeStudentAndSubject(st, subject2));
         assertTrue(subjectHistoryDAO.removeStudentAndSubject(st, subject3));
     }
+
+    @Test
+    public void SqlSubjectHistoryDAOTest14(){
+        User u = new User("gmail21@gmail.com", "passhash", USERTYPE.STUDENT);
+        int newID = userDAO.addUser(u);
+        Student st = new Student("gmail21@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 1, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", newID);
+        studentDAO.addStudent(st);
+        Subject subject = new Subject("Computer Science 3", 6, LecID);
+        Subject subject2 = new Subject("Computer Science 4", 6, LecID);
+        Subject subject3 = new Subject("Computer Science 5", 6, LecID);
+        u = new User("gmail22@gmail.com", "passhash", USERTYPE.STUDENT);
+        newID = userDAO.addUser(u);
+        Student st2 = new Student("gmail22@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 2, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", newID);
+        studentDAO.addStudent(st2);
+
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject2) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject3) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st2, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st2, subject2) != -1);
+
+        Map<Integer, ArrayList<Student>> map1 = subjectHistoryDAO.getAllStudentsOfSubject(subject.getName());
+        Map<Integer, ArrayList<Student>> map2 = subjectHistoryDAO.getAllStudentsOfSubject(subject2.getName());
+        Map<Integer, ArrayList<Student>> map3 = subjectHistoryDAO.getAllStudentsOfSubject(subject3.getName());
+        assertEquals(2, map1.keySet().size());
+        assertTrue(map1.get(1) != null);
+        assertTrue(map1.get(2) != null);
+        assertEquals(1, map1.get(1).size());
+        assertEquals(1, map1.get(2).size());
+        assertEquals(2, map2.keySet().size());
+        assertTrue(map2.get(1) != null);
+        assertTrue(map2.get(2) != null);
+        assertEquals(1, map2.get(1).size());
+        assertEquals(1, map2.get(2).size());
+        assertEquals(1, map3.keySet().size());
+        assertTrue(map3.get(1) != null);
+        assertTrue(map3.get(2) == null);
+        assertEquals(1, map3.get(1).size());
+    }
 }

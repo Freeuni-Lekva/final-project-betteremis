@@ -3,11 +3,11 @@ package DAO;
 import DAO.Interfaces.StudentDAO;
 import DAO.Interfaces.SubjectDAO;
 import DAO.Interfaces.SubjectHistoryDAO;
-import Model.Student;
-import Model.Subject;
+import Model.*;
 import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -302,6 +302,47 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
 
     @Override
     public Map<Integer, ArrayList<Student>> getAllStudentsOfSubject(String subjectName) {
-        return null;
+        SubjectDAO sd = new SqlSubjectDAO(pool);
+        int SubjectID = sd.getSubjectIDByName(subjectName);
+        Map<Integer, ArrayList<Student>> result = new HashMap<>();
+        Connection conn = pool.getConnection();
+        try{
+           String statement = "SELECT Q.Email, Q.PasswordHash, Q.Privilege, Q.FirstName, Q.LastName, Q.Profession, Q.CurrentSemester," +
+                   " Q.Gender, Q.DateOfBirth, Q.Address, Q.StudentStatus, Q.School, Q.Credits, Q.GPA, Q.PhoneNumber, Q.GroupName, Q.UserID, S.Semester" +
+                   " FROM (SELECT S.ID, U.Email, U.PasswordHash, U.Privilege, S.FirstName, S.LastName, S.Profession, S.CurrentSemester, S.Gender," +
+                   " S.DateOfBirth, S.Address, S.StudentStatus, S.School, S.Credits, S.GPA, S.PhoneNumber, S.GroupName, S.UserID" +
+                   " FROM USERS U JOIN STUDENTS S on U.ID = S.UserID) Q JOIN SUBJECTS_HISTORY S ON S.UserID = Q.ID WHERE S.SubjectID = ?;";
+           PreparedStatement ps = conn.prepareStatement(statement);
+           ps.setInt(1, SubjectID);
+           ResultSet rs = ps.executeQuery();
+           while(rs.next()){
+               String email = rs.getString(1), hash = rs.getString(2);
+               USERTYPE priv = USERTYPE.toUserType(rs.getString(3));
+               String fName = rs.getString(4), lName = rs.getString(5), prof = rs.getString(6);
+               int curSem = rs.getInt(7);
+               GENDER gender = rs.getString(8).equals(GENDER.MALE.toString()) ? GENDER.MALE : GENDER.FEMALE;
+               Date date = new Date(rs.getDate(9).getTime());
+               String address = rs.getString(10);
+               STATUS status = rs.getString(11).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE;
+               String school = rs.getString(12);
+               int credits = rs.getInt(13);
+               double gpa = rs.getDouble(14);
+               BigInteger phone = new BigInteger(rs.getString(15));
+               String group = rs.getString(16);
+               int userID = rs.getInt(17);
+               Student st = new Student(email, hash, priv, fName, lName, prof, curSem, gender, date, address,
+                       status, school, credits, gpa, phone, group, userID);
+               int semester = rs.getInt(18);
+               if(result.get(semester) == null)
+                   result.put(semester, new ArrayList<>());
+               result.get(semester).add(st);
+           }
+
+        } catch (SQLException e) {
+            return null;
+        } finally {
+            pool.releaseConnection(conn);
+        }
+        return result;
     }
 }
