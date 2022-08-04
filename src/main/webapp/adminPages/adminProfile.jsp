@@ -68,8 +68,6 @@
         %>
     </form>
 </div>
-
-
 <div class="main">
     <div class="fieldset2" >
         <div class="temp">
@@ -89,12 +87,10 @@
                         }
                     %>
                 </tbody>
-
             </table>
         </fieldset>
         </div>
     </div>
-
 </div>
 </body>
 </html>

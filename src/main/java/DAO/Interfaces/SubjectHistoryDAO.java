@@ -163,4 +163,14 @@ public interface SubjectHistoryDAO {
      * @return true if removed successfully, false otherwise.
      */
     boolean removeStudentAndSubject(Student st, Subject sb);
+
+
+
+    /**
+     *
+     * @param subjectName : given name of the subject
+     * @return  map containing students ordered by semesters. (Key in the map is semester)
+     */
+    Map<Integer, ArrayList<Student> > getAllStudentsOfSubject(String subjectName);
+
 }
