@@ -299,4 +299,9 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         pool.releaseConnection(conn);
         return false;
     }
+
+    @Override
+    public Map<Integer, ArrayList<Student>> getAllStudentsOfSubject(String subjectName) {
+        return null;
+    }
 }
