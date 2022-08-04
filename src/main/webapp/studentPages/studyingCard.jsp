@@ -44,6 +44,16 @@
 %>
 
 <%!
+    private String decorateGrade(Map<String, Double> grades) {
+        String result = "";
+        for(String task : grades.keySet()){
+            double grade = grades.get(task);
+            if(grade != -1)
+                result += task.toUpperCase() + " : " + grade + "<br>";
+        }
+        return result;
+    }
+
     public String decorate (Map<Integer, ArrayList<Subject>> map, Student student, SubjectHistoryDAO shDAO, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO){
         String result = "";
         for(int semester : map.keySet()){
@@ -54,13 +64,14 @@
                     "            <th><h1>Subject Name</h1></th>\n" +
                     "            <th><h1>Lecturer</h1></th>\n" +
                     "            <th><h1>Credits</h1></th>\n" +
-                    "            <th><h1>Mark</h1></th>\n" +
+                    "            <th><h1>Score distribution</h1></th>\n" +
                     "            <th><h1>Grade</h1></th>\n" +
                     "            <th><h1>Syllabus</h1></th>\n" +
                     "        </tr>\n" +
                     "    </thead>";
             for(Subject sb :  map.get(semester)){
-                double mark = shDAO.getGrade(student, sb);
+                Map<String, Double> grades = shDAO.getGrade(student, sb);
+                double mark = shDAO.getSumOfScores(student, sb);
                 String grade = getGrade(mark);
                 Lecturer lec = lecDAO.getLecturerWithID(sb.getLecturerID());
                 result += "    <tbody>\n" +
@@ -68,8 +79,8 @@
                         "            <td>" + sb.getName() + "</td>\n" +
                         "            <td> " + lec.getFirstName() + " " + lec.getLastName() + "</td>\n" +
                         "            <td> " + sb.getNumCredits() + "</td>\n" +
-                        "            <td> " + mark + "</td>\n" +
-                        "            <td> " + grade + "</td>\n" +
+                        "            <td> " + decorateGrade(grades) + "</td>\n" +
+                        "            <td> " + mark + " | " + grade + "</td>\n" +
                         "            <td>Syllabus is currently unavailable</td>\n";
                 try {
                     if (!shDAO.isCompleted(student, sb) && rsDAO.registrationStatus())
