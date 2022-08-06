@@ -26,24 +26,23 @@
 
 <%!
     private String decorate(String name, double value){
-        String res = " <div><label for=\"" + name + "\">" + name + "</label></div>\n" +
-                "<input name=\"" + name + "\" placeholder=\"Enter -1 to discard this field\" type=\"number\" value =\"" + value+"\"  step=\"any\" min=\"-1\" max=\"100\">";
+        String res = " <div><label for=\"" + name + "\" style = \"color:white;\">" + name + "</label></div>\n" +
+                "<input name=\"" + name + "\" placeholder=\"Enter -1 to discard this field\" type=\"number\" value =\"" + value+"\"  step=\"any\" min=\"-1\" max=\"100\" required>";
         return res;
     }
 %>
 
-<script>
-    function removeField(fieldName) {
-        var elem = document.querySelector('#'+ fieldName);
-        elem.parentNode.removeChild(elem);
-    }
-</script>
 
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="markStudent.css">
 </head>
 <body>
+    <br>
+    <label style="color: #A7A1AE"> Edit <%= student.getFirstName()%>'s scores </label>
+    <br>
+    <br>
     <div class = "mainPanel">
         <form class="markform" action="../ServletChangeMarks" method="POST">
             <%
@@ -53,17 +52,21 @@
                     }
                 }
             %>
-            <input type="hidden" name= "subname" value= <%= subName %> > >
-            <input type="hidden" name= "email" value= <%= email %> > >
+            <input type="hidden" name= "subname" value= <%= subName %> >
+            <input type="hidden" name= "email" value= <%= email %> >
+            <br>
+            <br>
             <input type="submit" value="Submit scores">
         </form>
 
         <form class="resetForm" action="../ServletChangeMarks" method="POST" >
-            <input type="hidden" name= "subname" value= <%= subName %> > >
-            <input type="hidden" name= "email" value= <%= email %> > >
+            <input type="hidden" name= "subname" value= <%= subName %> >
+            <input type="hidden" name= "email" value= <%= email %> >
             <input type = "hidden" name = "reset" value="Reset">
             <input type = "submit" value="Reset Default">
         </form>
+
+        <a href="lecturerProfile.jsp">Go To Profile</a>
     </div>
 </body>
 </html>
