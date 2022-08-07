@@ -32,6 +32,7 @@ public interface Mapping {
     //Grades
     String QUIZ = "quiz";
     String HOMEWORK = "homework";
+
     String PROJECT = "project";
     String PRESENTATION = "presentation";
     String MIDTERM = "midterm";

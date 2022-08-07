@@ -77,7 +77,7 @@
                 <tr>
                     <th>Email</th>
                     <th>Privilege</th>
-                    <th>LecturerID</th>
+                    <th>See More</th>
                 </tr>
                 </thead>
                 <tbody>
