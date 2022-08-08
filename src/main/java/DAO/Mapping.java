@@ -7,7 +7,7 @@ public interface Mapping {
     //Context
     String USER_DAO = "usrdao";
 
-    String MESSAGES_DAO = "usrdao";
+    String MAIL_DAO = "maildao";
     String STUDENT_DAO = "stdao";
     String LECTURER_DAO = "lecdao";
     String SUBJECT_DAO = "subjdao";

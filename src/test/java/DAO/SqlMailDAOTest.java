@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -78,50 +79,52 @@ public class SqlMailDAOTest {
 
     @Test
     public void SqlMailDAOTest1(){
-        assertTrue(mailDAO.addMail(u, u2, "gamarjoba"));
-        assertTrue(mailDAO.addMail(u2, u, "gagimarjos"));
-        assertTrue(mailDAO.addMail(u, u2, "rogor xar?"));
-        assertTrue(mailDAO.addMail(u2, u, "kargad shen?"));
-        assertTrue(mailDAO.addMail(u, u2, "mec kargad"));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "gamarjoba", null)));
+        assertTrue(mailDAO.addMail(new Message(u2.getEmail(), u.getEmail(), "gagimarjos", null)));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "rogor xar?", null)));
+        assertTrue(mailDAO.addMail(new Message(u2.getEmail(), u.getEmail(), "kargad shen?", null)));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "mec kargad", null)));
+
     }
 
     @Test
     public void SqlMailDAOTest2(){
-        assertTrue(mailDAO.addMail(u, u2, "gamarjoba"));
-        assertTrue(mailDAO.addMail(u2, u, "gagimarjos"));
-        assertTrue(mailDAO.addMail(u, u2, "rogor xar?"));
-        assertTrue(mailDAO.addMail(u2, u, "kargad shen?"));
-        assertTrue(mailDAO.addMail(u, u2, "mec kargad"));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "gamarjoba", null)));
+        assertTrue(mailDAO.addMail(new Message(u2.getEmail(), u.getEmail(), "gagimarjos", null)));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "rogor xar?", null)));
+        assertTrue(mailDAO.addMail(new Message(u2.getEmail(), u.getEmail(), "kargad shen?", null)));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "mec kargad", null)));
 
-        List<String> result = mailDAO.getAllMails(u, u2, true);
+        List<Message> result = mailDAO.getAllMails(u.getEmail(), u2.getEmail(), true);
+        List<String> mapped = result.stream().map(x-> (x).getMessage()).collect(Collectors.toList());
         assertEquals(5, result.size());
-        assertTrue(result.contains("gamarjoba"));
-        assertTrue(result.contains("gagimarjos"));
-        assertTrue(result.contains("rogor xar?"));
-        assertTrue(result.contains("kargad shen?"));
-        assertTrue(result.contains("mec kargad"));
+        assertTrue(mapped.contains("gamarjoba"));
+        assertTrue(mapped.contains("gagimarjos"));
+        assertTrue(mapped.contains("rogor xar?"));
+        assertTrue(mapped.contains("kargad shen?"));
+        assertTrue(mapped.contains("mec kargad"));
     }
 
     @Test
     public void SqlMailDAOTest3(){
-        assertTrue(mailDAO.addMail(u, u2, "gamarjoba"));
-        assertTrue(mailDAO.addMail(u2, u, "gagimarjos"));
-        assertTrue(mailDAO.addMail(u, u2, "rogor xar?"));
-        assertTrue(mailDAO.addMail(u2, u, "kargad shen?"));
-        assertTrue(mailDAO.addMail(u, u2, "mec kargad"));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "gamarjoba", null)));
+        assertTrue(mailDAO.addMail(new Message(u2.getEmail(), u.getEmail(), "gagimarjos", null)));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "rogor xar?", null)));
+        assertTrue(mailDAO.addMail(new Message(u2.getEmail(), u.getEmail(), "kargad shen?", null)));
+        assertTrue(mailDAO.addMail(new Message(u.getEmail(), u2.getEmail(), "mec kargad", null)));
 
-        List<String> result = mailDAO.getAllMails(u, u2, true);
+        List<Message> result = mailDAO.getAllMails(u.getEmail(), u2.getEmail(), true);
+        List<String> mapped = result.stream().map(x-> (x).getMessage()).collect(Collectors.toList());
         assertEquals(5, result.size());
-        assertTrue(result.contains("gamarjoba"));
-        assertTrue(result.contains("gagimarjos"));
-        assertTrue(result.contains("rogor xar?"));
-        assertTrue(result.contains("kargad shen?"));
-        assertTrue(result.contains("mec kargad"));
+        assertTrue(mapped.contains("gamarjoba"));
+        assertTrue(mapped.contains("gagimarjos"));
+        assertTrue(mapped.contains("rogor xar?"));
+        assertTrue(mapped.contains("kargad shen?"));
+        assertTrue(mapped.contains("mec kargad"));
 
-        assertTrue(mailDAO.deleteAllMails(u, u2) == 5);
-        result = mailDAO.getAllMails(u, u2, true);
+        assertTrue(mailDAO.deleteAllMails(u.getEmail(), u2.getEmail()) == 5);
+        result = mailDAO.getAllMails(u.getEmail(), u2.getEmail(), true);
         assertEquals(0, result.size());
 
     }
-
 }

@@ -1,15 +1,16 @@
 package Model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
-public class Message {
+public class Message implements Comparable{
 
     private String senderEmail;
     private String receiverEmail;
     private String message;
-    private Date date;
+    private Timestamp date;
 
-    public Message(String sender, String receiver, String message, Date date) {
+    public Message(String sender, String receiver, String message, Timestamp date) {
         this.senderEmail = sender;
         this.receiverEmail = receiver;
         this.message = message;
@@ -30,5 +31,11 @@ public class Message {
 
     public Date getDate(){
         return this.date;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Message other = (Message) o;
+        return this.date.compareTo(other.date);
     }
 }
