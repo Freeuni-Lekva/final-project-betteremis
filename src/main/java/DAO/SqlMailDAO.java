@@ -4,7 +4,6 @@ import DAO.Interfaces.MailDAO;
 import DAO.Interfaces.UserDAO;
 import Model.Message;
 import Model.User;
-import org.eclipse.jetty.websocket.common.message.MessageAppender;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
