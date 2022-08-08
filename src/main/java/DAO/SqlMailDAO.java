@@ -2,7 +2,9 @@ package DAO;
 
 import DAO.Interfaces.MailDAO;
 import DAO.Interfaces.UserDAO;
+import Model.Message;
 import Model.User;
+import org.eclipse.jetty.websocket.common.message.MessageAppender;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SqlMailDAO implements MailDAO {
@@ -23,17 +26,11 @@ public class SqlMailDAO implements MailDAO {
         this.pool = pool;
     }
 
-
     @Override
-    public boolean addMail(User sender, User receiver, String message) {
-        return addMail(sender.getEmail(), receiver.getEmail(), message);
-    }
-
-    @Override
-    public boolean addMail(String sender, String receiver, String message) {
+    public boolean addMail(Message message) {
         UserDAO userDAO = new SqlUserDAO(pool);
-        int IDSender = userDAO.getIDByEmail(sender);
-        int IDReceiver = userDAO.getIDByEmail(receiver);
+        int IDSender = userDAO.getIDByEmail(message.getSender());
+        int IDReceiver = userDAO.getIDByEmail(message.getReceiver());
 
         if(IDSender == -1 || IDReceiver == -1)
             return false;
@@ -45,7 +42,7 @@ public class SqlMailDAO implements MailDAO {
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setInt(1, IDSender);
             ps.setInt(2, IDReceiver);
-            ps.setString(3, message);
+            ps.setString(3, message.getMessage());
             int result = ps.executeUpdate();
             return result == 1;
         }catch (SQLException e){
@@ -54,11 +51,6 @@ public class SqlMailDAO implements MailDAO {
         }finally {
             pool.releaseConnection(conn);
         }
-    }
-
-    @Override
-    public int deleteAllMails(User sender, User receiver) {
-        return deleteAllMails(sender.getEmail(), receiver.getEmail());
     }
 
     @Override
@@ -90,12 +82,18 @@ public class SqlMailDAO implements MailDAO {
     }
 
     @Override
-    public List<String> getAllMails(User sender, User receiver, boolean asc) {
-        return getAllMails(sender.getEmail(), receiver.getEmail(), asc);
+    public List<Message> getAllMails(String sender, String receiver, boolean asc) {
+        List<Message> res = getAllMailsHelper(sender, receiver, asc);
+        List<Message> secondRes = getAllMailsHelper(receiver, sender, asc);
+        res.addAll(secondRes);
+        Collections.sort(res);
+        if(!asc){
+            Collections.reverse(res);
+        }
+        return res;
     }
 
-    @Override
-    public List<String> getAllMails(String sender, String receiver, boolean asc) {
+    private List<Message> getAllMailsHelper(String sender, String receiver, boolean asc){
         UserDAO userDAO = new SqlUserDAO(pool);
         int IDSender = userDAO.getIDByEmail(sender);
         int IDReceiver = userDAO.getIDByEmail(receiver);
@@ -103,20 +101,18 @@ public class SqlMailDAO implements MailDAO {
         if(IDSender == -1 || IDReceiver == -1)
             return null;
 
-        List<String> result = new ArrayList<>();
+        List<Message> result = new ArrayList<>();
 
         Connection conn = pool.getConnection();
 
         try{
-            String statement = "SELECT * FROM MAIL WHERE (UserIDFrom = ? AND UserIDTo = ?) OR (UserIDFrom = ? AND UserIDTo = ?) ORDER BY SendDate "+ (asc ? "asc" : "desc") +";";
+            String statement = "SELECT * FROM MAIL WHERE  UserIDFrom = ? AND UserIDTo = ? ORDER BY SendDate "+ (asc ? "asc" : "desc") +";";
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setInt(1, IDSender);
             ps.setInt(2, IDReceiver);
-            ps.setInt(3, IDReceiver);
-            ps.setInt(4, IDSender);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                result.add(rs.getString(5));
+                result.add(new Message(sender, receiver,rs.getString(5),rs.getTimestamp(4)));
             }
             return result;
         }catch (SQLException e){
@@ -126,4 +122,5 @@ public class SqlMailDAO implements MailDAO {
             pool.releaseConnection(conn);
         }
     }
+
 }

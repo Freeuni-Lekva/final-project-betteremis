@@ -16,6 +16,8 @@ public class ServletMark extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String subName = (String) request.getSession().getAttribute("subjectName");
         String studentEmail = request.getParameter("studentEmail");
+        int semester = Integer.parseInt(request.getParameter("studentSemester"));
+        request.getSession().setAttribute("studentSemester", semester);
         request.getSession().setAttribute("studentEmail", studentEmail);
         request.getSession().setAttribute("subjectName", subName);
         response.sendRedirect("lecturerPages/markStudent.jsp");
