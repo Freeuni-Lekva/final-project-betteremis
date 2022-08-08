@@ -8,7 +8,8 @@
 <%@ page import="DAO.Interfaces.LecturerDAO" %>
 <%@ page import="Model.Lecturer" %>
 <%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
-<%@ page import="java.sql.SQLException" %><%--
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="DAO.Interfaces.PrerequisitesDAO" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 21.07.22
@@ -23,6 +24,7 @@
     Map<Integer, ArrayList<Subject>> completed = shDAO.getCompletedSubjects(student);
     Map<Integer, ArrayList<Subject>> incomplete = shDAO.getIncompleteSubjects(student);
     RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
+    PrerequisitesDAO pDAO = (PrerequisitesDAO)  request.getServletContext().getAttribute(Mapping.PREREQUISITES_DAO);
 %>
 
 <%!
@@ -54,7 +56,7 @@
         return result;
     }
 
-    public String decorate (Map<Integer, ArrayList<Subject>> map, Student student, SubjectHistoryDAO shDAO, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO){
+    public String decorate (Map<Integer, ArrayList<Subject>> map, Student student, SubjectHistoryDAO shDAO, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO, PrerequisitesDAO pDAO){
         String result = "";
         for(int semester : map.keySet()){
             result += " <table> " +
@@ -66,6 +68,7 @@
                     "            <th><h1>Credits</h1></th>\n" +
                     "            <th><h1>Score distribution</h1></th>\n" +
                     "            <th><h1>Grade</h1></th>\n" +
+                    "            <th><h1>Prerequisites</h1></th>\n" +
                     "            <th><h1>Syllabus</h1></th>\n" +
                     "        </tr>\n" +
                     "    </thead>";
@@ -81,6 +84,7 @@
                         "            <td> " + sb.getNumCredits() + "</td>\n" +
                         "            <td> " + decorateGrade(grades) + "</td>\n" +
                         "            <td> " + mark + " | " + grade + "</td>\n" +
+                        "            <td> " + pDAO.getSubjectPrerequisitesByName(sb.getName()) + "</td>\n" +
                         "            <td>Syllabus is currently unavailable</td>\n";
                 try {
                     if (!shDAO.isCompleted(student, sb) && rsDAO.registrationStatus())
@@ -117,12 +121,12 @@
 
 <h1>Incomplete courses</h1>
 <%
-    out.println(decorate(incomplete, student, shDAO, lecDAO, rsDAO));
+    out.println(decorate(incomplete, student, shDAO, lecDAO, rsDAO, pDAO));
 %>
 
 <h1>Completed courses</h1>
 <%
-    out.println(decorate(completed, student, shDAO, lecDAO, rsDAO));
+    out.println(decorate(completed, student, shDAO, lecDAO, rsDAO, pDAO));
 %>
 
 <a href="studentProfile.jsp">Profile</a>
