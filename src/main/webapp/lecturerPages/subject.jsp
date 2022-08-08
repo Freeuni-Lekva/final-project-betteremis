@@ -27,6 +27,7 @@
                 "                <td>\n" +
                 "               <form action = \"../ServletMark\" method = \"POST\">\n" +
                 "                   <input type = \"hidden\" name = \"studentEmail\" value = \""+ student.getEmail() + "\"/>\n" +
+                "                   <input type = \"hidden\" name = \"studentSemester\" value = \""+ semester + "\"/>\n" +
                 "                   <input type = \"submit\" value = \"See More\"/>\n" +
                 "               </form>\n"
                 +  "</td>\n" +

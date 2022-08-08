@@ -178,3 +178,18 @@ CREATE TABLE REGISTRATION_STATUS(
 );
 
 INSERT INTO REGISTRATION_STATUS (IsOpen) VALUES (false);
+
+
+
+DROP TABLE IF EXISTS MESSAGES;
+ -- remove table if it already exists and start from scratch
+
+CREATE TABLE MESSAGES (
+	ID int NOT NULL AUTO_INCREMENT,
+    SenderEmail CHAR(55) NOT NULL,
+	ReceiverEmail CHAR(55) NOT NULL,
+    Message CHAR(255) NOT NULL,
+    DateOfSend DATE NOT NULL,
+
+	PRIMARY KEY (ID)
+);
