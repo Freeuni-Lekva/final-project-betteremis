@@ -30,13 +30,6 @@ public interface SubjectDAO {
     Subject getSubjectByName(String subjectName);
 
     /**
-     * Finds all the students who are enrolled in this course and returns them
-     * as a list of Student objects.
-     * @return List of students enrolled in this subject.
-     */
-    List<Student> getEnrolledStudents(int subject_id);
-
-    /**
      * Given the subject name, gets subjects ID from the table.
      * @param name Name of the subject
      * @return ID or the subject if found, -1 otherwise.
