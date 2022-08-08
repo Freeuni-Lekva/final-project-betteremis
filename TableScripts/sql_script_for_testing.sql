@@ -178,3 +178,18 @@ CREATE TABLE REGISTRATION_STATUS(
 );
 
 INSERT INTO REGISTRATION_STATUS (IsOpen) VALUES (false);
+
+DROP TABLE IF EXISTS MAIL;
+-- remove table if it already exists and start from scratch
+
+CREATE TABLE MAIL(
+                     ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                     UserIDFrom int NOT NULL,
+                     UserIDTo int NOT NULL,
+                     SendDate DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                     Message MEDIUMTEXT NOT NULL,
+
+                     CHECK (UserIDFrom != UserIDTo),
+                     FOREIGN KEY (UserIDFrom) REFERENCES USERS(ID) ON DELETE CASCADE,
+                     FOREIGN KEY (UserIDTo) REFERENCES USERS(ID) ON DELETE CASCADE
+);
