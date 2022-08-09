@@ -21,6 +21,7 @@ public class ContextListener implements ServletContextListener {
         TokenDAO sqlTokenDAO = new SqlTokenDAO(pool);
         RegistrationStatusDAO sqlRegistrationStatusDAO = new SqlRegistrationStatusDAO(pool);
         MailDAO mailDAO = new SqlMailDAO(pool);
+        FriendsDAO friendsDAO = new SqlFriendsDAO(pool);
         sce.getServletContext().setAttribute(Mapping.USER_DAO, sqlUserDAO);
         sce.getServletContext().setAttribute(Mapping.STUDENT_DAO, sqlStudentDAO);
         sce.getServletContext().setAttribute(Mapping.LECTURER_DAO, sqlLecturerDAO);
@@ -30,6 +31,7 @@ public class ContextListener implements ServletContextListener {
         sce.getServletContext().setAttribute(Mapping.TOKEN_DAO, sqlTokenDAO);
         sce.getServletContext().setAttribute(Mapping.REGISTRATION_STATUS_DAO, sqlRegistrationStatusDAO);
         sce.getServletContext().setAttribute(Mapping.MAIL_DAO, mailDAO);
+        sce.getServletContext().setAttribute(Mapping.FRIENDS_DAO, friendsDAO);
     }
 
     @Override

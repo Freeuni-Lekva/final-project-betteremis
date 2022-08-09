@@ -4,6 +4,7 @@ import DAO.Interfaces.MailDAO;
 import DAO.Interfaces.UserDAO;
 import Model.Message;
 import Model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

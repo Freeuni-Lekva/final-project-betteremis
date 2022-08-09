@@ -15,6 +15,7 @@ public interface Mapping {
     String PREREQUISITES_DAO = "predao";
     String TOKEN_DAO = "tokdao";
     String REGISTRATION_STATUS_DAO = "rsdao";
+    String FRIENDS_DAO = "friendsdao";
 
     //Mappings used for reading data
     String PASSWORD = "pass";
