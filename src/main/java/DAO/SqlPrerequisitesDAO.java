@@ -26,7 +26,7 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         Connection conn = pool.getConnection();
         boolean result = false;
         try{
-            String statement = "DELETE FROM PREREQUISITES P JOIN SUBJECT S ON P.subjectID=S.ID HAVING SUBJECTNAME = ?;";
+            String statement = "DELETE FROM PREREQUISITES P JOIN SUBJECTS S ON P.SubjectID = S.ID WHERE S.SubjectName = ?;";
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setString(1, subjectName);
             int updateResult = ps.executeUpdate();

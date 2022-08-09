@@ -136,7 +136,7 @@ public class SqlSubjectDAO implements SubjectDAO {
             PreparedStatement ps = conn.prepareStatement(statement);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(5));
+                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
                 result.add(s);
             }
 
