@@ -11,16 +11,18 @@
   SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
   LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
   RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
+  PrerequisitesDAO pDAO = (PrerequisitesDAO) request.getServletContext().getAttribute(Mapping.PREREQUISITES_DAO);
   List<Subject> allSubjects = subjectDAO.getAllSubjects();
 %>
 
 <%!
-  public String decorate(Subject subject, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO){
+  public String decorate(Subject subject, LecturerDAO lecDAO, RegistrationStatusDAO rsDAO, PrerequisitesDAO pDAO){
     Lecturer lec = lecDAO.getLecturerWithID(subject.getLecturerID());
     String result =  "<tr>\n" +
             "        <td>" + subject.getName() + "</td>\n" +
             "        <td> " + lec.getFirstName() + " " + lec.getLastName() + "</td>\n" +
             "        <td> " + subject.getNumCredits() + "</td>\n" +
+            "        <td> " + pDAO.getSubjectPrerequisitesByName(subject.getName()) + "</td>\n" +
             "        <td>Syllabus is currently unavailable</td>\n";
     try {
       if(rsDAO.registrationStatus())
@@ -57,10 +59,11 @@
               "   <th><h1>Subject Name</h1></th>\n" +
               "   <th><h1>Lecturer</h1></th>\n" +
               "   <th><h1>Credits</h1></th>\n" +
+              "   <th><h1>Prerequisites</h1></th>\n" +
               "   <th><h1>Syllabus</h1></th>\n" +
               "</tr>\n");
   for(Subject subject : allSubjects){
-    out.println(decorate(subject, lecDAO, rsDAO));
+    out.println(decorate(subject, lecDAO, rsDAO, pDAO));
   }
 %>
 </table>

@@ -1,6 +1,30 @@
+<%@ page import="DAO.Interfaces.FriendsDAO" %>
+<%@ page import="static DAO.Mapping.FRIENDS_DAO" %>
+<%@ page import="static DAO.Mapping.*" %>
+<%@ page import="Model.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.util.stream.Collectors" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <%
+        List<User> data;
+        FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
+        data = dao.GetAllFriends((User) request.getSession().getAttribute(USER_OBJECT), true);
+        // following four lines are used for testing
+//        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
+//        for(int i=0; i<100; i++){
+//            data.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
+//        }
+        if(request.getParameter("search") != null){
+            String key = request.getParameter("search");
+            data = data.stream().filter( (user) -> {
+                if(user.getEmail().contains(key)) return true;
+                return false;
+            }).collect(Collectors.toList());
+        }
+        int ITEM_PER_PAGE = 16;
+    %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -35,10 +59,10 @@
 <!-- search bar -->
 <div class="container mt-5">
     <div class="row" id="search-bar">
-        <form class="form-inline">
-            <label class="sr-only" for="inlineFormInputName2">Name</label>
-            <input type="text" class="form-control mb-2 mr-sm-2" id="search" placeholder="search name ...">
-            <button type="submit" class="btn btn-primary mb-2" id="submit-search">Submit</button>
+        <form class="form-inline" action="friends.jsp" method="get">
+            <label class="sr-only">Name</label>
+            <input type="text" class="form-control mb-2 mr-sm-2" id="search" name="search" placeholder="search name ...">
+            <input type="submit" class="btn btn-primary mb-2" id="submit-search">
         </form>
     </div>
 </div>
@@ -46,7 +70,30 @@
 <!-- data-panel -->
 <div class="container">
     <div class="row" id="data-panel">
-
+        <%
+            int offset = 0;
+            if(request.getParameter("page") != null){
+                offset =  Integer.parseInt(request.getParameter("page")) - 1;
+            }
+            offset *= ITEM_PER_PAGE;
+            for(int i = offset; i < Math.min(offset + ITEM_PER_PAGE, data.size()); i++){
+                User item = data.get(i);
+        %>
+        <div class="col-sm-3">
+            <div class="card mb-2" id="card-list">
+                <img class="card-img-top show-photo" data-toggle="modal" data-target="#show-photo-modal" data-id="<%=i%>"
+                     data-email="<%=item.getEmail()%>" data-type="<%=item.getType()%>" src="https://randomuser.me/api/portraits/women/72.jpg" title="<%=item.getEmail()%>" alt="Card image cap">
+                <div class="card-body">
+                    <h6><%=item.getEmail()%>></h6>
+                    <form action="TODOservlet" method="post">
+                        <input type="submit" class="btn btn-info btn-add-friend" data-id="<%=i%>" value="Send Message"></input>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <%
+            }
+        %>
     </div>
 </div>
 
@@ -55,7 +102,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="show-photo-title">Modal title</h5>
+                <h5 class="modal-title" id="show-photo-title"> Friend Info</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -80,19 +127,36 @@
         </div>
     </div>
 </div>
-
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
         <li class="prev">
-            <a class="page-link" href="#" aria-label="Previous">
+            <a class="page-link" href="<%=request.getContextPath()+"/friends.jsp"%>" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
+
             </a>
         </li>
         <ul class="pagination" id="pagination">
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <%
+                int totalPages =  ((int)Math.ceil(data.size() / (double)ITEM_PER_PAGE));
+                if(totalPages == 0) totalPages = 1;
+                for (int i = 0; i < totalPages; i++) {%>
+                <li class="page-item">
+                    <a class="page-link" <%
+                        if(request.getParameter("search") != null){%>
+                            href="<%="?search="+request.getParameter("search")+"&page="+(i+1)%>"
+                       <%} else {%>href="<%="?page="+(i+1)%>"
+                            <%}%>
+                       data-page="<%=(i+1)%>>"><%=(i+1)%></a>
+                </li>
+            <%}%>
         </ul>
         <li class="next">
-            <a class="page-link" href="#" aria-label="next">
+            <a class="page-link" <%
+                    if(request.getParameter("search") != null){%>
+                    href="<%="?search="+request.getParameter("search")+"&page="+totalPages%>"
+                    <%} else {%>href="<%="?page="+totalPages%>"
+               <%}%>
+               aria-label="next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
@@ -109,6 +173,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
         integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
         crossorigin="anonymous"></script>
-<script src="studentPages/friends.js"></script>
+<script src="friends.js" type="text/javascript"></script>
 </body>
 </html>

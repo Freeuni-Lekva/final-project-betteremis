@@ -88,11 +88,6 @@ public class SqlSubjectDAO implements SubjectDAO {
     }
 
     @Override
-    public List<Student> getEnrolledStudents(int subject_id) {
-        return null;
-    }
-
-    @Override
     public int getSubjectIDByName(String name) {
         Connection conn = pool.getConnection();
         int result = -1;
