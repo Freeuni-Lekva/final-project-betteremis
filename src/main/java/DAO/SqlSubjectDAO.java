@@ -88,11 +88,6 @@ public class SqlSubjectDAO implements SubjectDAO {
     }
 
     @Override
-    public List<Student> getEnrolledStudents(int subject_id) {
-        return null;
-    }
-
-    @Override
     public int getSubjectIDByName(String name) {
         Connection conn = pool.getConnection();
         int result = -1;
@@ -136,7 +131,7 @@ public class SqlSubjectDAO implements SubjectDAO {
             PreparedStatement ps = conn.prepareStatement(statement);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(5));
+                Subject s = new Subject(rs.getString(2), rs.getInt(3), rs.getInt(4));
                 result.add(s);
             }
 

@@ -16,9 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class SqlMailDAO implements MailDAO {
-
-    final String FORMAT = "DD-MM-YYYY HH24:MI:SS";
-
     ConnectionPool pool;
 
     public SqlMailDAO(ConnectionPool pool) {
