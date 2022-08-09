@@ -103,6 +103,15 @@ public class SqlFriendsDAO implements FriendsDAO {
                 res.add(new User(set.getString(1),set.getString(2),
                         USERTYPE.toUserType(set.getString(3))));
             }
+            String query2 = "SELECT U.Email, U.PasswordHash, U.Privilege FROM USERS U JOIN "+
+                    (mode? " FRIENDS F " : "FRIEND_REQS F ") + " ON U.ID = F.UserID WHERE F.FriendID = ? ;";
+            PreparedStatement stm2 = conn.prepareStatement(query2);
+            stm2.setInt(1, id);
+            ResultSet set2 = stm2.executeQuery();
+            while(set2.next()){
+                res.add(new User(set2.getString(1),set2.getString(2),
+                        USERTYPE.toUserType(set2.getString(3))));
+            }
             return res;
         } catch (SQLException e) {
             return null;
