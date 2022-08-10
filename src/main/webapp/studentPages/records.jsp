@@ -6,7 +6,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #343a40">
 <head>
     <title>Academic Records</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -20,9 +20,10 @@
 <%
     Student student = (Student) request.getSession().getAttribute(USER_OBJECT);
     SubjectHistoryDAO dao = (SubjectHistoryDAO) request.getServletContext().getAttribute(SUBJECT_HISTORY_DAO);
-    Map<Integer, ArrayList<Subject>> data = dao.getAllSubjects(student);
+    Map<Integer, ArrayList<Subject>> data = dao.getAllSubjects(student, 0);
     int cnt = 1;
 %>
+<div class="wrapper-container">
 <body>
 <div class="p-3 mb-2 bg-dark text-white">
     <div class="container">
@@ -70,8 +71,8 @@
         <br>
         <table class="table table-hover table-dark table-striped">
             <thead>
-            <tr >
-                <th style="width: 5%">#</th>
+            <tr style="color: #8BC34A">
+                <th style="width: 5%; ">#</th>
                 <th style="width: 35%">Subject Name</th>
                 <th style="width: 10%">Semester</th>
                 <th style="width: 10%">Percentage</th>
@@ -128,4 +129,5 @@
     </div>
 </div>
 </body>
+</div>
 </html>

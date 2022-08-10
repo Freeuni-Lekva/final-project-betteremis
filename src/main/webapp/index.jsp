@@ -1,3 +1,6 @@
+<%@ page import="Model.User" %>
+<%@ page import="static DAO.Mapping.USER_OBJECT" %>
+<%@ page import="static Model.USERTYPE.*" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -10,6 +13,18 @@
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/indexStyle.scss">
+    <%
+        User user = (User) request.getSession().getAttribute(USER_OBJECT);
+        if(user != null){
+            if(user.getType() == STUDENT){
+                response.sendRedirect("studentPages/studentProfile.jsp");
+            }else if(user.getType() == LECTURER){
+                response.sendRedirect("lecturerPages/lecturerProfile.jsp");
+            }else if(user.getType() == ADMIN){
+                response.sendRedirect("adminPages/adminProfile.jsp");
+            }
+        }
+    %>
 </head>
 <%--<a style="color : #eee ; position:absolute;right:1rem" href="invalidUser.jsp"> TestingNotFound</a>--%>
 <%--<br />--%>
