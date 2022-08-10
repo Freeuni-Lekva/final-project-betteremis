@@ -17,7 +17,7 @@
             response.sendRedirect("invalidUser.jsp");
         }
         FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
-        List<User> friends = dao.getAllFriends(user, false);
+        List<User> friends = dao.getAllRequests(user);
         friends.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
         for(int i=0; i<100; i++){
             friends.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));

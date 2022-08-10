@@ -58,28 +58,28 @@ public class SqlFriendsDAOTest {
     @Order(1)
     public void testAddingFriends() {
         initAll();
-        assertEquals(true, friendsDAO.addFriend(stud1, stud2, false));
-        assertEquals(true, friendsDAO.addFriend(stud2, stud3, false));
-        assertEquals(true, friendsDAO.addFriend(stud3, stud1, false));
-        assertEquals(false, friendsDAO.addFriend(stud1, stud2, false));
-        assertEquals(false, friendsDAO.addFriend(stud2, stud3, false));
-        assertEquals(false, friendsDAO.addFriend(stud3, stud1, false));
-        assertEquals(true, friendsDAO.addFriend(stud1, stud2, true));
-        assertEquals(true, friendsDAO.addFriend(stud2, stud3, true));
-        assertEquals(true, friendsDAO.addFriend(stud3, stud1, true));
-        assertEquals(false, friendsDAO.addFriend(stud1, stud2, false));
-        assertEquals(false, friendsDAO.addFriend(stud1, stud2, true));
+        assertEquals(true, friendsDAO.addRequest(stud1, stud2));
+        assertEquals(true, friendsDAO.addRequest(stud2, stud3));
+        assertEquals(true, friendsDAO.addRequest(stud3, stud1));
+        assertEquals(false, friendsDAO.addRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.addRequest(stud2, stud3));
+        assertEquals(false, friendsDAO.addRequest(stud3, stud1));
+        assertEquals(true, friendsDAO.addFriend(stud1, stud2));
+        assertEquals(true, friendsDAO.addFriend(stud2, stud3));
+        assertEquals(true, friendsDAO.addFriend(stud3, stud1));
+        assertEquals(false, friendsDAO.addRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.addFriend(stud1, stud2));
     }
     @Test
     @Order(2)
     public void testRemovingFriends() {
         initAll();
         testAddingFriends();
-        assertEquals(false, friendsDAO.removeFriends(stud1, stud2, false));
-        assertEquals(false, friendsDAO.removeFriends(stud1, stud2, false));
-        assertEquals(false, friendsDAO.addFriend(stud1, stud2, true));
-        assertEquals(true, friendsDAO.removeFriends(stud1, stud2, true));
-        assertEquals(true, friendsDAO.addFriend(stud1, stud2, true));
+        assertEquals(true, friendsDAO.removeRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.removeRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.addFriend(stud1, stud2));
+        assertEquals(true, friendsDAO.removeFriends(stud1, stud2));
+        assertEquals(true, friendsDAO.addFriend(stud1, stud2));
     }
     @Test
     @Order(3)
@@ -88,9 +88,9 @@ public class SqlFriendsDAOTest {
         List<String> L=new ArrayList<>();
         L.add(stud2.getEmail());
         L.add(stud3.getEmail());
-        friendsDAO.addFriend(stud1, stud2, true);
-        friendsDAO.addFriend(stud1, stud3, true);
-        List<User >L1=friendsDAO.getAllFriends(stud1,true);
+        friendsDAO.addFriend(stud1, stud2);
+        friendsDAO.addFriend(stud1, stud3);
+        List<User >L1=friendsDAO.getAllFriends(stud1);
         List<String>L2=new ArrayList<String >();
         for(int i=0;i<L1.size();i++){
             L2.add(L1.get(i).getEmail());
