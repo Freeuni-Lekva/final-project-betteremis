@@ -12,7 +12,7 @@
         List<User> data;
         User currentUser = (User) request.getSession().getAttribute(USER_OBJECT);
         FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
-        data = dao.GetAllFriends(currentUser, true);
+        data = dao.getAllFriends(currentUser, true);
 //        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
 //        for(int i=0; i<100; i++){
 //            data.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
@@ -45,13 +45,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.jsp">Home
+                </a>
+            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home
+                <a class="nav-link" href="friends.jsp">Friends
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="favorite.html">friend</a>
+                <a class="nav-link" href="friend-requests.jsp">Friend requests
+                </a>
             </li>
         </ul>
     </div>

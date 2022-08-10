@@ -27,7 +27,7 @@ public class SqlFriendsDAO implements FriendsDAO {
     }
 
     @Override
-    public boolean AreFriends(User user1, User user2,boolean mode){
+    public boolean areFriends(User user1, User user2, boolean mode){
         int id1 = userDAO.getIDByEmail(user1.getEmail());
         int id2 = userDAO.getIDByEmail(user2.getEmail());
         Connection conn = pool.getConnection();
@@ -46,14 +46,14 @@ public class SqlFriendsDAO implements FriendsDAO {
         }
     }
     @Override
-    public boolean AddFriend(User user1, User user2, boolean mode) {
-        if(AreFriends(user1,user2,mode)) return false;
-        if(mode==false&&AreFriends(user1,user2,true)) return false;
+    public boolean addFriend(User user1, User user2, boolean mode) {
+        if(areFriends(user1,user2,mode)) return false;
+        if(mode==false&& areFriends(user1,user2,true)) return false;
         int id1 = userDAO.getIDByEmail(user1.getEmail());
         int id2 = userDAO.getIDByEmail(user2.getEmail());
         Connection conn = pool.getConnection();
         if(mode==true)
-            Remove(user1,user2,false);// remove from requests
+            removeFriends(user1,user2,false);// remove from requests
         try {
             String query = "INSERT IGNORE INTO "  + (mode? "FRIENDS" : "FRIEND_REQS")
                 + " (UserID, FriendID) VALUES (? , ?) ";
@@ -70,7 +70,7 @@ public class SqlFriendsDAO implements FriendsDAO {
     }
 
     @Override
-    public boolean Remove(User user1, User user2, boolean mode) {
+    public boolean removeFriends(User user1, User user2, boolean mode) {
         int id1 = userDAO.getIDByEmail(user1.getEmail());
         int id2 = userDAO.getIDByEmail(user2.getEmail());
         Connection conn = pool.getConnection();
@@ -89,7 +89,7 @@ public class SqlFriendsDAO implements FriendsDAO {
     }
 
     @Override
-    public List<User> GetAllFriends(User user, boolean mode) {
+    public List<User> getAllFriends(User user, boolean mode) {
         List<User> res = new ArrayList<>();
         int id = userDAO.getIDByEmail(user.getEmail());
         Connection conn = pool.getConnection();

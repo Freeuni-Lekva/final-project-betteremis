@@ -15,7 +15,7 @@ public interface FriendsDAO {
      * @return
      */
 
-    boolean AddFriend(User user1, User user2, boolean mode);
+    boolean addFriend(User user1, User user2, boolean mode);
 
     /**
      *
@@ -24,7 +24,7 @@ public interface FriendsDAO {
      * @param mode is true : removes in FRIENDS table. mode if false : removes in FRIEND_REQS table.
      * @return
      */
-    boolean Remove(User user1, User user2, boolean mode);
+    boolean removeFriends(User user1, User user2, boolean mode);
 
 
     /**
@@ -34,7 +34,7 @@ public interface FriendsDAO {
      *            mode if false: returns all the requests of the given user.
      * @return
      */
-    List<User> GetAllFriends(User user, boolean mode);
+    List<User> getAllFriends(User user, boolean mode);
 
     /**
      *
@@ -45,7 +45,7 @@ public interface FriendsDAO {
      *
      * @return
      */
-    public boolean AreFriends(User user1, User user2,boolean mode);
+    public boolean areFriends(User user1, User user2, boolean mode);
 
 
 }
