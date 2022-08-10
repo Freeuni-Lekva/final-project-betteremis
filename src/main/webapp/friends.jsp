@@ -4,14 +4,15 @@
 <%@ page import="Model.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.stream.Collectors" %>
+<%@ page import="DAO.Mapping" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%
         List<User> data;
+        User currentUser = (User) request.getSession().getAttribute(USER_OBJECT);
         FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
-        data = dao.GetAllFriends((User) request.getSession().getAttribute(USER_OBJECT), true);
-        // following four lines are used for testing
+        data = dao.GetAllFriends(currentUser, true);
 //        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
 //        for(int i=0; i<100; i++){
 //            data.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
@@ -84,8 +85,10 @@
                 <img class="card-img-top show-photo" data-toggle="modal" data-target="#show-photo-modal" data-id="<%=i%>"
                      data-email="<%=item.getEmail()%>" data-type="<%=item.getType()%>" src="https://randomuser.me/api/portraits/women/72.jpg" title="<%=item.getEmail()%>" alt="Card image cap">
                 <div class="card-body">
-                    <h6><%=item.getEmail()%>></h6>
-                    <form action="TODOservlet" method="post">
+                    <h6><%=item.getEmail()%></h6>
+                    <form action="ServletSendMessage" method="post">
+                        <input type = "hidden" name = <%=Mapping.SENDER%> value= <%=currentUser.getEmail()%> >
+                        <input type = "hidden"  name = <%=Mapping.RECEIVER%> value=<%=item.getEmail()%> >
                         <input type="submit" class="btn btn-info btn-add-friend" data-id="<%=i%>" value="Send Message"></input>
                     </form>
                 </div>
