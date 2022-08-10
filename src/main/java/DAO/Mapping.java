@@ -20,6 +20,8 @@ public interface Mapping {
     String REGISTRATION_STATUS_DAO = "rsdao";
     String FRIENDS_DAO = "friendsdao";
 
+    String FRIEND_SERVICE = "friendservice";
+
     //Mappings used for reading data
     String PASSWORD = "pass";
     String FIRST_NAME = "firstname";
