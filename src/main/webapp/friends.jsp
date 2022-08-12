@@ -13,10 +13,10 @@
         User currentUser = (User) request.getSession().getAttribute(USER_OBJECT);
         FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
         data = dao.getAllFriends(currentUser);
-//        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
-//        for(int i=0; i<100; i++){
-//            data.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
-//        }
+        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
+        for(int i=0; i<100; i++){
+            data.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
+        }
         if(request.getParameter("search") != null){
             String key = request.getParameter("search");
             data = data.stream().filter( (user) -> {
