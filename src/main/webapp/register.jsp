@@ -37,7 +37,7 @@
                     F<input type="radio" name="Gender" value="F" id="female" >
     </span>
     <div><label for="userbday">Birthday</label></div>
-    <input type="date" name="dateofbirth" id="userbday" min='1899-01-01' title="Wrong min date">
+    <input type="date" name="birthdate" id="userbday" min='1899-01-01' title="Wrong min date">
     <div><label for="useremail">Email Address</label></div>
     <input name="email" id="useremail" type="email" placeholder="Enter email" maxlength="50">
     <div><label for="userPass">Password</label></div>
@@ -46,7 +46,7 @@
     <div><label for="addr">Address</label></div>
     <input name="address" id="addr" type="text" placeholder="Enter address" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
     <div><label for="tell">Phone</label></div>
-    <input name="number" id="tell" type="tel" placeholder="Enter phone number" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
+    <input name="phone" id="tell" type="tel" placeholder="Enter phone number" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
 
     <div class="dgend">User type</div>
     <span class="gend">
@@ -55,9 +55,9 @@
     </span>
     <div class = "desc" id="fields">
         <div><label for="group">Group</label></div>
-        <input name="groupname" id="group" type="text" placeholder="Enter group name" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
+        <input name="groupname" id="group" type="text" placeholder="Enter group name" maxlength="20" pattern=".{2,20}"  title="2 to 20 characters">
         <div><label for="school">School</label></div>
-        <input name="school" id="school" type="tel" placeholder="Enter school name" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
+        <input name="school" id="school" type="tel" placeholder="Enter school name" maxlength="20" pattern=".{2,20}"  title="2 to 20 characters">
     </div>
     <input class="button" type="submit" value="Send" name="submit">
 </form>
