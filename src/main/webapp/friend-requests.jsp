@@ -79,7 +79,7 @@
 <%--        </button>--%>
 <%--        <button class="friend-request decline-request" id="<%=(2*cnt+1)%>" onclick="buttonClicked(this)" data-username="angrytiger584">Decline--%>
 <%--        </button>--%>
-        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>&reponse=Decline>" class="friend-request decline-request-request btn btn-primary">Decline</a>
+        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>&response=Decline>" class="friend-request decline-request-request btn btn-primary" style="background-color: #E91E63">Decline</a>
     </div>
     </div>
     <%
