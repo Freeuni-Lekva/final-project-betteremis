@@ -129,7 +129,7 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
                 st.push(s);
             } else if (s.equals(")")) {
                 if(st.isEmpty()) return false;
-                st.push(s);
+                st.pop();
             }
         }
         return st.isEmpty();
