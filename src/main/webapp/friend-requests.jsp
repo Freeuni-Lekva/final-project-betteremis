@@ -74,12 +74,12 @@
     <div class="name-box"><%=email%>></div>
     <div class="user-name-box">@Nick sent u a friend request<br> <%=type%></div>
     <div class="request-btn-row" data-username="angrytiger584">
-        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>" class="friend-request accept-request btn btn-primary">Accept</a>
+        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>&response=Accept" class="friend-request accept-request btn btn-primary">Accept</a>
 <%--        <button class="friend-request accept-request" id="<%=(2*cnt)%>" onclick="buttonClicked(this)" data-username="angrytiger584">Accept--%>
 <%--        </button>--%>
 <%--        <button class="friend-request decline-request" id="<%=(2*cnt+1)%>" onclick="buttonClicked(this)" data-username="angrytiger584">Decline--%>
 <%--        </button>--%>
-        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>" id="<%=email%>" class="friend-request decline-request-request btn btn-primary">Decline</a>
+        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>&response=Decline>" class="friend-request decline-request-request btn btn-primary" style="background-color: #E91E63">Decline</a>
     </div>
     </div>
     <%
