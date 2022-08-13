@@ -11,6 +11,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 
 import static DAO.Mapping.*;
+import static Model.USERTYPE.ADMIN;
 
 @WebServlet(name = "FriendRequestServlet", value = "/FriendRequestServlet")
 public class FriendRequestServlet extends HttpServlet {
@@ -26,7 +27,7 @@ public class FriendRequestServlet extends HttpServlet {
         User user = (User) request.getSession().getAttribute(USER_OBJECT);
         UserDAO dao = (UserDAO) context.getAttribute(USER_DAO);
         User friend = dao.getUserByEmail(email);
-        if(email == null || user == null || friend == null){
+        if(email == null || user == null || friend == null || friend.getType() == ADMIN){
             response.sendRedirect("invalidUser.jsp");
         }
         FriendsDAO friendsDAO = (FriendsDAO) context.getAttribute(FRIENDS_DAO);
