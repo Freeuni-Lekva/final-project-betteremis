@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @MultipartConfig
 public class ServletUploader extends HttpServlet {
 
-    private static final int LEN = 8;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -48,30 +47,64 @@ public class ServletUploader extends HttpServlet {
         StudentDAO studentDAO = (StudentDAO) request.getServletContext().getAttribute(Mapping.STUDENT_DAO);
         SubjectDAO subjectDAO = (SubjectDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_DAO);
         // Parse file and redirect client.
+        //FIRST LINE Must contain names of the fields.
+        String fields =  br.readLine();
+        if(fields == null){
+            //TODO: syntax error
+            System.out.println("Expected fields");
+            return;
+        }
+        String[] parts = fields.split(" ");
 
-        br.lines().forEach(line -> parseStudentGrades(line, subjectName, studentDAO, subjectDAO, subDAO));
+        while(true){
+            String line =  br.readLine();
+            if(line == null) break;
+            parseStudentGrades(line, parts, subjectName, studentDAO, subjectDAO, subDAO);
+        }
+
         response.sendRedirect("lecturerPages/subject.jsp");
     }
 
-    private void parseStudentGrades(String line, String subjectName , StudentDAO studentDAO ,
+    private void parseStudentGrades(String line, String[] parts, String subjectName , StudentDAO studentDAO ,
                                     SubjectDAO subjectDAO,SubjectHistoryDAO subDAO) {
-        //TODO READ : Expected format :studentEmail QUIZ HOMEWORK PROJECT PRESENTATION MIDTERM FINAL FX
-        // Example : Expected format: dshis20@freeuni.edu.ge 24 12 -1 -1 24 60 -1
+        //TODO READ : Expected format on each line :studentEmail foreach space seperated integer must
+        // be the grade of the appropriate field wrote on the first line
+        // Example : if first line is :quiz midterm fx (each is optional)
+        // Expected format: dshis20@freeuni.edu.ge gradeOfTheQuiz gradeOfTheMidterm gradeOfTheFX
         String[] parsedStrings  =  line.split(" ");
         String email  = parsedStrings[0];
-        if(parsedStrings.length != LEN){
+        if(parsedStrings.length != parts.length + 1){
             //TODO : INVALID FORMAT EXCEPTION...
             System.out.println("Invalid Format");
             return;
         }
         Student student = studentDAO.getStudentWithEmail(email);
         Subject subject = subjectDAO.getSubjectByName(subjectName);
-        subDAO.updateStudentQuiz(student, subject, Double.parseDouble(parsedStrings[1]));
-        subDAO.updateStudentHomework(student, subject, Double.parseDouble(parsedStrings[2]));
-        subDAO.updateStudentProject(student, subject, Double.parseDouble(parsedStrings[3]));
-        subDAO.updateStudentPresentation(student, subject, Double.parseDouble(parsedStrings[4]));
-        subDAO.updateStudentMidterm(student, subject, Double.parseDouble(parsedStrings[5]));
-        subDAO.updateStudentFinal(student, subject, Double.parseDouble(parsedStrings[6]));
-        subDAO.updateStudentFX(student, subject, Double.parseDouble(parsedStrings[7]));
+        for (int i = 0; i < parts.length; i++) {
+            String field = parts[i];
+            switch (field) {
+                case Mapping.QUIZ:
+                    subDAO.updateStudentQuiz(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+                case Mapping.HOMEWORK:
+                    subDAO.updateStudentHomework(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+                case Mapping.PROJECT:
+                    subDAO.updateStudentProject(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+                case Mapping.PRESENTATION:
+                    subDAO.updateStudentPresentation(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+                case Mapping.MIDTERM:
+                    subDAO.updateStudentMidterm(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+                case Mapping.FINAL:
+                    subDAO.updateStudentFinal(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+                case Mapping.FX:
+                    subDAO.updateStudentFX(student, subject, Double.parseDouble(parsedStrings[i+1]));
+                    break;
+            }
+        }
     }
 }
