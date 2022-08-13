@@ -82,6 +82,7 @@
 .friend-requests {
     font-family: "Montserrat", sans-serif;
     text-align: center;
+    background-color: #434750;
 }
 .friend-requests .friend-box {
     position: relative;

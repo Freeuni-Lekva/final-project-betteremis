@@ -45,14 +45,14 @@ public class User {
             return ((Student)this).getFirstName();
         else if(type == LECTURER)
             return ((Lecturer)this).getFirstName();
-        return null;
+        return "Admin"; // FOR TESTING PURPOSES
     }
     public String getLastName(){
         if(type == STUDENT)
             return ((Student)this).getLastName();
         else if(type == LECTURER)
             return ((Lecturer)this).getLastName();
-        return null;
+        return "Admin";
     }
 
 
