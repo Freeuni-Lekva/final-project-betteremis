@@ -82,5 +82,12 @@
         </div>
     </div>
 </div>
+<div style= "">
+    <form method="post" action="../ServletUploader" enctype="multipart/form-data">
+        <input type="file" name=<%=Mapping.FILE%> />
+        </br>
+        <input type="submit" value="Upload" />
+    </form>
+</div>
 </body>
 </html>

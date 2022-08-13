@@ -12,6 +12,7 @@ public interface Mapping {
     String LECTURER_DAO = "lecdao";
     String SUBJECT_DAO = "subjdao";
 
+    String FILE = "file";
     String SENDER = "sender";
     String RECEIVER = "receiver";
     String SUBJECT_HISTORY_DAO = "subjhistorydao";
