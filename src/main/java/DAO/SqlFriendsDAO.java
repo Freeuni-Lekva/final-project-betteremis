@@ -36,6 +36,7 @@ public class SqlFriendsDAO implements FriendsDAO {
             if(res == 1) return true;
             return false;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         } finally {
             pool.releaseConnection(conn);
@@ -67,14 +68,20 @@ public class SqlFriendsDAO implements FriendsDAO {
         int id1 = userDAO.getIDByEmail(user1.getEmail());
         int id2 = userDAO.getIDByEmail(user2.getEmail());
         Connection conn = pool.getConnection();
+        String additional = " OR (FriendID = ? and UserID = ?) ";
         try {
-            String query = "DELETE FROM " + (mode? "FRIENDS":"FRIEND_REQS") + " WHERE UserID = ? and FriendID = ?;";
+            String query = "DELETE FROM " + (mode? "FRIENDS":"FRIEND_REQS") + " WHERE (UserID = ? and FriendID = ?) " +
+                     ( mode ? additional : "" ) + " ;";
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setInt(1, id1); stm.setInt(2, id2);
+            if(mode){
+                stm.setInt(3, id1); stm.setInt(4, id2);
+            }
             int res = stm.executeUpdate();
             if(res == 1) return true;
             return false;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         } finally {
             pool.releaseConnection(conn);
@@ -109,6 +116,7 @@ public class SqlFriendsDAO implements FriendsDAO {
             }
             return res;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         } finally {
             pool.releaseConnection(conn);
@@ -138,6 +146,7 @@ public class SqlFriendsDAO implements FriendsDAO {
             if(res.next()) return true;
             return false;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         } finally {
             pool.releaseConnection(conn);

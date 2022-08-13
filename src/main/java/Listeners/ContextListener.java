@@ -2,16 +2,20 @@ package Listeners;
 
 import DAO.*;
 import DAO.Interfaces.*;
+import Services.FriendService;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
+
+import static DAO.Mapping.*;
 
 @WebListener
 public class ContextListener implements ServletContextListener {
     ConnectionPool pool;
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        pool = new ConnectionPool(5);
+        pool = new ConnectionPool(10);
+        ServletContext context = sce.getServletContext();
         UserDAO sqlUserDAO = new SqlUserDAO(pool);
         StudentDAO sqlStudentDAO = new SqlStudentDAO(pool);
         LecturerDAO sqlLecturerDAO = new SqlLecturerDAO(pool);
@@ -22,16 +26,20 @@ public class ContextListener implements ServletContextListener {
         RegistrationStatusDAO sqlRegistrationStatusDAO = new SqlRegistrationStatusDAO(pool);
         MailDAO mailDAO = new SqlMailDAO(pool);
         FriendsDAO friendsDAO = new SqlFriendsDAO(pool);
-        sce.getServletContext().setAttribute(Mapping.USER_DAO, sqlUserDAO);
-        sce.getServletContext().setAttribute(Mapping.STUDENT_DAO, sqlStudentDAO);
-        sce.getServletContext().setAttribute(Mapping.LECTURER_DAO, sqlLecturerDAO);
-        sce.getServletContext().setAttribute(Mapping.SUBJECT_DAO, sqlSubjectDAO);
-        sce.getServletContext().setAttribute(Mapping.SUBJECT_HISTORY_DAO, sqlSubjectHistoryDAO);
-        sce.getServletContext().setAttribute(Mapping.PREREQUISITES_DAO, sqlPrerequisitesDAO);
-        sce.getServletContext().setAttribute(Mapping.TOKEN_DAO, sqlTokenDAO);
-        sce.getServletContext().setAttribute(Mapping.REGISTRATION_STATUS_DAO, sqlRegistrationStatusDAO);
-        sce.getServletContext().setAttribute(Mapping.MAIL_DAO, mailDAO);
-        sce.getServletContext().setAttribute(Mapping.FRIENDS_DAO, friendsDAO);
+        context.setAttribute(USER_DAO, sqlUserDAO);
+        context.setAttribute(STUDENT_DAO, sqlStudentDAO);
+        context.setAttribute(LECTURER_DAO, sqlLecturerDAO);
+        context.setAttribute(SUBJECT_DAO, sqlSubjectDAO);
+        context.setAttribute(SUBJECT_HISTORY_DAO, sqlSubjectHistoryDAO);
+        context.setAttribute(PREREQUISITES_DAO, sqlPrerequisitesDAO);
+        context.setAttribute(TOKEN_DAO, sqlTokenDAO);
+        context.setAttribute(REGISTRATION_STATUS_DAO, sqlRegistrationStatusDAO);
+        context.setAttribute(MAIL_DAO, mailDAO);
+        context.setAttribute(FRIENDS_DAO, friendsDAO);
+
+        FriendService service = new FriendService();
+        context.setAttribute(FRIEND_SERVICE, service);
+
     }
 
     @Override
