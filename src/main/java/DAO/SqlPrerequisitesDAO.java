@@ -4,7 +4,10 @@ import DAO.Interfaces.PrerequisitesDAO;
 import Model.Subject;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class SqlPrerequisitesDAO implements PrerequisitesDAO {
     private final ConnectionPool pool;
@@ -40,40 +43,72 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         pool.releaseConnection(conn);
         return result;
     }
-    private int addSubjectAndPrerequisites(String subjectName,String prerequisites) throws SQLException {
+    private boolean isOperator(String op){
+        if(op.equals("(") || op.equals(")") || op.equals("&") ||op.equals("|")) return true;
+        return false;
+    }
+
+
+    private int addSubjectAndPrerequisites(String subjectName, String prerequisites) throws SQLException {
         Connection conn = pool.getConnection();
-        int result = -1;
-        String prerequisitesInIDs="";
-        for(int i=0;i<prerequisites.length();i++){
-            if(notNumberAndNotChar(i,prerequisites)==false){
-                String currentName="";
-                int currentID=0;
-                while(i<prerequisites.length()&&((prerequisites.charAt(i)>='A'&&prerequisites.charAt(i)<='Z')||
-                        (prerequisites.charAt(i)>='a'&&prerequisites.charAt(i)<='z'))){
-                    currentName+=prerequisites.charAt(i);
-                    i++;
-                }
-                try{
-                    String statement = "SELECT S.ID FROM SUBJECTS S WHERE S.SubjectName = ?;";
-                    PreparedStatement ps = conn.prepareStatement(statement);
-                    ps.setString(1, currentName);
-                    ResultSet rs = ps.executeQuery();
-                    while(rs.next()){
-                        currentID=rs.getInt(1);
-                    }
-                }catch (SQLException e){
-                    e.printStackTrace();
-                    pool.releaseConnection(conn);
-                }
-                prerequisitesInIDs+=((Integer)currentID).toString();
-            }else{
-                prerequisitesInIDs+=prerequisites.charAt(i);
+        //Bellow string weak checking.
+        String[] validity = prerequisites.split("&&");
+        String[] validity2 = prerequisites.split("||");
+        if(validity.length > 0 || validity2.length > 0 ) return -1;
+        String[] split = prerequisites.split("[()|&]");
+        if(!isValidBracketsFormat(split)) return -1;
+        //End of checking
+
+        SqlSubjectDAO dao=new SqlSubjectDAO(pool);
+        int subjectID = dao.getSubjectIDByName(subjectName);
+        if(subjectID == -1) return -1;
+
+        List<String> stringList = Arrays.stream(split).map(x->{
+            if(isOperator(x)){
+                return  x;
             }
+            SqlSubjectDAO subjectDAO = new SqlSubjectDAO(pool);
+            int id = subjectDAO.getSubjectIDByName(x);
+            return Integer.toString(id);
+        }).collect(Collectors.toList());
+        int result = -1;
+
+        for(String s : stringList){
+            if(s.equals("-1")) return -1;
         }
+        String prerequisitesInIDs= stringList.stream().reduce("",(x,y)->x.concat(y));
+
+//        for(int i = 0; i < prerequisites.length(); i++){
+//            if(notNumberAndNotChar(i,prerequisites)==false){
+//                String currentName="";
+//                int currentID=0;
+//                while(i<prerequisites.length()&&((prerequisites.charAt(i)>='A'&&prerequisites.charAt(i)<='Z')||
+//                        (prerequisites.charAt(i)>='a'&&prerequisites.charAt(i)<='z'))){
+//                    currentName+=prerequisites.charAt(i);
+//                    i++;
+//                }
+//                try{
+//                    String statement = "SELECT S.ID FROM SUBJECTS S WHERE S.SubjectName = ?;";
+//                    PreparedStatement ps = conn.prepareStatement(statement);
+//                    ps.setString(1, currentName);
+//                    ResultSet rs = ps.executeQuery();
+//                    while(rs.next()){
+//                        currentID=rs.getInt(1);
+//                    }
+//                }catch (SQLException e){
+//                    e.printStackTrace();
+//                    pool.releaseConnection(conn);
+//                }
+//                prerequisitesInIDs+=((Integer)currentID).toString();
+//            }else{
+//                prerequisitesInIDs+=prerequisites.charAt(i);
+//            }
+//        }
+
+
         String statement = "INSERT INTO PREREQUISITES (SubjectID, Prerequisites) VALUES (?, ?);";
         PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
-        SqlSubjectDAO dao=new SqlSubjectDAO(pool);
-        ps.setInt(1, dao.getSubjectIDByName(subjectName));
+        ps.setInt(1, subjectID);
         ps.setString(2, prerequisitesInIDs);
         if (ps.executeUpdate() == 1) {
             ResultSet keys = ps.getGeneratedKeys();
@@ -83,6 +118,23 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         pool.releaseConnection(conn);
         return result;
     }
+
+    /*
+        Check for brackets.
+     */
+    private boolean isValidBracketsFormat(String[] split) {
+        Stack<String> st = new Stack<>();
+        for(String s : split){
+            if(s.equals("(")){
+                st.push(s);
+            } else if (s.equals(")")) {
+                if(st.isEmpty()) return false;
+                st.pop();
+            }
+        }
+        return st.isEmpty();
+    }
+
     public void updatePrerequisite(String subjectName,String prerequisites) {
         removeSubjectAndPrerequisite(subjectName);
         try {
