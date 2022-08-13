@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static DAO.Mapping.*;
 import static Services.FriendService.RequestResult.*;
+import static Servlets.ErrorMessages.ERROR_INVALID_USER;
 import static Servlets.ErrorMessages.ERROR_MESSAGE;
 
 @WebServlet(name = "SendFriendRequestServlet", value = "/SendFriendRequestServlet")
@@ -36,7 +37,7 @@ public class SendFriendRequestServlet extends HttpServlet {
         }else if(result == REQUEST_BECAME_FRIENDS){
             message = "You and " + email + " became friends!";
         }else if(result == REQUEST_USER_NOT_FOUND){
-            message = "Such user does not exist. Please enter a valid user";
+            message = ERROR_INVALID_USER + " Please enter a valid user";
         }else if(result == REQUEST_ARE_FRIENDS){
             message = "You and " + email + " already are friends! Please enter a different email";
         }else if(result == REQUEST_SAME_USER){

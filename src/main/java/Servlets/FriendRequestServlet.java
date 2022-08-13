@@ -12,6 +12,8 @@ import java.io.IOException;
 
 import static DAO.Mapping.*;
 import static Model.USERTYPE.ADMIN;
+import static Servlets.ErrorMessages.ERROR_INVALID_USER;
+import static Servlets.ErrorMessages.ERROR_PAGE_NOT_FOUND;
 
 @WebServlet(name = "FriendRequestServlet", value = "/FriendRequestServlet")
 public class FriendRequestServlet extends HttpServlet {
@@ -28,7 +30,9 @@ public class FriendRequestServlet extends HttpServlet {
         UserDAO dao = (UserDAO) context.getAttribute(USER_DAO);
         User friend = dao.getUserByEmail(email);
         if(email == null || user == null || friend == null || friend.getType() == ADMIN){
-            response.sendRedirect("invalidUser.jsp");
+            request.setAttribute("mess", ERROR_INVALID_USER);
+            request.getRequestDispatcher("invalidUser.jsp").forward(request,response);
+            return;
         }
         FriendsDAO friendsDAO = (FriendsDAO) context.getAttribute(FRIENDS_DAO);
         FriendService friendService = (FriendService) context.getAttribute(FRIEND_SERVICE);
@@ -36,13 +40,15 @@ public class FriendRequestServlet extends HttpServlet {
             if(friendService.acceptRequest(user, friend, friendsDAO)){
                 response.sendRedirect("friendRequests.jsp");
             }else{
-                response.sendRedirect("invalidUser.jsp");
+                request.setAttribute("mess", ERROR_PAGE_NOT_FOUND);
+                request.getRequestDispatcher("invalidUser.jsp").forward(request,response);
             }
         }else if(friendRequestResponse.equals(FRIEND_REQUEST_DECLINE)){
             if(friendService.declineRequest(user, friend, friendsDAO)){
                 response.sendRedirect("friendRequests.jsp");
             }else{
-                response.sendRedirect("invalidUser.jsp");
+                request.setAttribute("mess", ERROR_PAGE_NOT_FOUND);
+                request.getRequestDispatcher("invalidUser.jsp").forward(request,response);
             }
         }
     }

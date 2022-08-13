@@ -1,7 +1,8 @@
 <%@ page import="Model.*" %>
 <%@ page import="static DAO.Mapping.*" %>
 <%@ page import="DAO.Interfaces.FriendsDAO" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="Services.FriendService" %><%--
   Created by IntelliJ IDEA.
   User: gluncho
   Date: 7/29/2022
@@ -16,12 +17,13 @@
         if(user == null){
             response.sendRedirect("invalidUser.jsp");
         }
-        FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
-        List<User> friends = dao.getAllRequests(user);
+        FriendService service = (FriendService) request.getServletContext().getAttribute(FRIEND_SERVICE);
+        List<User> friends = service.getAllRequests(user, request.getServletContext());
         friends.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
         for(int i=0; i<100; i++){
             friends.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
         }
+        int size = friends.size();
     %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,6 +61,7 @@
         </ul>
     </div>
 </nav>
+<h1 style="text-align: center; color: #F44336"> You have <%=size%> friend requests in total:</h1>
 <div class="friend-requests">
     <%
         int cnt = 0;
