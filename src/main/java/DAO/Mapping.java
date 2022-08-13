@@ -38,6 +38,8 @@ public interface Mapping {
     String IS_STUDENT = "type";
     String SCHOOL = "school";
 
+    String SUB_NAME ="subname";
+    String LEC_EMAIL = "lecemail";
     //Grades
     String QUIZ = "quiz";
     String HOMEWORK = "homework";

@@ -85,6 +85,8 @@
 <div style= "">
     <form method="post" action="../ServletUploader" enctype="multipart/form-data">
         <input type="file" name=<%=Mapping.FILE%> />
+        <input type="hidden" name = <%=Mapping.LEC_EMAIL%> value=<%=lecturer.getEmail()%>>
+        <input type="hidden" name = <%=Mapping.SUB_NAME%> value=<%=subName%>>
         </br>
         <input type="submit" value="Upload" />
     </form>
