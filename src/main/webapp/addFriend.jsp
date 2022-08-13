@@ -42,7 +42,6 @@
         </ul>
     </div>
 </nav>
-<p>lol</p>
 
 <%
     if(request.getSession().getAttribute(ERROR_MESSAGE) != null){
@@ -55,6 +54,10 @@
 <form action="SendFriendRequestServlet" method="get">
     <input type="text" name="email">
     <input type="submit" value="Send Friend Request">
+</form>
+<form action="RemoveFriendServlet" method="get">
+    <input type="text" name="email">
+    <input type="submit" value="Remove Friend">
 </form>
 </body>
 </html>

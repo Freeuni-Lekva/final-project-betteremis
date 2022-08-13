@@ -10,6 +10,7 @@ import java.util.List;
 
 import static DAO.Mapping.*;
 import static Model.USERTYPE.*;
+import static Services.FriendService.RemoveResult.*;
 import static Services.FriendService.RequestResult.*;
 
 public class FriendService {
@@ -64,18 +65,30 @@ public class FriendService {
         User receiver = userDAO.getUserByEmail(receiverEmail);
         if(receiver == null) return REQUEST_USER_NOT_FOUND;
         if(receiver.getEmail().equals(sender.getEmail())) return REQUEST_SAME_USER;
-        if(friendsDAO.isInRequests(sender, receiver)){
+        if(friendsDAO.isInRequests(receiver, sender)){
             return REQUEST_ALREADY_EXISTS;
-        }else if(friendsDAO.isInRequests(receiver, sender)){
-            friendsDAO.removeRequest(receiver, sender);
-            friendsDAO.addFriend(receiver, sender);
+        }else if(friendsDAO.isInRequests(sender, receiver)){
+            friendsDAO.removeRequest(sender, receiver);
+            friendsDAO.addFriend(sender, receiver);
             return REQUEST_BECAME_FRIENDS;
-        }else if(friendsDAO.areFriends(sender, receiver)){
+        }else if(friendsDAO.areFriends(receiver, sender)){
             return REQUEST_ARE_FRIENDS;
-        }else{
-            friendsDAO.addRequest(sender, receiver);
+        }else if(friendsDAO.addRequest(receiver, sender)){
             return REQUEST_SUCCESS;
+        }else{
+            return REQUEST_USER_NOT_FOUND;
         }
+    }
+
+    public enum RemoveResult{
+        REMOVE_SUCCESS,
+        REMOVE_FAIL
+    }
+    public RemoveResult removeFriend(User user, String friendEmail, FriendsDAO friendsDAO, UserDAO userDAO){
+        User friend = userDAO.getUserByEmail(friendEmail);
+        if(friend == null) return REMOVE_FAIL;
+        if(!friendsDAO.areFriends(user, friend)) return REMOVE_FAIL;
+         return friendsDAO.removeFriends(user, friend) ? REMOVE_SUCCESS : REMOVE_FAIL;
     }
 
     /**

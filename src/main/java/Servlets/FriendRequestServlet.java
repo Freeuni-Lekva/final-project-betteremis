@@ -38,14 +38,14 @@ public class FriendRequestServlet extends HttpServlet {
         FriendService friendService = (FriendService) context.getAttribute(FRIEND_SERVICE);
         if(friendRequestResponse.equals(FRIEND_REQUEST_ACCEPT)){
             if(friendService.acceptRequest(user, friend, friendsDAO)){
-                response.sendRedirect("friendRequests.jsp");
+                response.sendRedirect("friend-requests.jsp");
             }else{
                 request.setAttribute("mess", ERROR_PAGE_NOT_FOUND);
                 request.getRequestDispatcher("invalidUser.jsp").forward(request,response);
             }
         }else if(friendRequestResponse.equals(FRIEND_REQUEST_DECLINE)){
             if(friendService.declineRequest(user, friend, friendsDAO)){
-                response.sendRedirect("friendRequests.jsp");
+                response.sendRedirect("friend-requests.jsp");
             }else{
                 request.setAttribute("mess", ERROR_PAGE_NOT_FOUND);
                 request.getRequestDispatcher("invalidUser.jsp").forward(request,response);

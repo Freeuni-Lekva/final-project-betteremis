@@ -19,10 +19,10 @@
         }
         FriendService service = (FriendService) request.getServletContext().getAttribute(FRIEND_SERVICE);
         List<User> friends = service.getAllRequests(user, request.getServletContext());
-        friends.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
-        for(int i=0; i<100; i++){
-            friends.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
-        }
+//        friends.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
+//        for(int i=0; i<100; i++){
+//            friends.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
+//        }
         int size = friends.size();
     %>
     <meta charset="UTF-8">
@@ -82,7 +82,7 @@
 <%--        </button>--%>
 <%--        <button class="friend-request decline-request" id="<%=(2*cnt+1)%>" onclick="buttonClicked(this)" data-username="angrytiger584">Decline--%>
 <%--        </button>--%>
-        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>&response=Decline>" class="friend-request decline-request-request btn btn-primary" style="background-color: #E91E63">Decline</a>
+        <a href="<%=request.getContextPath()%>/FriendRequestServlet?email=<%=email%>&response=Decline" class="friend-request decline-request-request btn btn-primary" style="background-color: #E91E63">Decline</a>
     </div>
     </div>
     <%
