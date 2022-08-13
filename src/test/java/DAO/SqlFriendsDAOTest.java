@@ -99,6 +99,16 @@ public class SqlFriendsDAOTest {
         assertTrue(L.equals(L2));
 
     }
+
+    @Test
+    @Order(4)
+    public void test4(){
+        friendsDAO.addRequest(stud1, stud2);
+        assertTrue(friendsDAO.isInRequests(stud1, stud2));
+//        assertTrue(friendsDAO.removeRequest(stud1, stud2));
+        List<User> users = friendsDAO.getAllRequests(stud1);
+        assertEquals(users.size(), 1);
+    }
 }
 
 

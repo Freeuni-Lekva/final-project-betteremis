@@ -29,7 +29,7 @@ public class SqlFriendsDAO implements FriendsDAO {
 
         try {
             String query = "INSERT IGNORE INTO "  + (mode? "FRIENDS" : "FRIEND_REQS")
-                + " (UserID, FriendID) VALUES (? , ?) ";
+                    + " (UserID, FriendID) VALUES (? , ?) ";
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setInt(1, id1); stm.setInt(2, id2);
             int res = stm.executeUpdate();
@@ -71,7 +71,7 @@ public class SqlFriendsDAO implements FriendsDAO {
         String additional = " OR (FriendID = ? and UserID = ?) ";
         try {
             String query = "DELETE FROM " + (mode? "FRIENDS":"FRIEND_REQS") + " WHERE (UserID = ? and FriendID = ?) " +
-                     ( mode ? additional : "" ) + " ;";
+                    ( mode ? additional : "" ) + " ;";
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setInt(1, id1); stm.setInt(2, id2);
             if(mode){
