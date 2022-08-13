@@ -9,7 +9,8 @@
 <%@ page import="Model.Lecturer" %>
 <%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="DAO.Interfaces.PrerequisitesDAO" %><%--
+<%@ page import="DAO.Interfaces.PrerequisitesDAO" %>
+<%@ page import="Model.User" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 21.07.22
@@ -18,6 +19,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    User user = (User) request.getSession().getAttribute(Mapping.USER_OBJECT);
+    if(user == null){
+        response.sendRedirect("invalidUser.jsp");
+    }
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
     SubjectHistoryDAO shDAO = (SubjectHistoryDAO) application.getAttribute(Mapping.SUBJECT_HISTORY_DAO);
     LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);

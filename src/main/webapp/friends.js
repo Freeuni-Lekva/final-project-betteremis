@@ -18,7 +18,7 @@
         var id = data.id
         var email = data.email
         var type = data.type
-        modalImage.innerHTML = `<img src="https://randomuser.me/api/portraits/women/72.jpg" class="img-fluid" alt="Responsive image">`
+        modalImage.innerHTML = `<img src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59095529-stock-illustration-profile-icon-male-avatar.jpg" class="img-fluid" alt="Responsive image">`
         modalEmail.textContent = `Email : ${email}`
         modalGender.textContent = `Gender : male`
         modalAge.textContent = `Type : ${type}`
