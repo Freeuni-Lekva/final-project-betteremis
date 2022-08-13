@@ -56,6 +56,7 @@ public class ServletUploader extends HttpServlet {
     private void parseStudentGrades(String line, String subjectName , StudentDAO studentDAO ,
                                     SubjectDAO subjectDAO,SubjectHistoryDAO subDAO) {
         //TODO READ : Expected format :studentEmail QUIZ HOMEWORK PROJECT PRESENTATION MIDTERM FINAL FX
+        // Example : Expected format: dshis20@freeuni.edu.ge 24 12 -1 -1 24 60 -1
         String[] parsedStrings  =  line.split(" ");
         String email  = parsedStrings[0];
         if(parsedStrings.length != LEN){
