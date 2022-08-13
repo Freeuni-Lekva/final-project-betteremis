@@ -2,6 +2,7 @@ package DAO;
 
 import Model.Subject;
 import org.junit.jupiter.api.*;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -27,7 +28,7 @@ public class SqlSubjectDAOTest {
 
     public static int prepareTablesForAddingSubject() throws FileNotFoundException {
         Connection conn = pool.getConnection();
-        TestingUtils.emptyTables(conn);
+        SqlScriptRunner.emptyTables(conn);
         String statement = "insert into USERS (email, passwordhash, privilege) values ('gmail@gmail.com', 'totallyhashedpassword', 'Lecturer')";
         PreparedStatement ps;
         int ID = 0;

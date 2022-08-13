@@ -33,11 +33,9 @@ public class SqlUserDAO implements UserDAO {
             ResultSet rs = stm.getGeneratedKeys();
             if(rs.next())
                 userID = rs.getInt(1);
-        } catch (SQLException e) {
+        } catch (SQLException e) {return -1;}
             // No need to print the error here
-            //e.printStackTrace();
-            return -1;
-        }finally{
+        finally{
             pool.releaseConnection(conn);
         }
         return userID;
@@ -52,10 +50,9 @@ public class SqlUserDAO implements UserDAO {
             stm.setString(1, user.getEmail());
             int added = stm.executeUpdate();
             return added == 1;
-        } catch (SQLException e) {
+        } catch (SQLException e) {}
             // No need to print the error here
-            //e.printStackTrace();
-        }finally{
+        finally{
             pool.releaseConnection(conn);
         }
         return false;
@@ -75,16 +72,12 @@ public class SqlUserDAO implements UserDAO {
                 String privilege = rs.getString(4);
                 String passHash = rs.getString(3);
                 USERTYPE type = USERTYPE.toUserType(privilege);
-                pool.releaseConnection(conn);
                 return new User(email, passHash, type);
             }
-            pool.releaseConnection(conn);
             return null;
-        } catch (SQLException e) {
-            // No need to print the error here
-            //e.printStackTrace();
+        } catch (SQLException e) {return null;}
+        finally{
             pool.releaseConnection(conn);
-            return null;
         }
     }
 
@@ -117,9 +110,8 @@ public class SqlUserDAO implements UserDAO {
             int updated = stm.executeUpdate();
             if(updated == 1) return true;
             return false;
-        } catch (SQLException e) {
-            return false;
-        }finally {
+        } catch (SQLException e) {return false;}
+        finally {
             pool.releaseConnection(conn);
         }
     }
@@ -136,9 +128,8 @@ public class SqlUserDAO implements UserDAO {
                return rs.getInt(1);
             }
             return -1;
-        } catch (SQLException e) {
-            return -1;
-        }finally {
+        } catch (SQLException e) {return -1;}
+        finally {
             pool.releaseConnection(conn);
         }
     }
@@ -157,9 +148,8 @@ public class SqlUserDAO implements UserDAO {
                         USERTYPE.toUserType(rs.getString(4))));
             }
             return res;
-        } catch (SQLException e) {
-            return null;
-        }finally {
+        } catch (SQLException e) {return null;}
+        finally {
             pool.releaseConnection(conn);
         }
 

@@ -5,8 +5,9 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
-import static DAO.TestingUtils.emptyTables;
+import static utility.SqlScriptRunner.emptyTables;
 import static Model.USERTYPE.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,10 +27,10 @@ public class SqlUserDAOTest {
     public SqlUserDAOTest() throws FileNotFoundException {
         ConnectionPool pool = new ConnectionPool(5, true);
         userDAO = new SqlUserDAO(pool);
-        student = new User("student@gmail.com", BCrypt.withDefaults().hashToString(12, "hash".toCharArray()), STUDENT); //hash
-        student2 = new User("student2@gmail.com", BCrypt.withDefaults().hashToString(12, "xAE12$#%".toCharArray()), STUDENT); //xAE12$#%
-        lecturer = new User("lecturer@gmail.com", BCrypt.withDefaults().hashToString(12, "dzlierihashi123".toCharArray()), LECTURER); //dzlierihashi123
-        admin = new User("admin@gmail.com", BCrypt.withDefaults().hashToString(12, "vergatexav123".toCharArray()), ADMIN); //vergatexav123
+        student = new User("student@gmail.com", BCrypt.withDefaults().hashToString(10, "hash".toCharArray()), STUDENT); //hash
+        student2 = new User("student2@gmail.com", BCrypt.withDefaults().hashToString(10, "xAE12$#%".toCharArray()), STUDENT); //xAE12$#%
+        lecturer = new User("lecturer@gmail.com", BCrypt.withDefaults().hashToString(10, "dzlierihashi123".toCharArray()), LECTURER); //dzlierihashi123
+        admin = new User("admin@gmail.com", BCrypt.withDefaults().hashToString(10, "vergatexav123".toCharArray()), ADMIN); //vergatexav123
         emptyTables(pool.getConnection());
     }
 
@@ -118,6 +119,38 @@ public class SqlUserDAOTest {
         assertNull(adminAfterDeletion);
     }
 
+    @Test
+    public void testSetPassword(){
+        userDAO.addUser(student);
+        String newPassword = "newPassword";
+        boolean set = userDAO.setPassword(student.getEmail(), "newPassword");
+        assertEquals(true, set);
+        User newStudent = userDAO.getUserByEmail(student.getEmail());
+        BCrypt.Verifyer verifier = BCrypt.verifyer();
+        BCrypt.Result res = verifier.verify(newPassword.toCharArray(), newStudent.getPasswordHash().toCharArray());
+        assertTrue(res.verified);
+        assertFalse(verifier.verify("hash".toCharArray(), newStudent.getPasswordHash().toCharArray()).verified);
+
+        assertNotSame(-1, userDAO.addUser(student2));
+        set = userDAO.setPassword(student2.getEmail(),"xAE12$#%");
+        newStudent = userDAO.getUserByEmail(student2.getEmail());
+        assertEquals(true, userDAO.isValidUser(student2.getEmail(), "xAE12$#%"));
+        assertEquals(true, set);
+        BCrypt.Result answer = verifier.verify("araswori".toCharArray(), newStudent.getPasswordHash().toCharArray());
+        assertTrue(res.verified);
+
+        userDAO.removeUser(student);
+        userDAO.removeUser(student2);
+        userDAO.addUser(admin);
+        userDAO.addUser(student2);
+
+        userDAO.setPassword(admin.getEmail(), "oe");
+        assertEquals(false, userDAO.setPassword("invalidMail", "oe"));
+        User user = userDAO.getUserByEmail(admin.getEmail());
+        verifier.verify("ae".toCharArray(), user.getPasswordHash().toCharArray());
+        assertEquals(true, userDAO.removeUser(admin));
+        assertEquals(false, userDAO.isValidUser(user.getEmail(), user.getPasswordHash()));
+    }
 
     @Test
     // Tests every single method of SqlUserDAO class.
@@ -149,5 +182,41 @@ public class SqlUserDAOTest {
         assertNull(userDAO.getUserByEmail(lecturer.getEmail()));
         userDAO.addUser(lecturer);
         assertNotNull(userDAO.getUserByEmail(lecturer.getEmail()));
+    }
+
+    @Test
+    public void testIdByEmail(){
+        int id = userDAO.addUser(student);
+        int id2 = userDAO.addUser(student2);
+        assertEquals(id, userDAO.getIDByEmail(student.getEmail()));
+        userDAO.removeUser(student);
+        id = userDAO.addUser(student);
+        assertEquals(id, userDAO.getIDByEmail(student.getEmail()));
+
+        assertEquals(id2, userDAO.getIDByEmail(student2.getEmail()));
+        assertTrue(userDAO.isValidUser(student2.getEmail(),"xAE12$#%" ));
+
+        assertEquals(-1, userDAO.getIDByEmail("invalidMail"));
+        assertEquals(-1, userDAO.getIDByEmail("invaaaaaaaaaalid"));
+
+    }
+
+    @Test
+    public void testAllUsers(){
+        userDAO.addUser(student);
+        userDAO.addUser(lecturer);
+        userDAO.addUser(student2);
+        userDAO.addUser(admin);
+        List<User> users = userDAO.getAllUsers();
+        assertEquals(3, users.size());
+        for(int i = 0; i < users.size(); i++){
+            User current = users.get(i);
+            assert(current.equals(student) || current.equals(lecturer) || current.equals(student2));
+        }
+        userDAO.removeUser(student2);
+        userDAO.removeUser(lecturer);
+        users = userDAO.getAllUsers();
+        assertEquals(1, users.size());
+        assertEquals(student, users.get(0));
     }
 }

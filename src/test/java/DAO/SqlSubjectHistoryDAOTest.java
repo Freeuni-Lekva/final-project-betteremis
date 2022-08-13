@@ -2,8 +2,8 @@ package DAO;
 
 import DAO.Interfaces.*;
 import Model.*;
-import org.apache.ibatis.jdbc.SQL;
 import org.junit.jupiter.api.*;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -34,7 +34,7 @@ public class SqlSubjectHistoryDAOTest {
     @BeforeEach
     public void clean() throws FileNotFoundException {
         Connection conn = pool.getConnection();
-        TestingUtils.emptyTables(conn);
+        SqlScriptRunner.emptyTables(conn);
         pool.releaseConnection(conn);
         User u = new User("gmail@gmail.com", "passhash", USERTYPE.STUDENT);
         ID = userDAO.addUser(u);
