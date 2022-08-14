@@ -1,15 +1,14 @@
 package DAO;
 
-import DAO.Interfaces.*;
 import Model.*;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.*;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -40,7 +39,7 @@ public class SqlLecturerDAOTest {
     static void initAll(){
         pool = new ConnectionPool(10, true);
         try {
-            TestingUtils.emptyTables(pool.getConnection());
+            SqlScriptRunner.emptyTables(pool.getConnection());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -167,7 +166,7 @@ public class SqlLecturerDAOTest {
     @Test
     public void testGetByID() throws FileNotFoundException {
         Connection conn = pool.getConnection();
-        TestingUtils.emptyTables(conn);
+        SqlScriptRunner.emptyTables(conn);
         pool.releaseConnection(conn);
 
         User u1 = new User("dshis20@freeuni.edu.ge", getRandomPassword() ,USERTYPE.LECTURER);

@@ -4,6 +4,7 @@ import DAO.Interfaces.RegistrationStatusDAO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -25,7 +26,7 @@ public class SqlRegistrationStatusDAOTest {
     @BeforeEach
     public void clean() throws FileNotFoundException {
         Connection conn = pool.getConnection();
-        TestingUtils.emptyTables(conn);
+        SqlScriptRunner.emptyTables(conn);
         pool.releaseConnection(conn);
     }
 

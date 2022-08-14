@@ -6,6 +6,7 @@ import DAO.Interfaces.UserDAO;
 import Model.*;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.*;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -26,7 +27,7 @@ public class SqlFriendsDAOTest {
     static void initAll() {
         pool = new ConnectionPool(10, true);
         try {
-            TestingUtils.emptyTables(pool.getConnection());
+            SqlScriptRunner.emptyTables(pool.getConnection());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -97,6 +98,16 @@ public class SqlFriendsDAOTest {
         }
         assertTrue(L.equals(L2));
 
+    }
+
+    @Test
+    @Order(4)
+    public void test4(){
+        friendsDAO.addRequest(stud1, stud2);
+        assertTrue(friendsDAO.isInRequests(stud1, stud2));
+//        assertTrue(friendsDAO.removeRequest(stud1, stud2));
+        List<User> users = friendsDAO.getAllRequests(stud1);
+        assertEquals(users.size(), 1);
     }
 }
 
