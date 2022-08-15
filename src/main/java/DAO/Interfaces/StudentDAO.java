@@ -20,6 +20,8 @@ public interface StudentDAO {
      */
     Student getStudentWithEmail(String email);
 
+
+    int getStudentIDByEmail(String studentEmail);
     /**
      * Sets student's status to INACTIVE.
      * @param student student to Deactivate.

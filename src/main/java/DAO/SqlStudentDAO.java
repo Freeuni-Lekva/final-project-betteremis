@@ -159,4 +159,25 @@ public class SqlStudentDAO implements StudentDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public int getStudentIDByEmail(String studentEmail) {
+        Connection conn = pool.getConnection();
+        String query = "SELECT S.ID "+
+                "FROM USERS U JOIN STUDENTS S on U.ID = S.UserID WHERE U.Email = ?";
+        try{
+            PreparedStatement stm = conn.prepareStatement(query);
+            stm.setString(1,studentEmail);
+            ResultSet resultSet = stm.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt(1);
+            }
+            return -1;
+        }catch (Exception e){
+            System.out.println("Error while getting user from USERS");
+            return -1;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
 }
