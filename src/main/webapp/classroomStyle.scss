@@ -1,0 +1,238 @@
+.post {
+    position: relative;
+    min-height: 400px;
+    width: 100%;
+    background-color: #fff;
+    -webkit-box-shadow: 10px 10px 93px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 93px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 93px 0px rgba(0, 0, 0, 0.75);
+}
+
+
+.post .right {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.post h1 {
+    padding-top: 15px;
+    font-size: 1.3rem;
+    color: #4b4b4b;
+}
+
+.post .author {
+    background-color: #9ecaff;
+    height: 30px;
+    width: fit-content;
+    border-radius: 20px;
+    padding-inline: 10px;
+}
+
+.post .cat {
+    background-color: #eb9635;
+    height: 30px;
+    width: fit-content;
+    border-radius: 20px;
+    padding-inline: 10px;
+}
+
+.post .date {
+    background-color: #d4d0d1;
+    height: 30px;
+    width: fit-content;
+    border-radius: 20px;
+    padding-inline: 10px;
+}
+
+.post h2 {
+    padding-top: 8px;
+    margin-right: 6px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.post .separator {
+    margin-top: 10px;
+    border: 1px solid #c3c3c3;
+}
+
+.post p {
+    text-align: justify;
+    padding-top: 10px;
+    font-size: 0.95rem;
+    line-height: 150%;
+    color: #4b4b4b;
+    min-height: 140px;
+}
+
+.post h5 {
+    position: absolute;
+    left: 0px;
+    bottom: -95px;
+    font-size: 2rem;
+    color: #838080;
+}
+
+.post h6 {
+    position: absolute;
+    left: 0px;
+    bottom: -115px;
+    font-size: 1rem;
+    color: #838080;
+}
+
+.post h3 {
+    position: absolute;
+    left: 75px;
+    bottom: -115px;
+    font-size: 1rem;
+    color: #838080;
+}
+
+.post ul {
+    margin-left: 250px;
+}
+
+.post li {
+    display: inline;
+    list-style: none;
+    padding-right: 40px;
+    color: #7b7b7b;
+}
+
+.post .fab {
+    position: absolute;
+    right: 50px;
+    bottom: -30px;
+    box-sizing: border-box;
+    padding-top: 18px;
+    background-color: #1875d0;
+    width: 60px;
+    height: 60px;
+    color: white;
+    text-align: center;
+    border-radius: 50%;
+    -webkit-box-shadow: 10px 10px 50px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 50px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 50px 0px rgba(0, 0, 0, 0.75);
+    transition: background-color 0.4s ease;
+}
+
+.post .fab i {
+    line-height: 0.8;
+    font-size: 2em;
+}
+
+.post .fab:hover {
+    background-color: #eb9635;
+}
+
+.post .fab a {
+    color: white;
+}
+
+.post textarea {
+    border: none;
+    background: #e8e8e8;
+    padding: 5px 10px;
+    min-height: 60px;
+    border-radius: 5px 5px 0px 0px;
+    border-bottom: 2px solid #016ba8;
+    transition: all 0.5s;
+    margin-top: 15px;
+}
+
+.post textarea:focus {
+    outline: none;
+}
+
+.post button.btn {
+    background: #016ba8;
+    color: #fff;
+    padding: 10px 10px;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.25);
+    transition: 0.3s all;
+    font-size: 10px;
+    border-radius: 5px;
+    height: 50px;
+    margin-left: 5px;
+}
+
+.post button.btn:hover {
+    background: #eb9635;
+}
+
+.post .comments {
+    max-height: 150px;
+    overflow-x: hidden;
+}
+
+.post .comments .single-comment {
+    box-shadow: 0 4px 2px -2px gray;
+}
+
+.post .comments .single-comment p {
+    text-align: justify;
+    font-size: 0.95rem;
+    color: #4b4b4b;
+    min-height: fit-content;
+    max-height: fit-content;
+}
+
+.post .comments .single-comment p.name {
+    font-weight: 900;
+}
+
+@media only screen and (max-width: 992px) {
+    .post .thumbnail {
+        height: 300px;
+        width: 430px;
+    }
+
+    .post .right {
+        padding-top: 285px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .post {
+        min-height: 450px;
+    }
+
+    .post p {
+        min-height: 120px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .post .right {
+        padding-top: 185px;
+    }
+
+    .post {
+        min-height: 500px;
+    }
+
+    .post p {
+        min-height: 210px;
+    }
+
+    .post .fab {
+        width: 50px;
+        height: 50px;
+        bottom: -25px;
+    }
+
+    .post .fab i {
+        font-size: 1.1em;
+    }
+
+    .post button.btn {
+        letter-spacing: 1px;
+    }
+}
