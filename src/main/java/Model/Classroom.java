@@ -5,12 +5,14 @@ import java.util.Objects;
 
 public class Classroom {
 
+    private int tableID;
     private int subjectID ;
     private int semester ;
     private int lecturerID ;
     private Timestamp time ;
 
-    public Classroom(int subjectID, int semester, int lecturerID, Timestamp time) {
+    public Classroom(int tableID, int subjectID, int semester, int lecturerID, Timestamp time) {
+        this.tableID = tableID;
         this.subjectID = subjectID;
         this.semester = semester;
         this.lecturerID = lecturerID;

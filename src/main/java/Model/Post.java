@@ -5,12 +5,14 @@ import java.util.Objects;
 
 public class Post {
 
+    private int tableID;
     private int classroomID ;
     private int userID ;
     private String postContent ;
     private Timestamp time ;
 
-    public Post(int classroomID, int userID, String postContent, Timestamp time) {
+    public Post(int tableID, int classroomID, int userID, String postContent, Timestamp time) {
+        this.tableID = tableID;
         this.classroomID = classroomID;
         this.userID = userID;
         this.postContent = postContent;
