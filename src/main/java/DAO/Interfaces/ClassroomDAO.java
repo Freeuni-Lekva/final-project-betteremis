@@ -15,13 +15,6 @@ public interface ClassroomDAO {
      */
     List<Classroom> getClassroomsByLecturer(String lecturerEmail, boolean asc);
 
-    /**
-     *
-     * @param subjectName
-     * @param asc
-     * @return all classrooms created for given subject. if asc is true classrooms are sorted in ascending order.
-     */
-    List<Classroom> getClassroomsBySubject(String subjectName, boolean asc);
 
     /**
      *
@@ -36,8 +29,7 @@ public interface ClassroomDAO {
      * @param classroom
      * @return true if the given classroom has been added in CLASSROOMS database successfully. Otherwise: false.
      */
-    boolean addClassroom(Classroom classroom);
-
+    int addClassroom(Classroom classroom);
 
 
     /**
