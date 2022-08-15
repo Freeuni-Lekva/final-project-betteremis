@@ -29,6 +29,7 @@ public class SqlClassroomDAOTest {
     private static Student student;
     private static SqlStudentDAO studentDAO;
 
+    private static SqlStudentClassroomDAO studentClassroomDAO;
     private static SqlUserDAO  userDAO;
 
     private static SqlClassroomDAO sqlClassroomDAO;
@@ -68,6 +69,7 @@ public class SqlClassroomDAOTest {
         userDAO = new SqlUserDAO(pool);
         sqlClassroomDAO = new SqlClassroomDAO(pool);
         subjectDAO = new SqlSubjectDAO(pool);
+        studentClassroomDAO = new SqlStudentClassroomDAO(pool);
     }
 
 
@@ -82,6 +84,8 @@ public class SqlClassroomDAOTest {
         assertEquals(2, subjectDAO.addSubject(subject2));
         assertEquals(1, sqlClassroomDAO.addClassroom(classroom1));
         assertEquals(2, sqlClassroomDAO.addClassroom(classroom2));
+        assertEquals(1, studentClassroomDAO.addStudentAndClassroom(student.getEmail(), 1));
+        assertEquals(2, studentClassroomDAO.addStudentAndClassroom(student.getEmail(), 2));
     }
 
     @Test
@@ -90,8 +94,12 @@ public class SqlClassroomDAOTest {
         assertTrue(sqlClassroomDAO.removeClassroom(classroom1));
         assertTrue(sqlClassroomDAO.removeClassroom(classroom2));
         assertFalse(sqlClassroomDAO.removeClassroom(new Classroom(6,8,7,4,null)));
-        assertTrue(sqlClassroomDAO.addClassroom(classroom1) > 0);
-        assertTrue( sqlClassroomDAO.addClassroom(classroom2) > 0);
+        int id1 = sqlClassroomDAO.addClassroom(classroom1);
+        int id2 = sqlClassroomDAO.addClassroom(classroom2);
+        assertTrue(id1 > 0);
+        assertTrue(  id2> 0);
+        assertTrue( studentClassroomDAO.addStudentAndClassroom(student.getEmail(), id1) > 0);
+        assertTrue( studentClassroomDAO.addStudentAndClassroom(student.getEmail(), id2) > 0);
     }
 
     @Test
@@ -106,4 +114,18 @@ public class SqlClassroomDAOTest {
         assertTrue(descList.get(0).equals(classroom2));
         assertTrue(descList.get(1).equals(classroom1));
     }
+
+    @Test
+    @Order(4)
+    public void testGetByStudent(){
+        List<Classroom> ascList = sqlClassroomDAO.getClassroomsByStudent(student.getEmail(), true);
+        assertTrue(ascList.size() == 2);
+        assertTrue(ascList.get(0).equals(classroom1));
+        assertTrue(ascList.get(1).equals(classroom2));
+        List<Classroom> descList = sqlClassroomDAO.getClassroomsByStudent(student.getEmail(), false);
+        assertTrue(descList.size() == 2);
+        assertTrue(descList.get(0).equals(classroom2));
+        assertTrue(descList.get(1).equals(classroom1));
+    }
+
 }

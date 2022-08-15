@@ -64,7 +64,7 @@ public class SqlStudentClassroomDAOTest {
         Connection connection = pool.getConnection();
         try{
             String statement = "INSERT INTO CLASSROOMS (SubjectID, Semester, LecturerID) VALUES (?, ?, ?);";
-            PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, Subj1);
             ps.setInt(2, 1);
             ps.setInt(3, LecID);
@@ -77,7 +77,7 @@ public class SqlStudentClassroomDAOTest {
         }catch (SQLException e){
             e.printStackTrace();
         }finally{
-            pool.releaseConnection(conn);
+            pool.releaseConnection(connection);
         }
     }
 

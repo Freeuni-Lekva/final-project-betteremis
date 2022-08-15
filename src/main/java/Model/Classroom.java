@@ -35,6 +35,9 @@ public class Classroom {
         return time;
     }
 
+    public int getTableID(){
+        return tableID;
+    }
     @Override
     public boolean equals(Object o) {
         Classroom classroom = (Classroom) o;
