@@ -2,7 +2,7 @@ package DAO.Interfaces;
 
 import Model.Classroom;
 
-public interface StudentAndClassroomDAO {
+public interface StudentClassroomDAO {
 
     /**
      *
