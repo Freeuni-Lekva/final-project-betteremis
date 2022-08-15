@@ -17,8 +17,9 @@ public interface ClassroomPostsDAO {
     /**
      * This method returns List of posts on a given classroom.
      * @param ClassroomID Classroom ID
-     * @return List of posts on a given classroom.
+     * @param asc boolean which indicates the order of the posts (ordered by date). If true date will be ascending, if false date will be descending.
+     * @return List of posts on a given classroom. If there were no posts emtpy List is returned. If some kind of exception happened null will be returned.
      */
-    List<Post> getPostsByClassroomID(int ClassroomID);
+    List<Post> getPostsByClassroomID(int ClassroomID, boolean asc);
 
 }

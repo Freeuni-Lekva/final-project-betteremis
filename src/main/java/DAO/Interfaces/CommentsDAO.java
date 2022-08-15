@@ -18,8 +18,9 @@ public interface CommentsDAO {
     /**
      * This method returns List of comments on a given classroom.
      * @param PostID Post ID
-     * @return List of comments on a given classroom.
+     * @param asc boolean which indicates the order of the posts (ordered by date). If true date will be ascending, if false date will be descending.
+     * @return List of comments on a given classroom. Empty list is returned if no comments were found. If some kind of exception happened null is returned.
      */
-    List<Comment> getCommentsByPostID(int PostID);
+    List<Comment> getCommentsByPostID(int PostID, boolean asc);
 
 }
