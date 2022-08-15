@@ -8,9 +8,9 @@ public interface StudentClassroomDAO {
      *
      * @param studentEmail
      * @param classroom
-     * @return true if the given classroom and student have been added in STUDENT_CLASSROOMS database successfully. Otherwise: false.
+     * @return ID if the given classroom and student have been added in STUDENT_CLASSROOMS database successfully. Otherwise: -1.
      */
-    boolean addStudentAndClassroom(String studentEmail, Classroom classroom);
+    int addStudentAndClassroom(String studentEmail, int ClassroomID);
 
 
     /**
@@ -19,5 +19,5 @@ public interface StudentClassroomDAO {
      * @param classroom
      * @return true if the given classroom and student have been removed from STUDENT_CLASSROOMS database successfully. Otherwise: false.
      */
-    boolean removeStudentAndClassroom(String studentEmail, Classroom classroom);
+    boolean removeStudentAndClassroom(String studentEmail, int ClassroomID);
 }
