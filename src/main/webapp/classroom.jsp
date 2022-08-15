@@ -11,7 +11,9 @@
     <title>Title</title>
     <link rel="stylesheet" href="classroomStyle.scss">
 </head>
-<body >
+<body style="text-align: center">
+<header style="position: sticky ; top : 0; z-index: 999  ; font-family: sans-serif; border: 5px slateblue;
+border-radius: 40px; font-size: 30px ; background-color: #016ba8; color: white">Temporary classroom</header>
 <div style="width: 1200px; margin: 0 auto;">
     <form id="addPost" action="ServletAddPost" method="post">
         <input type="text" placeholder="Write Post Title" name="title" style="width: 1200px">
