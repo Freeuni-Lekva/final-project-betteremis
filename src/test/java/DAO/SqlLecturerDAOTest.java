@@ -55,7 +55,7 @@ public class SqlLecturerDAOTest {
      * Just initializes needed variables.
      */
 
-    private static void initVariables() {
+    static void initVariables() {
         user1 = new User("dshis20@freeuni.edu.ge", getRandomPassword() ,USERTYPE.LECTURER);
         user2 = new User("nitsim@freeuni.edu.ge", getRandomPassword(),USERTYPE.LECTURER);
 
