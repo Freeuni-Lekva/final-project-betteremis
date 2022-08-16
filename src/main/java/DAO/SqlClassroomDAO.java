@@ -47,8 +47,8 @@ public class SqlClassroomDAO implements ClassroomDAO {
         List<Classroom> result = new ArrayList<>();
         try{
             String statement = "SELECT C.ID, C.SubjectID, C.Semester, C.LecturerID, C.CreationDate "
-                    + "FROM CLASSROOMS C JOIN STUDENT_CLASSROOMS SC ON C.ID = SC.ClassroomID " +
-                    "WHERE SC.StudentID = ? ORDER BY Semester " + (asc ? "asc" : "desc") + ";";
+                    + "FROM STUDENT_CLASSROOMS SC JOIN CLASSROOMS C ON C.ID = SC.ClassroomID " +
+                    "WHERE SC.StudentID = ? ORDER BY C.Semester " + (asc ? "asc" : "desc") + ";";
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setInt(1, studentID);
             ResultSet rs = ps.executeQuery();

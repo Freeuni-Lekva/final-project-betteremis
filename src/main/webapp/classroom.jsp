@@ -11,10 +11,11 @@
     <title>Title</title>
     <link rel="stylesheet" href="classroomStyle.scss">
 </head>
-<body >
+<body style="text-align: center">
+<header style="position: sticky ; top : 0; z-index: 999  ; font-family: sans-serif; border: 5px slateblue;
+border-radius: 40px; font-size: 30px ; background-color: #016ba8; color: white">Temporary classroom</header>
 <div style="width: 1200px; margin: 0 auto;">
     <form id="addPost" action="ServletAddPost" method="post">
-        <input type="text" placeholder="Write Post Title" name="title" style="width: 1200px">
         <textarea form="addPost" type="text" placeholder="Write Post Content" name="content" style="width: 1200px ; height: 100px"></textarea>
         </br>
         <button class='btn col-3' type="submit" style="width: 200px; background-color: #016ba8; color: white"> Post </button>
@@ -22,11 +23,10 @@
 </div>
 <div class="container" style="width: 1200px; margin: 0 auto;">
     <div class="post pb-4">
-        <div class="right">
-            <h1>Header</h1>
+        <div class="right" >
             <div class='d-flex'>
-                <div class="author">
-                    <h2>John Doe</h2>
+                <div class="author" style="justify-content: center; justify-items: center; align-items: center; text-align: center">
+                    <h2 style="font-size: 20px">John Doe</h2>
                 </div>
                 <div class="date">
                     <h2>12 Jan, 2020</h2>
@@ -57,5 +57,7 @@
         </div>
     </div>
 </div>
+
+
 </body>
 </html>
