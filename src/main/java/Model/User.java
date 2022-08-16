@@ -45,21 +45,21 @@ public class User {
             return ((Student)this).getFirstName();
         else if(type == LECTURER)
             return ((Lecturer)this).getFirstName();
-        return null;
+        return "Admin"; // FOR TESTING PURPOSES
     }
     public String getLastName(){
         if(type == STUDENT)
             return ((Student)this).getLastName();
         else if(type == LECTURER)
             return ((Lecturer)this).getLastName();
-        return null;
+        return "Admin";
     }
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Student)) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
         return user.getEmail().equals(this.email) && user.getPasswordHash().equals(this.passwordHash)
                 && user.getType().equals(this.type);

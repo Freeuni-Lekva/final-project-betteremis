@@ -12,6 +12,7 @@ public interface Mapping {
     String LECTURER_DAO = "lecdao";
     String SUBJECT_DAO = "subjdao";
 
+    String FILE = "file";
     String SENDER = "sender";
     String RECEIVER = "receiver";
     String SUBJECT_HISTORY_DAO = "subjhistorydao";
@@ -19,6 +20,8 @@ public interface Mapping {
     String TOKEN_DAO = "tokdao";
     String REGISTRATION_STATUS_DAO = "rsdao";
     String FRIENDS_DAO = "friendsdao";
+
+    String FRIEND_SERVICE = "friendservice";
 
     //Mappings used for reading data
     String PASSWORD = "pass";
@@ -35,6 +38,8 @@ public interface Mapping {
     String IS_STUDENT = "type";
     String SCHOOL = "school";
 
+    String SUB_NAME ="subname";
+    String LEC_EMAIL = "lecemail";
     //Grades
     String QUIZ = "quiz";
     String HOMEWORK = "homework";

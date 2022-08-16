@@ -4,6 +4,7 @@ import DAO.Interfaces.*;
 import Model.*;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.*;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -22,7 +23,7 @@ class SqlStudentDAOTest {
     static void initAll(){
         ConnectionPool pool = new ConnectionPool(10, true);
         try {
-            TestingUtils.emptyTables(pool.getConnection());
+            SqlScriptRunner.emptyTables(pool.getConnection());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

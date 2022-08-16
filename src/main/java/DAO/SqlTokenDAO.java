@@ -20,7 +20,7 @@ public class SqlTokenDAO implements TokenDAO {
             int rows_updated = stm.executeUpdate();
             if(rows_updated == 1) return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }finally{
             pool.releaseConnection(conn);
         }

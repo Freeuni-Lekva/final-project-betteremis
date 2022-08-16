@@ -6,6 +6,7 @@ import DAO.Interfaces.UserDAO;
 import Model.*;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.*;
+import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -26,7 +27,7 @@ public class SqlFriendsDAOTest {
     static void initAll() {
         pool = new ConnectionPool(10, true);
         try {
-            TestingUtils.emptyTables(pool.getConnection());
+            SqlScriptRunner.emptyTables(pool.getConnection());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -58,28 +59,28 @@ public class SqlFriendsDAOTest {
     @Order(1)
     public void testAddingFriends() {
         initAll();
-        assertEquals(true, friendsDAO.AddFriend(stud1, stud2, false));
-        assertEquals(true, friendsDAO.AddFriend(stud2, stud3, false));
-        assertEquals(true, friendsDAO.AddFriend(stud3, stud1, false));
-        assertEquals(false, friendsDAO.AddFriend(stud1, stud2, false));
-        assertEquals(false, friendsDAO.AddFriend(stud2, stud3, false));
-        assertEquals(false, friendsDAO.AddFriend(stud3, stud1, false));
-        assertEquals(true, friendsDAO.AddFriend(stud1, stud2, true));
-        assertEquals(true, friendsDAO.AddFriend(stud2, stud3, true));
-        assertEquals(true, friendsDAO.AddFriend(stud3, stud1, true));
-        assertEquals(false, friendsDAO.AddFriend(stud1, stud2, false));
-        assertEquals(false, friendsDAO.AddFriend(stud1, stud2, true));
+        assertEquals(true, friendsDAO.addRequest(stud1, stud2));
+        assertEquals(true, friendsDAO.addRequest(stud2, stud3));
+        assertEquals(true, friendsDAO.addRequest(stud3, stud1));
+        assertEquals(false, friendsDAO.addRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.addRequest(stud2, stud3));
+        assertEquals(false, friendsDAO.addRequest(stud3, stud1));
+        assertEquals(true, friendsDAO.addFriend(stud1, stud2));
+        assertEquals(true, friendsDAO.addFriend(stud2, stud3));
+        assertEquals(true, friendsDAO.addFriend(stud3, stud1));
+        assertEquals(false, friendsDAO.addRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.addFriend(stud1, stud2));
     }
     @Test
     @Order(2)
     public void testRemovingFriends() {
         initAll();
         testAddingFriends();
-        assertEquals(false, friendsDAO.Remove(stud1, stud2, false));
-        assertEquals(false, friendsDAO.Remove(stud1, stud2, false));
-        assertEquals(false, friendsDAO.AddFriend(stud1, stud2, true));
-        assertEquals(true, friendsDAO.Remove(stud1, stud2, true));
-        assertEquals(true, friendsDAO.AddFriend(stud1, stud2, true));
+        assertEquals(true, friendsDAO.removeRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.removeRequest(stud1, stud2));
+        assertEquals(false, friendsDAO.addFriend(stud1, stud2));
+        assertEquals(true, friendsDAO.removeFriends(stud1, stud2));
+        assertEquals(true, friendsDAO.addFriend(stud1, stud2));
     }
     @Test
     @Order(3)
@@ -88,15 +89,25 @@ public class SqlFriendsDAOTest {
         List<String> L=new ArrayList<>();
         L.add(stud2.getEmail());
         L.add(stud3.getEmail());
-        friendsDAO.AddFriend(stud1, stud2, true);
-        friendsDAO.AddFriend(stud1, stud3, true);
-        List<User >L1=friendsDAO.GetAllFriends(stud1,true);
+        friendsDAO.addFriend(stud1, stud2);
+        friendsDAO.addFriend(stud1, stud3);
+        List<User >L1=friendsDAO.getAllFriends(stud1);
         List<String>L2=new ArrayList<String >();
         for(int i=0;i<L1.size();i++){
             L2.add(L1.get(i).getEmail());
         }
         assertTrue(L.equals(L2));
 
+    }
+
+    @Test
+    @Order(4)
+    public void test4(){
+        friendsDAO.addRequest(stud1, stud2);
+        assertTrue(friendsDAO.isInRequests(stud1, stud2));
+//        assertTrue(friendsDAO.removeRequest(stud1, stud2));
+        List<User> users = friendsDAO.getAllRequests(stud1);
+        assertEquals(users.size(), 1);
     }
 }
 

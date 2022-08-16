@@ -28,7 +28,7 @@
     <button id="connect">Connect</button>
     <button id="disconnect" disabled>Disconnect</button>
     <input type="hidden" id="username" value="<%=user.getFirstName()%>"  placeholder="Username..." autofocus>
-    <input type="button" onclick="location.href='../studentPages/studentProfile.jsp';" value="Return to homepage" />
+    <input type="button" onclick="location.href='<%=request.getContextPath()%>/index.jsp';" value="Return to homepage" />
 </header>
 <aside>
     <h5>Online User(s)</h5>

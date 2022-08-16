@@ -5,14 +5,18 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="DAO.Mapping" %>
+<%@ page import="Services.FriendService" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%
         List<User> data;
         User currentUser = (User) request.getSession().getAttribute(USER_OBJECT);
-        FriendsDAO dao = (FriendsDAO) request.getServletContext().getAttribute(FRIENDS_DAO);
-        data = dao.GetAllFriends(currentUser, true);
+        if(currentUser == null){
+            response.sendRedirect("invalidUser.jsp");
+        }
+        FriendService service = (FriendService) request.getServletContext().getAttribute(FRIEND_SERVICE);
+        data = service.getAllFriends(currentUser, request.getServletContext());
 //        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));
 //        for(int i=0; i<100; i++){
 //            data.add(new User("hello"+i, "passw"+i, USERTYPE.ADMIN));
@@ -37,21 +41,26 @@
 </head>
 <body>
 <!-- navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="/index.html">People List</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom">
+    <a class="navbar-brand" href="addFriend.jsp">Add Friend</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.jsp">Home
+                </a>
+            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home
+                <a class="nav-link" href="friends.jsp">Friends
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="favorite.html">friend</a>
+                <a class="nav-link" href="friend-requests.jsp">Friend requests
+                </a>
             </li>
         </ul>
     </div>
@@ -83,7 +92,9 @@
         <div class="col-sm-3">
             <div class="card mb-2" id="card-list">
                 <img class="card-img-top show-photo" data-toggle="modal" data-target="#show-photo-modal" data-id="<%=i%>"
-                     data-email="<%=item.getEmail()%>" data-type="<%=item.getType()%>" src="https://randomuser.me/api/portraits/women/72.jpg" title="<%=item.getEmail()%>" alt="Card image cap">
+                     data-email="<%=item.getEmail()%>" data-firstname="<%=item.getFirstName()%>" data-lastname="<%=item.getLastName()%>" data-type="<%=item.getType()%>" src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59095529-stock-illustration-profile-icon-male-avatar.jpg"
+                     title="<%=item.getEmail()%>" alt="Card image cap"
+                >
                 <div class="card-body">
                     <h6><%=item.getEmail()%></h6>
                     <form action="ServletSendMessage" method="post">
@@ -116,11 +127,10 @@
                     </div>
                     <p></p>
                     <div class="col-sm-12" id="font-style">
-                        <p id="show-photo-gender"></p>
-                        <p id="show-photo-age"></p>
-                        <p id="show-photo-region"></p>
-                        <p id="show-photo-birthday"></p>
-                        <p id="show-photo-email"></p>
+                        <p id="show-photo-type" style = "text-align:  center; color: #F44336"></p>
+                        <p id="show-photo-firstname" style="color: #8BC34A" ></p>
+                        <p id="show-photo-lastname" style="color: #8BC34A" ></p>
+                        <p id="show-photo-email" style="color: #8BC34A" ></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

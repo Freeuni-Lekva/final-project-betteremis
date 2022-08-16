@@ -9,21 +9,21 @@
     })
 
     function showPhoto(data) {
-        const modalImage = document.getElementById('show-photo-image')
+        const modalFirstName = document.getElementById('show-photo-firstname')
+        const modalLastName = document.getElementById('show-photo-lastname')
         const modalEmail = document.getElementById('show-photo-email')
-        const modalGender = document.getElementById('show-photo-gender')
-        const modalAge = document.getElementById('show-photo-age')
-        const modalRegion = document.getElementById('show-photo-region')
-        const modalBirthday = document.getElementById('show-photo-birthday')
+        const modalType = document.getElementById('show-photo-type')
+        const modalImage = document.getElementById('show-photo-image')
         var id = data.id
         var email = data.email
         var type = data.type
-        modalImage.innerHTML = `<img src="https://randomuser.me/api/portraits/women/72.jpg" class="img-fluid" alt="Responsive image">`
-        modalEmail.textContent = `Email : ${email}`
-        modalGender.textContent = `Gender : male`
-        modalAge.textContent = `Type : ${type}`
-        modalRegion.textContent = `Region : usa`
-        modalBirthday.textContent = `Birthday : lol`
+        var name = data.firstname
+        var lastname = data.lastname
+        modalImage.innerHTML = `<img src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59095529-stock-illustration-profile-icon-male-avatar.jpg" class="img-fluid" alt="Responsive image">`
+        modalEmail.textContent = `Email:  ${email}`
+        modalType.textContent = `${type}`
+        modalFirstName.textContent = `First name:  ${name}`
+        modalLastName.textContent = `Last Name:  ${lastname}`
     }
 
 

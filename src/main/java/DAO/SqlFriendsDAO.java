@@ -13,11 +13,6 @@ import java.util.List;
 
 public class SqlFriendsDAO implements FriendsDAO {
 
-
-    /*
-    Updated tsima's freindsDAO and refactored names.
-     */
-
     private ConnectionPool pool;
     private SqlUserDAO userDAO;
 
@@ -26,70 +21,74 @@ public class SqlFriendsDAO implements FriendsDAO {
         userDAO = new SqlUserDAO(pool);
     }
 
-    @Override
-    public boolean AreFriends(User user1, User user2,boolean mode){
+
+    private boolean addHelper(User user1, User user2, boolean mode) {
         int id1 = userDAO.getIDByEmail(user1.getEmail());
         int id2 = userDAO.getIDByEmail(user2.getEmail());
         Connection conn = pool.getConnection();
-        try {
-            String query = "SELECT * FROM "  + (mode? "FRIENDS" : "FRIEND_REQS")
-                    + " WHERE UserID = ? and FriendID = ? ";
-            PreparedStatement stm = conn.prepareStatement(query);
-            stm.setInt(1, id1); stm.setInt(2, id2);
-            ResultSet res = stm.executeQuery();
-            if(res.next()) return true;
-            return false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            pool.releaseConnection(conn);
-        }
-    }
-    @Override
-    public boolean AddFriend(User user1, User user2, boolean mode) {
-        if(AreFriends(user1,user2,mode)) return false;
-        if(mode==false&&AreFriends(user1,user2,true)) return false;
-        int id1 = userDAO.getIDByEmail(user1.getEmail());
-        int id2 = userDAO.getIDByEmail(user2.getEmail());
-        Connection conn = pool.getConnection();
-        if(mode==true)
-            Remove(user1,user2,false);// remove from requests
+
         try {
             String query = "INSERT IGNORE INTO "  + (mode? "FRIENDS" : "FRIEND_REQS")
-                + " (UserID, FriendID) VALUES (? , ?) ";
+                    + " (UserID, FriendID) VALUES (? , ?) ";
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setInt(1, id1); stm.setInt(2, id2);
             int res = stm.executeUpdate();
             if(res == 1) return true;
             return false;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
         } finally {
             pool.releaseConnection(conn);
         }
     }
 
     @Override
-    public boolean Remove(User user1, User user2, boolean mode) {
+    public boolean addFriend(User user1, User user2) {
+        return addHelper(user1, user2, true);
+    }
+
+    @Override
+    public boolean addRequest(User user1, User user2) {
+        return addHelper(user1, user2, false);
+    }
+
+    @Override
+    public boolean removeFriends(User user1, User user2) {
+        return removeHelper(user1, user2, true);
+    }
+
+    @Override
+    public boolean removeRequest(User user1, User user2) {
+        return removeHelper(user1, user2, false);
+    }
+
+
+    private boolean removeHelper(User user1, User user2, boolean mode) {
         int id1 = userDAO.getIDByEmail(user1.getEmail());
         int id2 = userDAO.getIDByEmail(user2.getEmail());
         Connection conn = pool.getConnection();
+        String additional = " OR (FriendID = ? and UserID = ?) ";
         try {
-            String query = "DELETE FROM " + (mode? "FRIENDS":"FRIEND_REQS") + " WHERE UserID = ? and FriendID = ?;";
+            String query = "DELETE FROM " + (mode? "FRIENDS":"FRIEND_REQS") + " WHERE (UserID = ? and FriendID = ?) " +
+                    ( mode ? additional : "" ) + " ;";
             PreparedStatement stm = conn.prepareStatement(query);
             stm.setInt(1, id1); stm.setInt(2, id2);
+            if(mode){
+                stm.setInt(3, id1); stm.setInt(4, id2);
+            }
             int res = stm.executeUpdate();
             if(res == 1) return true;
             return false;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
         } finally {
             pool.releaseConnection(conn);
         }
     }
 
-    @Override
-    public List<User> GetAllFriends(User user, boolean mode) {
+    private List<User> getAllHelper(User user, boolean mode){
         List<User> res = new ArrayList<>();
         int id = userDAO.getIDByEmail(user.getEmail());
         Connection conn = pool.getConnection();
@@ -103,6 +102,9 @@ public class SqlFriendsDAO implements FriendsDAO {
                 res.add(new User(set.getString(1),set.getString(2),
                         USERTYPE.toUserType(set.getString(3))));
             }
+            if(!mode){
+                return res;
+            }
             String query2 = "SELECT U.Email, U.PasswordHash, U.Privilege FROM USERS U JOIN "+
                     (mode? " FRIENDS F " : "FRIEND_REQS F ") + " ON U.ID = F.UserID WHERE F.FriendID = ? ;";
             PreparedStatement stm2 = conn.prepareStatement(query2);
@@ -114,9 +116,52 @@ public class SqlFriendsDAO implements FriendsDAO {
             }
             return res;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         } finally {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public List<User> getAllFriends(User user) {
+        return getAllHelper(user, true);
+    }
+
+    @Override
+    public List<User> getAllRequests(User user) {
+        return getAllHelper(user, false);
+    }
+
+    private boolean areFHelper(User user1, User user2, boolean mode){
+        int id1 = userDAO.getIDByEmail(user1.getEmail());
+        int id2 = userDAO.getIDByEmail(user2.getEmail());
+        Connection conn = pool.getConnection();
+        try {
+            String query = "SELECT * FROM "  + (mode? "FRIENDS" : "FRIEND_REQS")
+                    + " WHERE UserID = ? and FriendID = ? ";
+            PreparedStatement stm = conn.prepareStatement(query);
+            stm.setInt(1, id1); stm.setInt(2, id2);
+            ResultSet res = stm.executeQuery();
+            if(res.next()) return true;
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
+    @Override
+    public boolean areFriends(User user1, User user2) {
+        return areFHelper(user1, user2, true) || areFHelper(user2, user1, true);
+    }
+
+    @Override
+    public boolean isInRequests(User user1, User user2) {
+        return areFHelper(user1, user2, false);
+    }
+
+
 }

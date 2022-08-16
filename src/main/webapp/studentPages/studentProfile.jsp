@@ -11,6 +11,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    User user = (User) request.getSession().getAttribute(Mapping.USER_OBJECT);
+    if(user == null){
+        response.sendRedirect("invalidUser.jsp");
+    }
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
 %>
 
