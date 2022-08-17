@@ -37,7 +37,7 @@
                 <h1 class="message__title"> <%=request.getAttribute("mess")%> </h1>
             </div>
             <div class="error__nav e-nav">
-                <a href="${pageContext.request.contextPath}/index.jsp" target="_blanck" class="e-nav__link"></a>
+                <a href="${pageContext.request.contextPath}/index.jsp" target="_top" class="e-nav__link"></a>
             </div>
         </div>
     </section>
