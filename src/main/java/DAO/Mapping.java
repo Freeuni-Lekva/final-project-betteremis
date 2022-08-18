@@ -6,11 +6,15 @@ public interface Mapping {
 
     //Context
     String USER_DAO = "usrdao";
-
     String MAIL_DAO = "maildao";
     String STUDENT_DAO = "stdao";
     String LECTURER_DAO = "lecdao";
     String SUBJECT_DAO = "subjdao";
+    String CLASSROOM_DAO = "classdao";
+    String CLASSROOM_POSTS_DAO = "classpostsdao";
+    String STUDENT_CLASSROOM_DAO = "studclassdao";
+    String COMMENTS_DAO = "comdao";
+
 
     String FILE = "file";
     String SENDER = "sender";
@@ -43,11 +47,14 @@ public interface Mapping {
     //Grades
     String QUIZ = "quiz";
     String HOMEWORK = "homework";
+    String CLASSROOM_ID = "classid";
+    String TABLE_ID = "tableid";
 
     String PROJECT = "project";
     String PRESENTATION = "presentation";
     String MIDTERM = "midterm";
     String FINAL = "final";
     String FX = "fx";
+    String USER_INPUT = "content";
 
 }

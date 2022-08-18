@@ -26,6 +26,10 @@ public class ContextListener implements ServletContextListener {
         RegistrationStatusDAO sqlRegistrationStatusDAO = new SqlRegistrationStatusDAO(pool);
         MailDAO mailDAO = new SqlMailDAO(pool);
         FriendsDAO friendsDAO = new SqlFriendsDAO(pool);
+        ClassroomDAO classroomDAO = new SqlClassroomDAO(pool);
+        ClassroomPostsDAO classroomPostsDAO = new SqlClassroomPostsDAO(pool);
+        StudentClassroomDAO studentClassroomDAO = new SqlStudentClassroomDAO(pool);
+        CommentsDAO commentsDAO = new SqlCommentsDAO(pool);
         context.setAttribute(USER_DAO, sqlUserDAO);
         context.setAttribute(STUDENT_DAO, sqlStudentDAO);
         context.setAttribute(LECTURER_DAO, sqlLecturerDAO);
@@ -36,6 +40,10 @@ public class ContextListener implements ServletContextListener {
         context.setAttribute(REGISTRATION_STATUS_DAO, sqlRegistrationStatusDAO);
         context.setAttribute(MAIL_DAO, mailDAO);
         context.setAttribute(FRIENDS_DAO, friendsDAO);
+        context.setAttribute(CLASSROOM_DAO, classroomDAO);
+        context.setAttribute(CLASSROOM_POSTS_DAO, classroomPostsDAO);
+        context.setAttribute(STUDENT_CLASSROOM_DAO, studentClassroomDAO);
+        context.setAttribute(COMMENTS_DAO, commentsDAO);
 
         FriendService service = new FriendService();
         context.setAttribute(FRIEND_SERVICE, service);
@@ -44,13 +52,17 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        sce.getServletContext().removeAttribute(Mapping.USER_DAO);
-        sce.getServletContext().removeAttribute(Mapping.STUDENT_DAO);
-        sce.getServletContext().removeAttribute(Mapping.LECTURER_DAO);
-        sce.getServletContext().removeAttribute(Mapping.SUBJECT_DAO);
-        sce.getServletContext().removeAttribute(Mapping.SUBJECT_HISTORY_DAO);
-        sce.getServletContext().removeAttribute(Mapping.PREREQUISITES_DAO);
-        sce.getServletContext().removeAttribute(Mapping.TOKEN_DAO);
+        sce.getServletContext().removeAttribute(USER_DAO);
+        sce.getServletContext().removeAttribute(STUDENT_DAO);
+        sce.getServletContext().removeAttribute(LECTURER_DAO);
+        sce.getServletContext().removeAttribute(SUBJECT_DAO);
+        sce.getServletContext().removeAttribute(SUBJECT_HISTORY_DAO);
+        sce.getServletContext().removeAttribute(PREREQUISITES_DAO);
+        sce.getServletContext().removeAttribute(TOKEN_DAO);
+        sce.getServletContext().removeAttribute(CLASSROOM_DAO);
+        sce.getServletContext().removeAttribute(CLASSROOM_POSTS_DAO);
+        sce.getServletContext().removeAttribute(COMMENTS_DAO);
+        sce.getServletContext().removeAttribute(STUDENT_CLASSROOM_DAO);
         pool.close();
     }
 
