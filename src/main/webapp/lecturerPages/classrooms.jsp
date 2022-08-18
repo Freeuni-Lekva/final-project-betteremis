@@ -18,15 +18,13 @@
     String email = user.getEmail();
     ClassroomDAO classroomDAO = (ClassroomDAO) application.getAttribute(Mapping.CLASSROOM_DAO);
     SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
-    UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
-    List<Classroom> classrooms = classroomDAO.getClassroomsByStudent(email,false);
+    List<Classroom> classrooms = classroomDAO.getClassroomsByLecturer(email,false);
 %>
 
 <%!
-    private String decorate(Classroom classroom, String sub_name, String lec_email){
+    private String decorate(Classroom classroom, String sub_name){
         String result = " <tr>\n" +
                 "            <td>" + sub_name + "</td>\n" +
-                "            <td> " + lec_email + "</td>\n" +
                 "          <td>\n" +
                 "              <a href=\"../classroom.jsp?"+Mapping.CLASSROOM_ID + "=" +classroom.getTableID() + "\" >Visit</a>\n"+
                 "           </td>\n"+
@@ -42,25 +40,23 @@
 </head>
 <body>
 
- <table>
-        <thead>
-            <th>Enrolled Classrooms</th>
-            <tr >
-                    <th><h1>Classroom's Subject</h1></th>
-                    <th><h1>Classroom's Lecturer</h1></th>
-                    <th><h1>Visit Classroom</h1></th>
-             </tr>
-       </thead>
+<table>
+    <thead>
+    <th>Enrolled Classrooms</th>
+    <tr >
+        <th><h1>Classroom's Subject</h1></th>
+        <th><h1>Visit Classroom</h1></th>
+    </tr>
+    </thead>
 
-        <tbody>
-            <%
-                for(Classroom classroom : classrooms){
-                    out.println(decorate(classroom,
-                            userDAO.getEmailByID(classroom.getLecturerID()),
-                            subjectDAO.getSubjectNameByID(classroom.getSubjectID()) ));
-                }
-            %>
-        </tbody>
- </table>
+    <tbody>
+    <%
+        for(Classroom classroom : classrooms){
+            out.println(decorate(classroom,
+                    subjectDAO.getSubjectNameByID(classroom.getSubjectID()) ));
+        }
+    %>
+    </tbody>
+</table>
 </body>
 </html>

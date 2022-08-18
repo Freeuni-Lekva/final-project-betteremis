@@ -20,7 +20,6 @@ public class Post {
         this.postContent = postContent;
         this.time = time;
     }
-    public int getTableID(){ return tableID;}
 
     public int getClassroomID() {
         return classroomID;

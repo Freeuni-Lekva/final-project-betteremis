@@ -17,17 +17,17 @@
     ClassroomPostsDAO postsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
     UserDAO userDAO = (UserDAO) request.getServletContext().getAttribute(Mapping.USER_DAO);
     CommentsDAO commentsDAO = (CommentsDAO) request.getServletContext().getAttribute(Mapping.COMMENTS_DAO);
-    int classroomID = (int) request.getSession().getAttribute(Mapping.CLASSROOM_ID);
+    int classroomID = Integer.parseInt(request.getParameter(Mapping.CLASSROOM_ID));
     List<Post> postList = postsDAO.getPostsByClassroomID(classroomID, false);
 
 %>
 
 <%!
     private String commentDecorator(Comment comment, String email){
-        String result = "        \"                <div class=\\\"single-comment\\\">\\n\" +\n" +
-                "                \"                    <p class=\\\"mb-0 pt-0 name\\\">"+ email + " , "+comment.getTime().toString() +"</p>\\n\" +\n" +
-                "                \"                    <p><textarea type=\\\"text\\\"  name=\\\"content\\\" style=\\\"width: 1130px ; height: 12px\\\" disabled>"+comment.getMessage() + "</textarea></p>\\n\" +\n" +
-                "                \"                </div>\\n\" +";
+        String result = "                       <div class=\\\"single-comment\\\">\\n\" +\n" +
+                "                                    <p class=\\\"mb-0 pt-0 name\\\">"+ email + " , "+comment.getTime().toString() +"</p>\\n\" +\n" +
+                "                                    <p><textarea type=\\\"text\\\"  name=\\\"content\\\" style=\\\"width: 1130px ; height: 12px\\\" disabled>"+comment.getMessage() + "</textarea></p>\\n\" +\n" +
+                "                                </div>\\n\" +";
 
         return result;
     }

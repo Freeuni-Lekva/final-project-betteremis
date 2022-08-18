@@ -88,6 +88,27 @@ public class SqlSubjectDAO implements SubjectDAO {
     }
 
     @Override
+    public String getSubjectNameByID(int id) {
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT SubjectName FROM SUBJECTS WHERE ID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString(1);
+            }
+            return null;
+        }catch (SQLException e){
+            //e.printStackTrace();
+            return null;
+        }
+        finally{
+            pool.releaseConnection(conn);
+        }
+    }
+
+    @Override
     public int getSubjectIDByName(String name) {
         Connection conn = pool.getConnection();
         int result = -1;
