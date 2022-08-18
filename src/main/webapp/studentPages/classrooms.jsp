@@ -4,7 +4,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="DAO.Interfaces.ClassroomDAO" %>
 <%@ page import="DAO.Interfaces.SubjectDAO" %>
-<%@ page import="DAO.Interfaces.UserDAO" %><%--
+<%@ page import="DAO.Interfaces.UserDAO" %>
+<%@ page import="DAO.Interfaces.LecturerDAO" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 21.07.22
@@ -18,7 +19,7 @@
     String email = user.getEmail();
     ClassroomDAO classroomDAO = (ClassroomDAO) application.getAttribute(Mapping.CLASSROOM_DAO);
     SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
-    UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
+    LecturerDAO lecturerDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
     List<Classroom> classrooms = classroomDAO.getClassroomsByStudent(email,false);
 %>
 
@@ -56,8 +57,8 @@
             <%
                 for(Classroom classroom : classrooms){
                     out.println(decorate(classroom,
-                            userDAO.getEmailByID(classroom.getLecturerID()),
-                            subjectDAO.getSubjectNameByID(classroom.getSubjectID()) ));
+                            subjectDAO.getSubjectNameByID(classroom.getSubjectID()),
+                            lecturerDAO.getLecturerWithID(classroom.getLecturerID()).getEmail()));
                 }
             %>
         </tbody>
