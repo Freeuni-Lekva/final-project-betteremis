@@ -35,6 +35,7 @@ public class Post {
         return time;
     }
 
+    public int getTableID(){return tableID;}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

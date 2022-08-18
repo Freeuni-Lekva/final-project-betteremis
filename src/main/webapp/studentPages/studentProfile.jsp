@@ -72,7 +72,7 @@
             <li style="--i:6;"> <a href="studyingCard.jsp"> Studying Card </a> </li>
             <li style="--i:5;"> <a href="../registration.jsp"> Academic Registration</a> </li>
             <li style="--i:4;"> <a href="records.jsp"> Academic Records</a> </li>
-            <li style="--i:3;"> <a href="finances.jsp"> Finances</a> </li>
+            <li style="--i:3;"> <a href="classrooms.jsp"> Classrooms </a> </li>
             <li style="--i:2;"> <a href="library.jsp"> Library</a> </li>
             <li style="--i:1;"> <a href="../LogOutServlet"> Log Out</a> </li>
         </ul>

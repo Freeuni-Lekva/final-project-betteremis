@@ -26,12 +26,12 @@ public class ServletAddPost extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession curSession = request.getSession();
         int classroomID = (int)request.getAttribute(Mapping.CLASSROOM_ID);
-        int tableID = (int)request.getAttribute(Mapping.TABLE_ID);
+        //int tableID = (int)request.getAttribute(Mapping.TABLE_ID);
         ClassroomPostsDAO classroomPostsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
         String postStr = (String) request.getAttribute(Mapping.USER_INPUT);
         User usr = (User)curSession.getAttribute(Mapping.USER_OBJECT);
         UserDAO userDAO = (UserDAO)request.getServletContext().getAttribute(Mapping.USER_DAO);
-        Post post = new Post(tableID, classroomID, userDAO.getIDByEmail(usr.getEmail()), postStr, new Timestamp(System.currentTimeMillis()));
+        Post post = new Post(-1, classroomID, userDAO.getIDByEmail(usr.getEmail()), postStr, new Timestamp(System.currentTimeMillis()));
         classroomPostsDAO.addPost(post);
         //TODO:send to posts page, in other words refresh.
 //        response.sendRedirect();

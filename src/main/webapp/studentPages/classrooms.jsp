@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Finances</title>
+    <link rel="stylesheet" href="../css/cardStyle.css">
 </head>
 <body>
 
