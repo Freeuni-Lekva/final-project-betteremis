@@ -10,7 +10,9 @@ public class Post {
     private int userID ;
     private String postContent ;
     private Timestamp time ;
-
+    public Post(int classroomID, int userID, String postContent, Timestamp time){
+        this(-1, classroomID, userID, postContent, time);
+    }
     public Post(int tableID, int classroomID, int userID, String postContent, Timestamp time) {
         this.tableID = tableID;
         this.classroomID = classroomID;
@@ -18,6 +20,7 @@ public class Post {
         this.postContent = postContent;
         this.time = time;
     }
+    public int getTableID(){ return tableID;}
 
     public int getClassroomID() {
         return classroomID;

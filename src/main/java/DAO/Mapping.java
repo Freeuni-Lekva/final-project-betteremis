@@ -48,7 +48,6 @@ public interface Mapping {
     String QUIZ = "quiz";
     String HOMEWORK = "homework";
     String CLASSROOM_ID = "classid";
-    String TABLE_ID = "tableid";
 
     String PROJECT = "project";
     String PRESENTATION = "presentation";
