@@ -82,8 +82,6 @@
     </symbol>
 </svg>
 
-<a href="classroom.jsp"> classroom </a>
-
 </body>
 
 </html>

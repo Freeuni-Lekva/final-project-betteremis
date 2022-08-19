@@ -1,4 +1,12 @@
-<%--
+<%@ page import="Model.Post" %>
+<%@ page import="DAO.Interfaces.ClassroomDAO" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="DAO.Interfaces.ClassroomPostsDAO" %>
+<%@ page import="DAO.Interfaces.CommentsDAO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="DAO.Interfaces.UserDAO" %>
+<%@ page import="Model.Comment" %>
+<%@ page import="java.util.Collections" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 15.08.22
@@ -6,6 +14,70 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    ClassroomPostsDAO postsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
+    UserDAO userDAO = (UserDAO) request.getServletContext().getAttribute(Mapping.USER_DAO);
+    CommentsDAO commentsDAO = (CommentsDAO) request.getServletContext().getAttribute(Mapping.COMMENTS_DAO);
+    int classroomID = Integer.parseInt(request.getParameter(Mapping.CLASSROOM_ID));
+    List<Post> postList = postsDAO.getPostsByClassroomID(classroomID, true);
+    Collections.reverse(postList);
+
+%>
+
+<%!
+    private String commentDecorator(Comment comment, String email){
+        String result = "                       <div class=\"single-comment\">\n" +
+                "                                    <p class=\"mb-0 pt-0 name\">"+ email + " , "+comment.getTime().toString() +"</p>\n" +
+                "                                    <p><textarea type=\"text\"  name=\"content\" style=\"width: 1130px ; height: 12px\" disabled>"+comment.getMessage() + "</textarea></p>\n" +
+                "                                </div>\n";
+
+        return result;
+    }
+%>
+
+<%!
+    private String decorate(Post post, String email,CommentsDAO commentsDAO,UserDAO userDAO, int classroomID ){
+        String result ="<div class=\"container\" style=\"width: 1200px; margin: 0 auto;\">\n" +
+                "    <div class=\"post pb-4\">\n" +
+                "        <div class=\"right\" >\n" +
+                "            <div class='d-flex'>\n" +
+                "                <div class=\"author\" style=\"justify-content: center; justify-items: center; align-items: center; text-align: center\">\n" +
+                "                    <h2 style=\"font-size: 20px\">"+ email + "</h2>\n" +
+                "                </div>\n" +
+                "                <div class=\"date\">\n" +
+                "                    <h2>"+ post.getTime().toString() +"</h2>\n" +
+                "                </div>\n" +
+                "            </div>\n" +
+                "            <div class=\"separator\"></div>\n" +
+                "            <p>\n" +
+                "            <textarea type=\"text\"  name=\"content\" style=\"width: 1130px ; height: 100px\" disabled>" + post.getPostContent() +"</textarea>\n" +
+                "            </p>\n" +
+                "            <div class=\"separator\"></div>\n" +
+                "            <div>\n" +
+                "                <form id=\"addComment"+ post.getTableID() + "\" action=\"ServletAddComment\" method=\"post\">\n" +
+                "                    <textarea name=\""+Mapping.COMMENT +"\" form=\"addComment" + post.getTableID() + "\" type=\"text\" class=\"col-9\" placeholder=\"Write a comment\" style=\"width: 500px\"></textarea>\n" +
+                "                    <input type=\"hidden\" name =\"" + Mapping.POST_ID + "\" value=\"" + post.getTableID() + "\">\n" +
+                "                    <input type=\"hidden\" name =\"" + Mapping.CLASSROOM_ID + "\" value=\""   +classroomID + "\">\n" +
+                "                    <button class='btn' type=\"submit\">Add Comment</button>\n"+
+                "                </form>\n" +
+                "            </div>\n" +
+                "            <div class=\"separator\"></div>\n" +
+                "            <div class=\"comments\">\n";
+        List<Comment> comments = commentsDAO.getCommentsByPostID(post.getTableID(),false);
+        for(Comment comment : comments){
+            result+= commentDecorator(comment,userDAO.getEmailByID(comment.getWriterID()));
+        }
+        result +=
+                "            </div>\n" +
+                "        </div>\n" +
+                "    </div>\n" +
+                "</div>";
+        return result;
+    }
+%>
+
+
+
 <html>
 <head>
     <title>Title</title>
@@ -16,48 +88,19 @@
 border-radius: 40px; font-size: 30px ; background-color: #016ba8; color: white">Temporary classroom</header>
 <div style="width: 1200px; margin: 0 auto;">
     <form id="addPost" action="ServletAddPost" method="post">
-        <textarea form="addPost" type="text" placeholder="Write Post Content" name="content" style="width: 1200px ; height: 100px"></textarea>
+        <textarea form="addPost" type="text" placeholder="Write Post Content" name="<%=Mapping.USER_INPUT%>" style="width: 1200px ; height: 100px"></textarea>
         </br>
+        <input type="hidden" name = "<%=Mapping.CLASSROOM_ID%>" value="<%=classroomID%>">
         <button class='btn col-3' type="submit" style="width: 200px; background-color: #016ba8; color: white"> Post </button>
     </form>
 </div>
-<div class="container" style="width: 1200px; margin: 0 auto;">
-    <div class="post pb-4">
-        <div class="right" >
-            <div class='d-flex'>
-                <div class="author" style="justify-content: center; justify-items: center; align-items: center; text-align: center">
-                    <h2 style="font-size: 20px">John Doe</h2>
-                </div>
-                <div class="date">
-                    <h2>12 Jan, 2020</h2>
-                </div>
-            </div>
-            <div class="separator"></div>
-            <p>
-            <textarea type="text"  name="content" style="width: 1130px ; height: 100px" disabled> Post content</textarea>
-            </p>
-            <div class="separator"></div>
-            <div>
-                <form id="addComment" action="ServletAddComment" method="post">
-                    <textarea name="comment" form="addComment" type="text" class="col-9" placeholder="Write a comment" style="width: 500px"></textarea>
-                    <button class='btn' type="submit">Add Comment</button>
-                </form>
-            </div>
-            <div class="separator"></div>
-            <div class="comments">
-                <div class="single-comment">
-                    <p class="mb-0 pt-0 name">Some Random Guy1 , 4 Days ago</p>
-                    <p><textarea type="text"  name="content" style="width: 1130px ; height: 12px" disabled> Comment content</textarea></p>
-                </div>
-                <div class="single-comment">
-                    <p class="mb-0 pt-0 name">Some Random Guy2 , 4 Days ago</p>
-                    <p><textarea type="text"  name="content" style="width: 1130px ; height: 12px" disabled> Comment content2</textarea></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
+
+<%
+    for(Post post: postList){
+        out.println(decorate(post, userDAO.getEmailByID(post.getUserID()), commentsDAO, userDAO, classroomID));
+    }
+%>
 
 </body>
 </html>

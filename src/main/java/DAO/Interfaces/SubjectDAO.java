@@ -29,6 +29,7 @@ public interface SubjectDAO {
      */
     Subject getSubjectByName(String subjectName);
 
+    String getSubjectNameByID(int id);
     /**
      * Given the subject name, gets subjects ID from the table.
      * @param name Name of the subject

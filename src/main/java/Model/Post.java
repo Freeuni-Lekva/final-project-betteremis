@@ -20,7 +20,6 @@ public class Post {
         this.postContent = postContent;
         this.time = time;
     }
-    public int getTableID(){ return tableID;}
 
     public int getClassroomID() {
         return classroomID;
@@ -38,6 +37,7 @@ public class Post {
         return time;
     }
 
+    public int getTableID(){return tableID;}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

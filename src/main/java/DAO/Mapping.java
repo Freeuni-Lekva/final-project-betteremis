@@ -56,4 +56,6 @@ public interface Mapping {
     String FX = "fx";
     String USER_INPUT = "content";
 
+    String POST_ID = "postid";
+    String COMMENT = "comment";
 }
