@@ -43,11 +43,6 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
         pool.releaseConnection(conn);
         return result;
     }
-    private boolean isOperator(String op){
-        if(op.equals("(") || op.equals(")") || op.equals("&") ||op.equals("|")) return true;
-        return false;
-    }
-
 
     private int addSubjectAndPrerequisites(String subjectName, String prerequisites) throws SQLException {
         Connection conn = pool.getConnection();
@@ -62,7 +57,8 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
                 String currentName="";
                 int currentID=0;
                 while(i<prerequisites.length()&&((prerequisites.charAt(i)>='A'&&prerequisites.charAt(i)<='Z')||
-                        (prerequisites.charAt(i)>='a'&&prerequisites.charAt(i)<='z'))){
+                        (prerequisites.charAt(i)>='a'&&prerequisites.charAt(i)<='z')||(
+                        prerequisites.charAt(i)>='0'&&prerequisites.charAt(i)<='9'))){
                     currentName+=prerequisites.charAt(i);
                     i++;
                 }
@@ -74,10 +70,13 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
                     while(rs.next()){
                         currentID=rs.getInt(1);
                     }
+                    if(currentID==0)
+                        return 0;
                 }catch (SQLException e){
                     e.printStackTrace();
                     pool.releaseConnection(conn);
                 }
+                System.out.println(i);
                 prerequisitesInIDs+=Integer.toString(currentID);;
             }else{
                 prerequisitesInIDs+=prerequisites.charAt(i);
@@ -101,23 +100,42 @@ public class SqlPrerequisitesDAO implements PrerequisitesDAO {
     /*
         Check for brackets.
      */
-    private boolean isValidBracketsFormat(String[] split) {
-        Stack<String> st = new Stack<>();
-        for(String s : split){
-            if(s.equals("(")){
-                st.push(s);
-            } else if (s.equals(")")) {
+    private boolean isValidBracketsFormat(String split) {
+        Stack<Character> st = new Stack<>();
+        for(int i=0;i< split.length();i++){
+            if(split.charAt(i)=='('){
+                st.push(split.charAt(i));
+            } else if (split.charAt(i)==')') {
                 if(st.isEmpty()) return false;
                 st.pop();
             }
         }
         return st.isEmpty();
     }
-
-    public void updatePrerequisite(String subjectName,String prerequisites) {
+    private boolean isValid(String s){
+        if(isValidBracketsFormat(s)==false) return false;
+        if(s.charAt(s.length()-1)=='|'||s.charAt(s.length()-1)=='&') return false;
+        if(s.charAt(0)=='|'||s.charAt(0)=='&') return false;
+        for(int i=0;i<s.length()-1;i++){
+            if((is_op(s.charAt(i))||s.charAt(i)=='('||s.charAt(i)==')')&&
+                    (is_op(s.charAt(i+1))||s.charAt(i+1)=='('||s.charAt(i+1)==')')){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean updatePrerequisite(String subjectName,String prerequisites) {
+        if(isValid(prerequisites)==false){
+            return false;
+        }
+        String oldPrerequisites=getSubjectPrerequisitesByName(subjectName);
         removeSubjectAndPrerequisite(subjectName);
         try {
-            addSubjectAndPrerequisites(subjectName,prerequisites);
+            if(addSubjectAndPrerequisites(subjectName,prerequisites)==0) {
+                updatePrerequisite(subjectName,oldPrerequisites);
+                return false;
+            }
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

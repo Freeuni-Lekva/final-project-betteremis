@@ -59,4 +59,5 @@ public interface Mapping {
     String POST_ID = "postid";
     String COMMENT = "comment";
     String PREREQUISITE = "prerequisite";
+    String WRONG ="Wrong";
 }

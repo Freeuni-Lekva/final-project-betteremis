@@ -70,6 +70,7 @@
         }
     </script>
 </head>
+
 <body>
 
 <div class="header">
@@ -115,6 +116,14 @@
 </div>
 
 
+<% if(session.getAttribute(Mapping.WRONG)!=null){
 
+    out.println("\n" +
+            "<script type=\"text/javascript\" >\n" +
+            "    alert('Invalid Expression!')\n" +
+            "</script>");
+    session.removeAttribute(Mapping.WRONG);
+}
+%>
 </body>
 </html>

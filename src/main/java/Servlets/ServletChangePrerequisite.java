@@ -1,5 +1,7 @@
 package Servlets;
 
+import DAO.Interfaces.PrerequisitesDAO;
+import DAO.Interfaces.SubjectDAO;
 import DAO.Mapping;
 
 import javax.servlet.*;
@@ -19,7 +21,14 @@ public class ServletChangePrerequisite extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String subject = request.getParameter(Mapping.SUB_NAME);
         String prerequisites = request.getParameter(Mapping.PREREQUISITE);
-        System.out.println(subject  + " " + prerequisites);
-        //TODO update prerequisites.
+   //     System.out.println(subject  + " " + prerequisites);
+        PrerequisitesDAO prerequisitesDAO=(PrerequisitesDAO) request.getServletContext().getAttribute(Mapping.PREREQUISITES_DAO);
+        boolean update=prerequisitesDAO.updatePrerequisite(subject,prerequisites);
+        if(update==false){
+            request.getSession().setAttribute(Mapping.WRONG,"Invalid expression!");
+            response.sendRedirect("adminPages/subjectsForAdmin.jsp");
+        }else {
+            response.sendRedirect("adminPages/adminProfile.jsp");
+        }
     }
 }
