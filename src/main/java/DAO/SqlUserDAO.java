@@ -27,6 +27,7 @@ public class SqlUserDAO implements UserDAO {
             stm.setString(1, user.getEmail());
             stm.setString(2, user.getPasswordHash());
             stm.setString(3, user.getType().toString());
+       //     stm.setString(3, USERTYPE.ADMIN.toString());
             int added = stm.executeUpdate();
             if(added != 1)
                 return -1;

@@ -19,5 +19,5 @@ public interface PrerequisitesDAO {
      * @param subjectName  Name of subject for which we are interested to update it's prerequisites;
      * @param prerequisites  String of prerequisites written with names;
      */
-    void updatePrerequisite(String subjectName,String prerequisites);
+    boolean updatePrerequisite(String subjectName,String prerequisites);
 }
