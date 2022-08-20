@@ -26,7 +26,7 @@
 <form action="registerServlet" method="POST" name="main_form">
     <h4>Registration info</h4>
     <div><label for="profession">Profession</label></div>
-    <input name="profession" id="profession" type="text" placeholder="Enter profession" maxlength="50" pattern="[A-Za-z]{1,50}" title="Profession can not contain numbers" required>
+    <input name="profession" id="profession" type="text" placeholder="Enter profession" maxlength="50" pattern="[A-Za-z\s]{1,50}" title="Profession can not contain numbers" required>
     <div><label for="username">Firstname</label></div>
     <input name="firstname" id="username" type="text" placeholder="Enter name" maxlength="50" pattern="[A-Za-z]{1,50}" title="Name can not contain numbers" required>
     <div><label for="userLastname">Lastname</label></div>
@@ -37,7 +37,7 @@
                     F<input type="radio" name="Gender" value="F" id="female" >
     </span>
     <div><label for="userbday">Birthday</label></div>
-    <input type="date" name="birthdate" id="userbday" min='1899-01-01' title="Wrong min date">
+    <input type="date" name="birthdate" id="userbday" min='1899-01-01' value="2000-01-01" title="Wrong min date">
     <div><label for="useremail">Email Address</label></div>
     <input name="email" id="useremail" type="email" placeholder="Enter email" maxlength="50">
     <div><label for="userPass">Password</label></div>
@@ -46,7 +46,7 @@
     <div><label for="addr">Address</label></div>
     <input name="address" id="addr" type="text" placeholder="Enter address" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
     <div><label for="tell">Phone</label></div>
-    <input name="phone" id="tell" type="tel" placeholder="Enter phone number" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
+    <input name="phone" id="tell" type="number" placeholder="Enter phone number" maxlength="20" pattern=".{6,20}"  title="6 to 20 characters">
 
     <div class="dgend">User type</div>
     <span class="gend">

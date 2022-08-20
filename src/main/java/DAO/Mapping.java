@@ -33,7 +33,7 @@ public interface Mapping {
     String LAST_NAME = "lastname";
     String EMAIL = "email";
     String PASSWORD_HASH = "passhash";
-    String IS_MALE = "male";
+    String IS_MALE = "Male";
     String PROFESSION = "profession";
     String DATE_OF_BIRTH = "birthdate";
     String ADDRESS = "address";

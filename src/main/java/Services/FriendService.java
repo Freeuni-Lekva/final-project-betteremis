@@ -63,7 +63,7 @@ public class FriendService {
      */
     public RequestResult sendRequest(User sender, String receiverEmail, FriendsDAO friendsDAO, UserDAO userDAO){
         User receiver = userDAO.getUserByEmail(receiverEmail);
-        if(receiver == null) return REQUEST_USER_NOT_FOUND;
+        if(receiver == null || (receiver.getType() == ADMIN && sender.getType() != ADMIN)) return REQUEST_USER_NOT_FOUND;
         if(receiver.getEmail().equals(sender.getEmail())) return REQUEST_SAME_USER;
         if(friendsDAO.isInRequests(receiver, sender)){
             return REQUEST_ALREADY_EXISTS;
@@ -88,7 +88,7 @@ public class FriendService {
         User friend = userDAO.getUserByEmail(friendEmail);
         if(friend == null) return REMOVE_FAIL;
         if(!friendsDAO.areFriends(user, friend)) return REMOVE_FAIL;
-         return friendsDAO.removeFriends(user, friend) ? REMOVE_SUCCESS : REMOVE_FAIL;
+        return friendsDAO.removeFriends(user, friend) ? REMOVE_SUCCESS : REMOVE_FAIL;
     }
 
     /**
