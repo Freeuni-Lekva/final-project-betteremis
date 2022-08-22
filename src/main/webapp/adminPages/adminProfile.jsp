@@ -14,7 +14,6 @@
     RegistrationStatusDAO regStatusDAO = (RegistrationStatusDAO) application.getAttribute(Mapping.REGISTRATION_STATUS_DAO);
     User admin = (User) session.getAttribute(Mapping.USER_OBJECT);
     if(admin == null || admin.getType() != USERTYPE.ADMIN) {
-        if(admin!=null) System.out.println(admin.getType());
         redirect(request, response);
         return;
     }
