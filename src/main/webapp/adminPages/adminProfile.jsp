@@ -5,10 +5,19 @@
 <%@ page import="Model.Subject" %>
 <%@ page import="DAO.Interfaces.SubjectDAO" %>
 <%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="Model.USERTYPE" %>
 <%
     UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
     RegistrationStatusDAO regStatusDAO = (RegistrationStatusDAO) application.getAttribute(Mapping.REGISTRATION_STATUS_DAO);
-    User admin = (User) application.getAttribute(Mapping.USER_OBJECT);
+    User admin = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(admin == null || admin.getType() != USERTYPE.ADMIN) {
+        if(admin!=null) System.out.println(admin.getType());
+        redirect(request, response);
+        return;
+    }
     List<User> allUsers = userDAO.getAllUsers();
 %>
 

@@ -15,7 +15,17 @@
 <%--<br />--%>
 <%--<a style="color : #eee; position:absolute;right:1rem" href="welcome.jsp"> TestingWelcome</a>--%>
 <%--<br />--%>
-
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="Model.USERTYPE" %>
+<%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != USERTYPE.ADMIN) {
+        redirect(request, response);
+        return;
+    }
+%>
 <body class="align">
 <div class="grid">
 

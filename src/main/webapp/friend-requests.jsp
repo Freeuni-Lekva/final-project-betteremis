@@ -11,12 +11,18 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null) {
+        redirect(request, response);
+        return;
+    }
+%>
 <head>
     <%
-        User user = (User) request.getSession().getAttribute(USER_OBJECT);
-        if(user == null){
-            response.sendRedirect("invalidUser.jsp");
-        }
         FriendService service = (FriendService) request.getServletContext().getAttribute(FRIEND_SERVICE);
         List<User> friends = service.getAllRequests(user, request.getServletContext());
 //        friends.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));

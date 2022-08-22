@@ -2,7 +2,8 @@
 <%@ page import="Model.User" %>
 <%@ page import="DAO.Mapping" %>
 <%@ page import="DAO.Interfaces.*" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 07.08.22
@@ -12,6 +13,10 @@
 
 <%
   User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+  if(user == null) {
+    redirect(request, response);
+    return;
+  }
   MailDAO mailDAO = (MailDAO) application.getAttribute(Mapping.MAIL_DAO);
   UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
   String receiver = request.getParameter(Mapping.RECEIVER);
