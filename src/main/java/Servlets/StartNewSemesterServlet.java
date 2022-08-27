@@ -1,12 +1,12 @@
 package Servlets;
 
 import DAO.Interfaces.ClassroomDAO;
-import DAO.Interfaces.RegistrationStatusDAO;
-import DAO.Interfaces.StudentClassroomDAO;
+import DAO.Interfaces.CurrentSemesterDAO;
+import DAO.Interfaces.StudentDAO;
+import DAO.Interfaces.SubjectDAO;
 import DAO.Mapping;
-import DAO.SqlUserDAO;
 import Model.Classroom;
-import Model.Student;
+import Model.Subject;
 import Model.USERTYPE;
 import Model.User;
 
@@ -16,11 +16,10 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ServletChangeRegistration", value = "/ServletChangeRegistration")
-public class ServletChangeRegistration extends HttpServlet {
+@WebServlet(name = "StartNewSemesterServlet", value = "/StartNewSemesterServlet")
+public class StartNewSemesterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 
     @Override
@@ -36,22 +35,20 @@ public class ServletChangeRegistration extends HttpServlet {
             request.getRequestDispatcher("studentPages/MessagePrinter.jsp").forward(request, response);
             return;
         }
-        StudentClassroomDAO studentClassroomDAO = (StudentClassroomDAO) request.getServletContext().getAttribute(Mapping.STUDENT_CLASSROOM_DAO);
+        SubjectDAO subjectDAO = (SubjectDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_DAO);
         ClassroomDAO classroomDAO = (ClassroomDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_DAO);
-        String demandForClose =  request.getParameter("Close");
-        RegistrationStatusDAO regDao = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
-        if(demandForClose == null){
-            regDao.openRegistration();
-        }else {
-            List<Classroom> classroomList = classroomDAO.getAllClassrooms();
-            for(Classroom c : classroomList){
-                List<Student> list = studentClassroomDAO.getStudentsInClassroom(c.getTableID());
-                if(list.isEmpty()){
-                    classroomDAO.removeClassroom(c);
-                }
-            }
-            regDao.closeRegistration();
+        CurrentSemesterDAO currentSemesterDAO = (CurrentSemesterDAO) request.getServletContext().getAttribute(Mapping.CURRENT_SEMESTER_DAO);
+        if(!currentSemesterDAO.incrementSemester())
+            return;
+        int semester = currentSemesterDAO.getCurrentSemester();
+        StudentDAO studentDAO = (StudentDAO) request.getServletContext().getAttribute(Mapping.STUDENT_DAO);
+        studentDAO.updateStudentCurrentSemester(semester);
+        if(semester == -1)
+            return;
+        List<Subject> subjectList = subjectDAO.getAllSubjects();
+        for(Subject s : subjectList){
+            Classroom c = new Classroom(-1, subjectDAO.getSubjectIDByName(s.getName()), semester, s.getLecturerID(), null);
+            classroomDAO.addClassroom(c);
         }
-        response.sendRedirect("adminPages/adminProfile.jsp");
     }
 }

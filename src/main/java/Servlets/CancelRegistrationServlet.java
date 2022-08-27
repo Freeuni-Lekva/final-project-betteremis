@@ -1,12 +1,8 @@
 package Servlets;
 
-import DAO.Interfaces.PrerequisitesDAO;
-import DAO.Interfaces.RegistrationStatusDAO;
-import DAO.Interfaces.SubjectDAO;
-import DAO.Interfaces.SubjectHistoryDAO;
+import DAO.Interfaces.*;
 import DAO.Mapping;
-import Model.Student;
-import Model.Subject;
+import Model.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -27,8 +23,8 @@ public class CancelRegistrationServlet extends HttpServlet {
 
         RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
         try {
-            if(!rsDAO.registrationStatus()){
-                request.setAttribute("userMessage", "You can only remove subjects when registration is open.");
+            if(!rsDAO.registrationStatus() || ((User) request.getSession().getAttribute(Mapping.USER_OBJECT)).getType() != USERTYPE.STUDENT){
+                request.setAttribute("userMessage", "Access denied.");
                 request.setAttribute("path", "studentProfile.jsp");
                 request.setAttribute("cssPath", "../css/welcome.scss");
                 request.getRequestDispatcher("MessagePrinter.jsp").forward(request, response);
@@ -44,7 +40,12 @@ public class CancelRegistrationServlet extends HttpServlet {
         SubjectDAO subjectDAO = (SubjectDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_DAO);
         Subject subject = subjectDAO.getSubjectByName(subjectToRemove);
         Student student = (Student) request.getSession().getAttribute(Mapping.USER_OBJECT);
+        StudentClassroomDAO studentClassroomDAO = (StudentClassroomDAO) request.getServletContext().getAttribute(Mapping.STUDENT_CLASSROOM_DAO);
+        ClassroomDAO classroomDAO = (ClassroomDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_DAO);
+
         if(!shDAO.isCompleted(student, subject)){
+            Classroom c = classroomDAO.getClassroomBySubjectNameAndSemester(subjectToRemove, student.getCurrentSemester());
+            studentClassroomDAO.removeStudentAndClassroom(student.getEmail(), c.getTableID());
             shDAO.removeStudentAndSubject(student, subject);
         }
         request.getRequestDispatcher("studyingCard.jsp").forward(request, response);

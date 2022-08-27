@@ -98,6 +98,24 @@ public class SqlStudentDAO implements StudentDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public boolean updateStudentCurrentSemester(int semester) {
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "UPDATE STUDENTS SET CurrentSemester = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, semester);
+            ps.executeUpdate();
+            return true;
+        }catch (SQLException e){
+            //e.printStackTrace();
+            return false;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
     @Override
     public int getStudentIDByUserID(int UserID) {
         Connection conn = pool.getConnection();
@@ -116,6 +134,48 @@ public class SqlStudentDAO implements StudentDAO {
         }
         pool.releaseConnection(conn);
         return result;
+    }
+
+    @Override
+    public Student getStudentByID(int ID) {
+        Connection conn = pool.getConnection();
+        try{
+            PreparedStatement stm = conn.prepareStatement("SELECT U.Email, U.PasswordHash, U.Privilege, S.FirstName," +
+                    "S.LastName, S.Profession, S.CurrentSemester, S.Gender, S.DateOfBirth, S.Address," +
+                    "S.StudentStatus, S.School, S.Credits, S.GPA, S.PhoneNumber, S.GroupName, S.UserID, S.ID  " +
+                    "FROM USERS U JOIN STUDENTS S on U.ID = S.UserID HAVING S.ID = ?");
+            stm.setInt(1, ID);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                String newEmail = rs.getString(1), hash = rs.getString(2);
+                USERTYPE priv = rs.getString(3).equals(USERTYPE.STUDENT.toString()) ? USERTYPE.STUDENT : USERTYPE.LECTURER;
+                String fName = rs.getString(4), lName = rs.getString(5), prof = rs.getString(6);
+                int curSem = rs.getInt(7);
+                GENDER gender = rs.getString(8).equals(GENDER.MALE.toString()) ? GENDER.MALE : GENDER.FEMALE;
+                java.util.Date date = new java.util.Date(rs.getDate(9).getTime());
+                String address = rs.getString(10);
+                STATUS status = rs.getString(11).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE;
+                String school = rs.getString(12);
+                int credits = rs.getInt(13);
+                double gpa = rs.getDouble(14);
+                BigInteger phone = new BigInteger(rs.getString(15));
+                String group = rs.getString(16);
+                int userID = rs.getInt(17);
+
+                Student newStud = new Student(newEmail, hash, priv, fName, lName, prof, curSem, gender, date, address,
+                        status, school, credits, gpa, phone, group, userID);
+
+                return newStud;
+            }
+            else return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Something happened while executing query for searching student by user!");
+            return null;
+        }
+        finally {
+            pool.releaseConnection(conn);
+        }
     }
 
 

@@ -8,9 +8,11 @@ import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -126,6 +128,64 @@ public class SqlClassroomDAOTest {
         assertTrue(descList.size() == 2);
         assertTrue(descList.get(0).equals(classroom2));
         assertTrue(descList.get(1).equals(classroom1));
+    }
+
+    @Test
+    @Order(5)
+    public void testGetClassroomBySubjectNameAndSemester() throws FileNotFoundException {
+        Connection conn = pool.getConnection();
+        SqlScriptRunner.emptyTables(conn);
+        pool.releaseConnection(conn);
+
+        User u2 = new User("nitsim@freeuni.edu.ge", "123456",USERTYPE.LECTURER);
+        int ID = userDAO.addUser(u2);
+        Lecturer l1 = new Lecturer(user2.getEmail(),user2.getPasswordHash(),user2.getType(),ID,"nikolozi","tsimaka",
+                "developer",GENDER.MALE,Date.valueOf("2002-04-12"),"tbilisi",STATUS.ACTIVE,new BigInteger("597"));
+        int LID1 = lecturerDAO.addLecturer(l1);
+        Subject s1 = new Subject("mathematics1",6,1);
+        int SUBID1 = subjectDAO.addSubject(s1);
+        Subject s2 = new Subject("mathematics2",6,1);
+        int SUBID2 = subjectDAO.addSubject(s2);
+        classroom1 = new Classroom(-1,SUBID1,1,LID1,null);
+        classroom2 = new Classroom(-1,SUBID2,2,LID1,null);
+
+        sqlClassroomDAO.addClassroom(classroom1);
+        sqlClassroomDAO.addClassroom(classroom2);
+
+        assertEquals(SUBID1, sqlClassroomDAO.getClassroomBySubjectNameAndSemester("mathematics1", 1).getSubjectID());
+        assertEquals(LID1, sqlClassroomDAO.getClassroomBySubjectNameAndSemester("mathematics1", 1).getLecturerID());
+        assertEquals(SUBID2, sqlClassroomDAO.getClassroomBySubjectNameAndSemester("mathematics2", 2).getSubjectID());
+        assertEquals(LID1, sqlClassroomDAO.getClassroomBySubjectNameAndSemester("mathematics2", 2).getLecturerID());
+        assertEquals(null, sqlClassroomDAO.getClassroomBySubjectNameAndSemester("mathematics1", 2));
+    }
+
+    @Test
+    @Order(6)
+    public void testGetAllClassrooms() throws FileNotFoundException {
+        Connection conn = pool.getConnection();
+        SqlScriptRunner.emptyTables(conn);
+        pool.releaseConnection(conn);
+
+        User u2 = new User("nitsim@freeuni.edu.ge", "123456",USERTYPE.LECTURER);
+        int ID = userDAO.addUser(u2);
+        Lecturer l1 = new Lecturer(user2.getEmail(),user2.getPasswordHash(),user2.getType(),ID,"nikolozi","tsimaka",
+                "developer",GENDER.MALE,Date.valueOf("2002-04-12"),"tbilisi",STATUS.ACTIVE,new BigInteger("597"));
+        int LID1 = lecturerDAO.addLecturer(l1);
+        Subject s1 = new Subject("mathematics1",6,1);
+        int SUBID1 = subjectDAO.addSubject(s1);
+        Subject s2 = new Subject("mathematics2",6,1);
+        int SUBID2 = subjectDAO.addSubject(s2);
+        classroom1 = new Classroom(-1,SUBID1,1,LID1,null);
+        classroom2 = new Classroom(-1,SUBID2,2,LID1,null);
+
+        sqlClassroomDAO.addClassroom(classroom1);
+        sqlClassroomDAO.addClassroom(classroom2);
+
+        List<Classroom> result = sqlClassroomDAO.getAllClassrooms();
+        assertEquals(2, result.size());
+        List<Integer> mapped = result.stream().map(x -> x.getSubjectID()).collect(Collectors.toList());
+        assertTrue(mapped.contains(SUBID1));
+        assertTrue(mapped.contains(SUBID2));
     }
 
 }

@@ -85,7 +85,7 @@
 </head>
 <body style="text-align: center">
 <header style="position: sticky ; top : 0; z-index: 999  ; font-family: sans-serif; border: 5px slateblue;
-border-radius: 40px; font-size: 30px ; background-color: #016ba8; color: white">Temporary classroom</header>
+border-radius: 40px; font-size: 30px ; background-color: #016ba8; color: white">Classroom</header>
 <div style="width: 1200px; margin: 0 auto;">
     <form id="addPost" action="ServletAddPost" method="post">
         <textarea form="addPost" type="text" placeholder="Write Post Content" name="<%=Mapping.USER_INPUT%>" style="width: 1200px ; height: 100px"></textarea>

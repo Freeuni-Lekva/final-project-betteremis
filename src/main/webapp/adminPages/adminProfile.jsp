@@ -67,6 +67,11 @@
             }
         %>
     </form>
+    <form action="../StartNewSemesterServlet" method="POST">
+        <%
+            out.println("<input type=\"submit\" value=\"Start New Semester\">");
+        %>
+    </form>
 </div>
 <div class="main">
     <div class="fieldset2" >

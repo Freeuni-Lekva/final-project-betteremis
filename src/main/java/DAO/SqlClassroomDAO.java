@@ -1,7 +1,9 @@
 package DAO;
 
 import DAO.Interfaces.ClassroomDAO;
+import DAO.Interfaces.SubjectDAO;
 import Model.Classroom;
+import Model.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -106,4 +108,48 @@ public class SqlClassroomDAO implements ClassroomDAO {
             pool.releaseConnection(conn);
         }
     }
+
+    @Override
+    public Classroom getClassroomBySubjectNameAndSemester(String name, int semester) {
+        Connection conn = pool.getConnection();
+        SubjectDAO subjectDAO = new SqlSubjectDAO(pool);
+        int ID = subjectDAO.getSubjectIDByName(name);
+        try{
+            String statement = "SELECT * FROM CLASSROOMS WHERE SubjectID = ? AND Semester = ? ;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, ID);
+            ps.setInt(2, semester);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return new Classroom(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getTimestamp(5));
+            }
+            return null;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
+    @Override
+    public List<Classroom> getAllClassrooms() {
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT * FROM CLASSROOMS;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ResultSet rs = ps.executeQuery();
+            List<Classroom> result = new ArrayList<>();
+            while(rs.next()){
+                result.add(new Classroom(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getTimestamp(5)));
+            }
+            return result;
+        }catch (SQLException e){
+            //e.printStackTrace();
+            return null;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
 }

@@ -24,7 +24,7 @@ public class SqlStudentClassroomDAOTest {
     static LecturerDAO lecturerDAO;
     static ClassroomPostsDAO classroomPostsDAO;
     static StudentClassroomDAO studentClassroomDAO;
-    int ID, ID2, LecID, Subj1, Subj2, ClassroomID;
+    int SUID1, SUID2, ID2, LecID, Subj1, Subj2, ClassroomID;
     @BeforeAll
     public static void setUp(){
         pool = new ConnectionPool(1, true);
@@ -43,10 +43,17 @@ public class SqlStudentClassroomDAOTest {
         SqlScriptRunner.emptyTables(conn);
         pool.releaseConnection(conn);
         User u = new User("gmail@gmail.com", "passhash", USERTYPE.STUDENT);
-        ID = userDAO.addUser(u);
+        SUID1 = userDAO.addUser(u);
 
-        Student st = new Student("gmail@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 1, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", ID);
+        Student st = new Student("gmail@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 1, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", SUID1);
         studentDAO.addStudent(st);
+
+        User u2 = new User("gmail2@gmail.com", "passhash", USERTYPE.STUDENT);
+        SUID2 = userDAO.addUser(u2);
+
+        Student st2 = new Student("gmail2@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 1, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", SUID2);
+        studentDAO.addStudent(st2);
+
 
         u = new User("totallylecturer@gmail.com", "totallyhashedpassword", USERTYPE.LECTURER);
         ID2 = userDAO.addUser(u);
@@ -95,5 +102,16 @@ public class SqlStudentClassroomDAOTest {
         assertFalse(studentClassroomDAO.removeStudentAndClassroom( "gmail@gmail.com", ClassroomID));
         assertTrue(-1 != studentClassroomDAO.addStudentAndClassroom("gmail@gmail.com", ClassroomID));
         assertEquals(-1, studentClassroomDAO.addStudentAndClassroom("gmail@gmail.com", ClassroomID));
+    }
+
+    @Test
+    public void SqlClassroomPostsDAOTest3(){
+        assertTrue(-1 != studentClassroomDAO.addStudentAndClassroom("gmail@gmail.com", ClassroomID));
+        assertTrue(-1 != studentClassroomDAO.addStudentAndClassroom("gmail2@gmail.com", ClassroomID));
+        List<Student> result = studentClassroomDAO.getStudentsInClassroom(ClassroomID);
+        assertTrue(result.size() == 2);
+        List<String> mapped = result.stream().map(s -> s.getEmail()).collect(Collectors.toList());
+        assertTrue(mapped.contains("gmail@gmail.com"));
+        assertTrue(mapped.contains("gmail2@gmail.com"));
     }
 }

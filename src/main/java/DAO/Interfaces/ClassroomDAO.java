@@ -39,4 +39,17 @@ public interface ClassroomDAO {
      */
     boolean removeClassroom(Classroom classroom);
 
+    /**
+     * Gets classroom by subject name and given semester. This can be done because this pair of fields uniquely identifies a classroom.
+     * @param name Subject name
+     * @param semester Semester
+     * @return Classroom of given subject in a given semester, null if some kind of error happened.
+     */
+    Classroom getClassroomBySubjectNameAndSemester(String name, int semester);
+
+    /**
+     * Gets all the existing classrooms.
+     * @return List of existing classroomsm, null if some kind of error happened.
+     */
+    List<Classroom> getAllClassrooms();
 }
