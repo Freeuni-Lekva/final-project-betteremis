@@ -259,7 +259,7 @@ CREATE TABLE CURRENT_SEMESTER(
     INTEGRITY_KEEPER ENUM('Integrity Keeper') NOT NULL PRIMARY KEY,
     CurrentSemester int NOT NULL,
 
-    CHECK (CurrentSemester >= 1)
+    CHECK (CurrentSemester >= 0)
 );
 
-INSERT INTO CURRENT_SEMESTER (CurrentSemester) VALUES (1);
+INSERT INTO CURRENT_SEMESTER (CurrentSemester) VALUES (0);

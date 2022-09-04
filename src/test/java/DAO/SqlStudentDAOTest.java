@@ -8,6 +8,7 @@ import utility.SqlScriptRunner;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
+import java.sql.Connection;
 import java.sql.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -128,5 +129,53 @@ class SqlStudentDAOTest {
                 "apple street", STATUS.ACTIVE, "1231 public", 35, 3.99, new BigInteger("599777779"), "Kings", ID);
 
         assertEquals(studDAO.addStudent(st), studDAO.getStudentIDByUserID(ID));
+    }
+
+    @Test
+    @Order(5)
+    public void testGetStudentByID() throws FileNotFoundException {
+        ConnectionPool pool = new ConnectionPool(1, true);
+        Connection conn = pool.getConnection();
+        SqlScriptRunner.emptyTables(conn);
+        pool.releaseConnection(conn);
+        User u1 = new User("dbena20@freeuni.edu.ge", BCrypt.withDefaults().hashToString(12, "bena20".toCharArray()), USERTYPE.STUDENT);
+        User u2 = new User("garse20@freeuni.edu.ge", BCrypt.withDefaults().hashToString(12, "arsena33".toCharArray()), USERTYPE.STUDENT);
+        int ID1 = usrDAO.addUser(u1);
+        int ID2 = usrDAO.addUser(u2);
+        Student s1 = new Student(stud1.getEmail(), stud1.getPasswordHash(), stud1.getType(), "dato", "benashvili", "macs", 4, GENDER.MALE, Date.valueOf("2002-08-06"),
+                "olive street", STATUS.ACTIVE, "22 public", 26, 3.32, new BigInteger("599595919"), "Kings", ID1);
+        Student s2 = new Student(stud2.getEmail(), stud2.getPasswordHash(), stud2.getType(), "giorgi", "arsenadze", "macs", 4, GENDER.MALE, Date.valueOf("2002-02-12"),
+                "apple street", STATUS.ACTIVE, "1231 public", 35, 3.99, new BigInteger("599777779"), "Kings", ID2);
+
+        int SID1 = studDAO.addStudent(s1);
+        int SID2 = studDAO.addStudent(s2);
+        assertEquals(s1.getEmail(), studDAO.getStudentByID(SID1).getEmail());
+        assertEquals(s2.getEmail(), studDAO.getStudentByID(SID2).getEmail());
+    }
+
+    @Test
+    @Order(5)
+    public void testUpdateStudentCurrentSemester() throws FileNotFoundException {
+        ConnectionPool pool = new ConnectionPool(1, true);
+        Connection conn = pool.getConnection();
+        SqlScriptRunner.emptyTables(conn);
+        pool.releaseConnection(conn);
+        User u1 = new User("dbena20@freeuni.edu.ge", BCrypt.withDefaults().hashToString(12, "bena20".toCharArray()), USERTYPE.STUDENT);
+        User u2 = new User("garse20@freeuni.edu.ge", BCrypt.withDefaults().hashToString(12, "arsena33".toCharArray()), USERTYPE.STUDENT);
+        int ID1 = usrDAO.addUser(u1);
+        int ID2 = usrDAO.addUser(u2);
+        Student s1 = new Student(stud1.getEmail(), stud1.getPasswordHash(), stud1.getType(), "dato", "benashvili", "macs", 4, GENDER.MALE, Date.valueOf("2002-08-06"),
+                "olive street", STATUS.ACTIVE, "22 public", 26, 3.32, new BigInteger("599595919"), "Kings", ID1);
+        Student s2 = new Student(stud2.getEmail(), stud2.getPasswordHash(), stud2.getType(), "giorgi", "arsenadze", "macs", 4, GENDER.MALE, Date.valueOf("2002-02-12"),
+                "apple street", STATUS.ACTIVE, "1231 public", 35, 3.99, new BigInteger("599777779"), "Kings", ID2);
+
+        int SID1 = studDAO.addStudent(s1);
+        int SID2 = studDAO.addStudent(s2);
+        studDAO.updateStudentCurrentSemester(1);
+        assertEquals(1, studDAO.getStudentByID(SID1).getCurrentSemester());
+        assertEquals(1, studDAO.getStudentByID(SID2).getCurrentSemester());
+        studDAO.updateStudentCurrentSemester(2);
+        assertEquals(2, studDAO.getStudentByID(SID1).getCurrentSemester());
+        assertEquals(2, studDAO.getStudentByID(SID2).getCurrentSemester());
     }
 }

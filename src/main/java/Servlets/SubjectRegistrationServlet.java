@@ -1,12 +1,8 @@
 package Servlets;
 
-import DAO.Interfaces.PrerequisitesDAO;
-import DAO.Interfaces.RegistrationStatusDAO;
-import DAO.Interfaces.SubjectDAO;
-import DAO.Interfaces.SubjectHistoryDAO;
+import DAO.Interfaces.*;
 import DAO.Mapping;
-import Model.Student;
-import Model.Subject;
+import Model.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -26,8 +22,8 @@ public class SubjectRegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
         try {
-            if(!rsDAO.registrationStatus()){
-                request.setAttribute("userMessage", "Registration is not open.");
+            if(!rsDAO.registrationStatus() || ((User) request.getSession().getAttribute(Mapping.USER_OBJECT)).getType() != USERTYPE.STUDENT){
+                request.setAttribute("userMessage", "Access denied.");
                 request.setAttribute("path", "studentPages/studentProfile.jsp");
                 request.setAttribute("cssPath", "css/welcome.scss");
                 request.getRequestDispatcher("studentPages/MessagePrinter.jsp").forward(request, response);
@@ -40,6 +36,8 @@ public class SubjectRegistrationServlet extends HttpServlet {
         PrerequisitesDAO pDAO = (PrerequisitesDAO) request.getServletContext().getAttribute(Mapping.PREREQUISITES_DAO);
         SubjectHistoryDAO shDAO = (SubjectHistoryDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_HISTORY_DAO);
         SubjectDAO subjectDAO = (SubjectDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_DAO);
+        StudentClassroomDAO studentClassroomDAO = (StudentClassroomDAO) request.getServletContext().getAttribute(Mapping.STUDENT_CLASSROOM_DAO);
+        ClassroomDAO classroomDAO = (ClassroomDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_DAO);
         Student student = (Student) request.getSession().getAttribute(Mapping.USER_OBJECT);
         String subjectName = request.getParameter("currentSubject");
         Subject subject = subjectDAO.getSubjectByName(subjectName);
@@ -48,8 +46,11 @@ public class SubjectRegistrationServlet extends HttpServlet {
             int result = shDAO.addStudentAndSubject(student, subject);
             if(result == -1)
                 request.getRequestDispatcher("failedToRegisterOnSubject.jsp").forward(request, response);
-            else
+            else {
+                Classroom c = classroomDAO.getClassroomBySubjectNameAndSemester(subjectName, student.getCurrentSemester());
+                studentClassroomDAO.addStudentAndClassroom(student.getEmail(), c.getTableID());
                 request.getRequestDispatcher("successfullyRegisteredOnSubject.jsp").forward(request, response);
+            }
         }else{
             request.getRequestDispatcher("failedToRegisterOnSubject.jsp").forward(request, response);
         }
