@@ -259,7 +259,16 @@ CREATE TABLE CURRENT_SEMESTER(
                                    INTEGRITY_KEEPER ENUM('Integrity Keeper') NOT NULL PRIMARY KEY,
                                    CurrentSemester int NOT NULL,
 
-                                   CHECK (CurrentSemester >= 1)
+                                   CHECK (CurrentSemester >= 0)
 );
 
-INSERT INTO CURRENT_SEMESTER (CurrentSemester) VALUES (1);
+INSERT INTO CURRENT_SEMESTER (CurrentSemester) VALUES (0);
+
+DROP TABLE IF EXISTS SEMESTER_STATUS;
+-- remove table if it already exists and start from scratch
+
+CREATE TABLE SEMESTER_STATUS(
+                                INTEGRITY_KEEPER ENUM('Integrity Keeper') NOT NULL PRIMARY KEY,
+                                IsStarted BOOLEAN NOT NULL
+);
+INSERT INTO SEMESTER_STATUS (IsStarted) VALUES (false);

@@ -1,17 +1,18 @@
-<%@ page import="DAO.Interfaces.UserDAO" %>
 <%@ page import="DAO.Mapping" %>
 <%@ page import="Model.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Model.Subject" %>
-<%@ page import="DAO.Interfaces.SubjectDAO" %>
-<%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
 <%@ page import="static Helper.ErrorPageRedirector.redirect" %>
 <%@ page import="DAO.Mapping" %>
 <%@ page import="Model.User" %>
 <%@ page import="Model.USERTYPE" %>
+<%@ page import="static DAO.Mapping.SEMESTER_DAO" %>
+<%@ page import="DAO.Interfaces.*" %>
 <%
     UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
     RegistrationStatusDAO regStatusDAO = (RegistrationStatusDAO) application.getAttribute(Mapping.REGISTRATION_STATUS_DAO);
+    CurrentSemesterDAO curSemesterDAO = (CurrentSemesterDAO) application.getAttribute(SEMESTER_DAO);
+    SemesterDAO semStatusDAO = (SemesterDAO) application.getAttribute(SEMESTER_DAO);
     User admin = (User) session.getAttribute(Mapping.USER_OBJECT);
     if(admin == null || admin.getType() != USERTYPE.ADMIN) {
         redirect(request, response);
@@ -69,6 +70,18 @@
             String inp2 = "<input type=\"submit\" name=\"Open\" value=\"Open Registration\">";
             boolean isOpen = regStatusDAO.registrationStatus();
             if(isOpen){
+                out.println(inp1);
+            }else{
+                out.println(inp2);
+            }
+        %>
+    </form>
+    <form action="../ChangeSemesterServlet" method="post">
+        <%
+            String startSemester = "<input type=\"submit\" name=\"Start\" value=\"Start new semester\">";
+            String endSemester = "<input type=\"submit\" name=\"End\" value=\"End current semester\">";
+            boolean semesterStatus = semStatusDAO.getSemesterStatus();
+            if(semesterStatus){
                 out.println(inp1);
             }else{
                 out.println(inp2);

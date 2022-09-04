@@ -14,8 +14,7 @@ public interface Mapping {
     String CLASSROOM_POSTS_DAO = "classpostsdao";
     String STUDENT_CLASSROOM_DAO = "studclassdao";
     String COMMENTS_DAO = "comdao";
-    String CURRENT_SEMESTER_DAO = "currentsemsterdao";
-
+    String SEMESTER_DAO = "semester_dao";
 
     String FILE = "file";
     String SENDER = "sender";

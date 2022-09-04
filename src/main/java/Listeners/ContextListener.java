@@ -31,6 +31,7 @@ public class ContextListener implements ServletContextListener {
         StudentClassroomDAO studentClassroomDAO = new SqlStudentClassroomDAO(pool);
         CommentsDAO commentsDAO = new SqlCommentsDAO(pool);
         CurrentSemesterDAO currentSemesterDAO = new SqlCurrentSemesterDAO(pool);
+        SemesterDAO semesterDAO = new SqlSemesterDAO(pool);
         context.setAttribute(USER_DAO, sqlUserDAO);
         context.setAttribute(STUDENT_DAO, sqlStudentDAO);
         context.setAttribute(LECTURER_DAO, sqlLecturerDAO);
@@ -45,7 +46,7 @@ public class ContextListener implements ServletContextListener {
         context.setAttribute(CLASSROOM_POSTS_DAO, classroomPostsDAO);
         context.setAttribute(STUDENT_CLASSROOM_DAO, studentClassroomDAO);
         context.setAttribute(COMMENTS_DAO, commentsDAO);
-        context.setAttribute(CURRENT_SEMESTER_DAO, currentSemesterDAO);
+        context.setAttribute(SEMESTER_DAO, currentSemesterDAO);
 
         FriendService service = new FriendService();
         context.setAttribute(FRIEND_SERVICE, service);
