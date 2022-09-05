@@ -22,6 +22,7 @@
         redirect(request, response);
         return;
     }
+    // TODO : check whether user has privileges to enter this class
     ClassroomPostsDAO postsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
     UserDAO userDAO = (UserDAO) request.getServletContext().getAttribute(Mapping.USER_DAO);
     CommentsDAO commentsDAO = (CommentsDAO) request.getServletContext().getAttribute(Mapping.COMMENTS_DAO);

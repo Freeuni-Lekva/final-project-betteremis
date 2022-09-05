@@ -6,7 +6,13 @@
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="DAO.Interfaces.*" %>
 <%@ page import="java.sql.SQLException" %>
-
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%
+  User currentUser = (User) session.getAttribute(Mapping.USER_OBJECT);
+  if(currentUser == null || currentUser.getType() != USERTYPE.STUDENT) {
+    redirect(request, response);
+    return;
+  }
 <%
   SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
   LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
