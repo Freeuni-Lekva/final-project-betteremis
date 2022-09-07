@@ -8,6 +8,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 
 import static DAO.Mapping.*;
+import static Helper.ErrorPageRedirector.redirect;
 
 @WebServlet(name = "ChangePasswordServlet", value = "/ChangePasswordServlet")
 public class ChangePasswordServlet extends HttpServlet {
@@ -16,6 +17,9 @@ public class ChangePasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userEmail = (String) request.getSession().getAttribute(EMAIL);
         String password = request.getParameter("password");
+        if(userEmail == null || password == null){
+            redirect(request, response);
+        }
         UserDAO dao = (UserDAO) request.getServletContext().getAttribute(USER_DAO);
         boolean res = dao.setPassword(userEmail, password);
         if(res){

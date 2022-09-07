@@ -7,12 +7,16 @@ import DAO.Interfaces.SubjectHistoryDAO;
 import DAO.Mapping;
 import Model.Student;
 import Model.Subject;
+import Model.USERTYPE;
+import Model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import static Helper.ErrorPageRedirector.redirect;
 
 @WebServlet(name = "CancelRegistrationServlet", value = "/studentPages/CancelRegistrationServlet")
 public class CancelRegistrationServlet extends HttpServlet {
@@ -24,10 +28,15 @@ public class CancelRegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+        if (user == null || user.getType() != USERTYPE.STUDENT) {
+            redirect(request, response);
+            return;
+        }
         RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
         try {
-            if(!rsDAO.registrationStatus()){
+            if (!rsDAO.registrationStatus()) {
                 request.setAttribute("userMessage", "You can only remove subjects when registration is open.");
                 request.setAttribute("path", "studentProfile.jsp");
                 request.setAttribute("cssPath", "../css/welcome.scss");
@@ -44,7 +53,7 @@ public class CancelRegistrationServlet extends HttpServlet {
         SubjectDAO subjectDAO = (SubjectDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_DAO);
         Subject subject = subjectDAO.getSubjectByName(subjectToRemove);
         Student student = (Student) request.getSession().getAttribute(Mapping.USER_OBJECT);
-        if(!shDAO.isCompleted(student, subject)){
+        if (!shDAO.isCompleted(student, subject)) {
             shDAO.removeStudentAndSubject(student, subject);
         }
         request.getRequestDispatcher("studyingCard.jsp").forward(request, response);

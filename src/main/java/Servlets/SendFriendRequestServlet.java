@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static DAO.Mapping.*;
+import static Helper.ErrorPageRedirector.redirect;
 import static Services.FriendService.RequestResult.*;
 import static Servlets.ErrorMessages.ERROR_INVALID_USER;
 import static Servlets.ErrorMessages.ERROR_MESSAGE;
@@ -27,6 +28,10 @@ public class SendFriendRequestServlet extends HttpServlet {
         UserDAO userDAO = (UserDAO) sc.getAttribute(USER_DAO);
         FriendService friendService = (FriendService) sc.getAttribute(FRIEND_SERVICE);
         User currentUser = (User) req.getSession().getAttribute(USER_OBJECT);
+        if(currentUser == null){
+            redirect(req, resp);
+            return;
+        }
         FriendsDAO friendsDAO = (FriendsDAO) sc.getAttribute(FRIENDS_DAO);
         FriendService.RequestResult result = friendService.sendRequest(currentUser, email, friendsDAO, userDAO);
         String message = null;

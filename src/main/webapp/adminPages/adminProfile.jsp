@@ -9,6 +9,7 @@
 <%@ page import="DAO.Mapping" %>
 <%@ page import="Model.User" %>
 <%@ page import="Model.USERTYPE" %>
+<%@ page import="static Servlets.ErrorMessages.ERROR_MESSAGE" %>
 <%
     UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
     RegistrationStatusDAO regStatusDAO = (RegistrationStatusDAO) application.getAttribute(Mapping.REGISTRATION_STATUS_DAO);
@@ -76,6 +77,15 @@
         %>
     </form>
 </div>
+<%
+    if(session.getAttribute(ERROR_MESSAGE) != null){
+%>
+<p> <%=session.getAttribute(ERROR_MESSAGE)%></p>
+
+<%
+        session.removeAttribute(ERROR_MESSAGE);
+    }
+%>
 <div class="main">
     <div class="fieldset2" >
         <div class="temp">
