@@ -76,6 +76,11 @@
             }
         %>
     </form>
+    <form action="../StartNewSemesterServlet" method="POST">
+        <%
+            out.println("<input type=\"submit\" value=\"Start New Semester\">");
+        %>
+    </form>
 </div>
 <%
     if(session.getAttribute(ERROR_MESSAGE) != null){

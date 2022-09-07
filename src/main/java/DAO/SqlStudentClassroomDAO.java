@@ -6,12 +6,41 @@ import Model.Classroom;
 import Model.Student;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlStudentClassroomDAO implements StudentClassroomDAO {
     ConnectionPool pool;
 
     public SqlStudentClassroomDAO(ConnectionPool pool) {
         this.pool = pool;
+    }
+
+    @Override
+    public List<Student> getStudentsInClassroom(int ClassroomID) {
+        StudentDAO stDAO = new SqlStudentDAO(pool);
+
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT * FROM STUDENT_CLASSROOMS WHERE ClassroomID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, ClassroomID);
+            ResultSet rs = ps.executeQuery();
+            List<Integer> IDS = new ArrayList<>();
+            while(rs.next()){
+                IDS.add(rs.getInt(3));
+            }
+            pool.releaseConnection(conn);
+            List<Student> result = new ArrayList<>();
+            for(int ID : IDS){
+                result.add(stDAO.getStudentByID(ID));
+            }
+            return result;
+        }catch (SQLException e){
+            //e.printStackTrace();
+            pool.releaseConnection(conn);
+            return null;
+        }
     }
 
     @Override

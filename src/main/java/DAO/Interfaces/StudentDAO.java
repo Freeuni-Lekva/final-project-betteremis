@@ -36,6 +36,19 @@ public interface StudentDAO {
      */
     int getStudentIDByUserID(int UserID);
 
+    /**
+     * Gets student from the database with a given ID
+     * @param ID
+     * @return Student object with required ID, null if some kind of error has happened.
+     */
+    Student getStudentByID(int ID);
+
     boolean recoverStatus(Student student);
 
+    /**
+     * Updates every student's current semester.
+     * @param semester
+     * @return true if everything is successful, false if some kind of error happened.
+     */
+    boolean updateStudentCurrentSemester(int semester);
 }
