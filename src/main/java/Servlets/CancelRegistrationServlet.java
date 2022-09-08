@@ -2,10 +2,7 @@ package Servlets;
 
 import DAO.Interfaces.*;
 import DAO.Mapping;
-import Model.Student;
-import Model.Subject;
-import Model.USERTYPE;
-import Model.User;
+import Model.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
