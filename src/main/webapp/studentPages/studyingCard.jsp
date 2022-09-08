@@ -1,27 +1,16 @@
-<%@ page import="Model.Student" %>
-<%@ page import="DAO.Mapping" %>
-<%@ page import="Model.Subject" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="DAO.Interfaces.SubjectHistoryDAO" %>
-<%@ page import="DAO.SqlSubjectHistoryDAO" %>
-<%@ page import="DAO.Interfaces.LecturerDAO" %>
-<%@ page import="Model.Lecturer" %>
-<%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="DAO.Interfaces.PrerequisitesDAO" %>
-<%@ page import="Model.User" %><%--
-  Created by IntelliJ IDEA.
-  User: dito
-  Date: 21.07.22
-  Time: 18:33
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="DAO.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="DAO.Interfaces.*" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="Model.*" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="static Model.USERTYPE.*" %>
 <%
-    User user = (User) request.getSession().getAttribute(Mapping.USER_OBJECT);
-    if(user == null){
-        response.sendRedirect("invalidUser.jsp");
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != STUDENT) {
+        redirect(request, response);
+        return;
     }
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
     SubjectHistoryDAO shDAO = (SubjectHistoryDAO) application.getAttribute(Mapping.SUBJECT_HISTORY_DAO);

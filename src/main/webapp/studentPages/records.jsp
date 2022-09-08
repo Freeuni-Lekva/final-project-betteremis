@@ -17,7 +17,15 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="Model.User" %>
+<%@ page import="static Model.USERTYPE.*" %>
 <%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != STUDENT) {
+        redirect(request, response);
+        return;
+    }
     Student student = (Student) request.getSession().getAttribute(USER_OBJECT);
     SubjectHistoryDAO dao = (SubjectHistoryDAO) request.getServletContext().getAttribute(SUBJECT_HISTORY_DAO);
     Map<Integer, ArrayList<Subject>> data = dao.getAllSubjects(student, 0);

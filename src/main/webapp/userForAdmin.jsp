@@ -1,6 +1,9 @@
 <%@ page import="DAO.Mapping" %>
 <%@ page import="DAO.Interfaces.*" %>
-<%@ page import="Model.*" %><%--
+<%@ page import="Model.*" %>
+<%@ page import="static DAO.Mapping.USER_OBJECT" %>
+<%@ page import="static Model.USERTYPE.ADMIN" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 02.08.22
@@ -9,7 +12,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-
+    User admin = (User) session.getAttribute(USER_OBJECT);
+    if(admin == null || admin.getType()!=ADMIN){
+        redirect(request, response);
+    }
     UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
     String email = (String) request.getSession().getAttribute(Mapping.EMAIL);
     User user = userDAO.getUserByEmail(email);

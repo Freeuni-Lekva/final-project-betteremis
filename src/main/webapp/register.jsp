@@ -22,7 +22,21 @@
         }
     }
 </script>
-
+<%@ page import="Model.User" %>
+<%@ page import="static Model.USERTYPE.*" %>
+<%@ page import="static DAO.Mapping.USER_OBJECT" %>
+<%
+    User user = (User) request.getSession().getAttribute(USER_OBJECT);
+    if(user != null){
+        if(user.getType() == STUDENT){
+            response.sendRedirect("studentPages/studentProfile.jsp");
+        }else if(user.getType() == LECTURER){
+            response.sendRedirect("lecturerPages/lecturerProfile.jsp");
+        }else if(user.getType() == ADMIN){
+            response.sendRedirect("adminPages/adminProfile.jsp");
+        }
+    }
+%>
 <form action="registerServlet" method="POST" name="main_form">
     <h4>Registration info</h4>
     <div><label for="profession">Profession</label></div>

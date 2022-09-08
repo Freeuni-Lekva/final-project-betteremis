@@ -13,6 +13,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 
 import static DAO.Mapping.*;
+import static Helper.ErrorPageRedirector.redirect;
 import static Services.FriendService.RemoveResult.REMOVE_FAIL;
 import static Services.FriendService.RemoveResult.REMOVE_SUCCESS;
 import static Services.FriendService.RequestResult.*;
@@ -29,6 +30,9 @@ public class RemoveFriendServlet extends HttpServlet {
         UserDAO userDAO = (UserDAO) sce.getAttribute(USER_DAO);
         FriendService friendService = (FriendService) sce.getAttribute(FRIEND_SERVICE);
         User currentUser = (User) session.getAttribute(USER_OBJECT);
+        if(currentUser == null) {
+            redirect(req, resp);
+        }
         FriendsDAO friendsDAO = (FriendsDAO) sce.getAttribute(FRIENDS_DAO);
         FriendService.RemoveResult result = friendService.removeFriend(currentUser, email, friendsDAO, userDAO);
         String message = null;

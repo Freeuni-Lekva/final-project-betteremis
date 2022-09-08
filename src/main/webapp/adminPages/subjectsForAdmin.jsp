@@ -2,7 +2,16 @@
 <%@ page import="DAO.Mapping" %>
 <%@ page import="Model.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="Model.USERTYPE" %>
 <%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != USERTYPE.ADMIN) {
+        redirect(request, response);
+        return;
+    }
     SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
     PrerequisitesDAO prerequisitesDAO = (PrerequisitesDAO) application.getAttribute(Mapping.PREREQUISITES_DAO);
     List<Subject> allSubjects = subjectDAO.getAllSubjects();
