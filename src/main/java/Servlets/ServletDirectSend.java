@@ -21,7 +21,7 @@ public class ServletDirectSend extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(Mapping.USER_OBJECT);
         String sender = request.getParameter(Mapping.SENDER);
-        if(user == null || user.getEmail() != sender){
+        if(user == null || !user.getEmail().equals(sender)){
             redirect(request, response);
         }
         String receiver = request.getParameter(Mapping.RECEIVER);

@@ -50,5 +50,6 @@ public class StartNewSemesterServlet extends HttpServlet {
             Classroom c = new Classroom(-1, subjectDAO.getSubjectIDByName(s.getName()), semester, s.getLecturerID(), null);
             classroomDAO.addClassroom(c);
         }
+        response.sendRedirect("adminPages/adminProfile.jsp");
     }
 }

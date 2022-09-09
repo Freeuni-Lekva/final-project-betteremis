@@ -1,10 +1,15 @@
 package DAO;
 
 import DAO.Interfaces.StudentDAO;
+import DAO.Interfaces.SubjectHistoryDAO;
 import Model.*;
 
 import java.math.BigInteger;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SqlStudentDAO implements StudentDAO {
 
@@ -113,7 +118,106 @@ public class SqlStudentDAO implements StudentDAO {
             return false;
         }finally {
             pool.releaseConnection(conn);
+            updateGPA();
         }
+    }
+
+    private void updateGPA() {
+        SubjectHistoryDAO historyDAO = new SqlSubjectHistoryDAO(pool);
+        List<Student> students = getAllStudents();
+        for(Student student : students){
+            Map<Subject, Double> grades = new HashMap<>();
+            Map<Integer, ArrayList<Subject>> mp = historyDAO.getCompletedSubjects(student);
+            for(Integer semester : mp.keySet()){
+                for(Subject subject : mp.get(semester)){
+                    double grade = historyDAO.getSumOfScores(student, subject);
+                    if(!grades.containsKey(subject)){
+                        grades.put(subject, grade);
+                    }else if(grades.get(subject) < grade){
+                        grades.put(subject, grade);
+                    }
+                }
+            }
+            double gpa = getGPA(grades);
+            setStudentGPA(student, gpa);
+        }
+    }
+
+    private boolean setStudentGPA(Student student, double gpa) {
+        Connection conn = pool.getConnection();
+        PreparedStatement stm;
+        try {
+            stm = conn.prepareStatement("UPDATE STUDENTS SET GPA = ? WHERE UserID = ?");
+            stm.setDouble(1, gpa);
+            stm.setInt(2, student.getUserID());
+            int added = stm.executeUpdate();
+            if(added != 1) throw new SQLException();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+        finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
+    private double getGPA(Map<Subject, Double> grades) {
+        int totalCredits = grades.keySet().stream().map( subject -> subject.getNumCredits()).reduce(0, (a,b) -> (a + b));
+        double nominator = 0;
+        for(Subject subject : grades.keySet()){
+            double grade = grades.get(subject);
+            double coeff = 0;
+            if(100 >= grade && grade >= 91){
+                coeff = 4;
+            }else if(grade >= 81){
+                coeff = 3.39;
+            }else if(grade >= 71){
+                coeff = 2.77;
+            }else if(grade >= 61){
+                coeff = 2.16;
+            }else if(grade >= 51){
+                coeff = 1.55;
+            }
+            nominator += coeff * subject.getNumCredits();
+        }
+        return nominator / totalCredits;
+    }
+
+    private List<Student> getAllStudents() {
+        Connection conn = pool.getConnection();
+        List<Student> students = new ArrayList<>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT U.Email, U.PasswordHash, U.Privilege, S.FirstName," +
+                    "S.LastName, S.Profession, S.CurrentSemester, S.Gender, S.DateOfBirth, S.Address," +
+                    "S.StudentStatus, S.School, S.Credits, S.GPA, S.PhoneNumber, S.GroupName, S.UserID, S.ID  " +
+                    "FROM USERS U JOIN STUDENTS S on U.ID = S.UserID");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                String newEmail = rs.getString(1), hash = rs.getString(2);
+                USERTYPE priv = rs.getString(3).equals(USERTYPE.STUDENT.toString()) ? USERTYPE.STUDENT : USERTYPE.LECTURER;
+                String fName = rs.getString(4), lName = rs.getString(5), prof = rs.getString(6);
+                int curSem = rs.getInt(7);
+                GENDER gender = rs.getString(8).equals(GENDER.MALE.toString()) ? GENDER.MALE : GENDER.FEMALE;
+                java.util.Date date = new java.util.Date(rs.getDate(9).getTime());
+                String address = rs.getString(10);
+                STATUS status = rs.getString(11).equals(STATUS.ACTIVE.toString()) ? STATUS.ACTIVE : STATUS.INACTIVE;
+                String school = rs.getString(12);
+                int credits = rs.getInt(13);
+                double gpa = rs.getDouble(14);
+                BigInteger phone = new BigInteger(rs.getString(15));
+                String group = rs.getString(16);
+                int userID = rs.getInt(17);
+
+                Student newStud = new Student(newEmail, hash, priv, fName, lName, prof, curSem, gender, date, address,
+                        status, school, credits, gpa, phone, group, userID);
+                students.add(newStud);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            pool.releaseConnection(conn);
+        }
+        return students;
     }
 
     @Override
