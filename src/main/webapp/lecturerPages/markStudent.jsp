@@ -60,8 +60,8 @@
                     }
                 }
             %>
-            <input type="hidden" name= "subname" value= <%= subName %> >
-            <input type="hidden" name= "email" value= <%= email %> >
+            <input type="hidden" name= "subname" value= "<%=subName %>" >
+            <input type="hidden" name= "email" value= "<%=email%>" >
             <br>
             <br>
             <label>Total Score: <%= subDao.getSumOfScores(student,subject) %></label>
@@ -69,8 +69,8 @@
         </form>
 
         <form class="resetForm" action="../ServletChangeMarks" method="POST" >
-            <input type="hidden" name= "subname" value= <%= subName %> >
-            <input type="hidden" name= "email" value= <%= email %> >
+            <input type="hidden" name= "subname" value= "<%=subName%>" >
+            <input type="hidden" name= "email" value= "<%=email%>" >
             <input type = "hidden" name = "reset" value="Reset">
             <input type = "submit" value="Reset Default">
         </form>

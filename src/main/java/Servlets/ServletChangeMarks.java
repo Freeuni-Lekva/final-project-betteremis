@@ -27,8 +27,8 @@ public class ServletChangeMarks extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User admin = (User) session.getAttribute(Mapping.USER_OBJECT);
-        if(admin == null || admin.getType() != USERTYPE.LECTURER) {
+        User lecturer = (User) session.getAttribute(Mapping.USER_OBJECT);
+        if(lecturer == null || lecturer.getType() != USERTYPE.LECTURER) {
             redirect(request, response);
             return;
         }

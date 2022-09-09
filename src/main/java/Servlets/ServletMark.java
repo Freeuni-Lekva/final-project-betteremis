@@ -1,16 +1,11 @@
 package Servlets;
 
-<<<<<<< HEAD
 import DAO.Interfaces.CurrentSemesterDAO;
 import DAO.Interfaces.StudentDAO;
 import DAO.Interfaces.SubjectDAO;
 import DAO.Interfaces.SubjectHistoryDAO;
 import DAO.Mapping;
 import Model.Student;
-import Model.Subject;
-=======
-import DAO.Mapping;
->>>>>>> 324b728e7d01689cdc26d5fdf5d3c25603707bd3
 import Model.USERTYPE;
 import Model.User;
 
