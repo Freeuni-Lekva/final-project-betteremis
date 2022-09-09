@@ -25,7 +25,7 @@ public class ServletSendMessage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute(Mapping.USER_OBJECT);
         String senderEmail = request.getParameter(Mapping.SENDER);
-        if(user == null || user.getEmail() != senderEmail){
+        if(user == null || !user.getEmail().equals(senderEmail)){
             redirect(request, response);
         }
         String receiverEmail = request.getParameter(Mapping.RECEIVER);

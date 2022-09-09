@@ -30,5 +30,10 @@ public class Subject {
         Subject s = (Subject) obj;
         return s.getName().equals(this.getName());
     }
+
+    @Override
+    public int hashCode() {
+        return this.getName().hashCode();
+    }
 }
 

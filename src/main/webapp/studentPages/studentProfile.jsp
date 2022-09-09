@@ -1,7 +1,4 @@
 <%@ page import="DAO.Mapping" %>
-<%@ page import="Model.User" %>
-<%@ page import="Model.USERTYPE" %>
-<%@ page import="Model.Student" %>
 <%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: dito
@@ -13,6 +10,11 @@
 <%@ page import="static Helper.ErrorPageRedirector.redirect" %>
 <%@ page import="Model.User" %>
 <%@ page import="static Model.USERTYPE.*" %>
+<%@ page import="DAO.Interfaces.SubjectHistoryDAO" %>
+<%@ page import="static DAO.Mapping.SUBJECT_HISTORY_DAO" %>
+<%@ page import="Model.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
 <%
     User user = (User) session.getAttribute(Mapping.USER_OBJECT);
     if(user == null || user.getType() != STUDENT) {
@@ -20,6 +22,14 @@
         return;
     }
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
+    SubjectHistoryDAO dao = (SubjectHistoryDAO) application.getAttribute(SUBJECT_HISTORY_DAO);
+    Map<Integer, ArrayList<Subject>> subjects = dao.getCompletedSubjects(student);
+    int totalCredits = 0;
+    for(Integer semester : subjects.keySet()){
+        for(Subject subject : subjects.get(semester)){
+            totalCredits += subject.getNumCredits();
+        }
+    }
 %>
 
 <html>
@@ -55,7 +65,7 @@
             <br />
             <li><a>School : <%=student.getSchool()%> </a></li>
             <br />
-            <li><a>Total Credits : <%=student.getCreditsDone()%> </a></li>
+            <li><a>Total Credits : <%=totalCredits%> </a></li>
             <br />
             <li><a>GPA : <%=student.getGpa()%> </a></li>
             <br />
