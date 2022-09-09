@@ -67,7 +67,6 @@
         <li style="--i:5;" > <a href="lecturerProfile.jsp"> Personal Info</a></li>
         <li style="--i:4;"> <a href="classrooms.jsp"> Classrooms </a> </li>
         <li style="--i:3;"> <a href="subjects.jsp"> Subjects</a> </li>
-        <li style="--i:2;"> <a href="subjectsRecords.jsp"> Subject Records</a> </li>
         <li style="--i:1;"> <a href="../LogOutServlet"> Log Out</a> </li>
     </ul>
 </div>

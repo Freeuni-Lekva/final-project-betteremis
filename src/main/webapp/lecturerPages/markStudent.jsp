@@ -30,15 +30,6 @@
     Student student = studentDAO.getStudentWithEmail(email);
     Subject subject = subjectDAO.getSubjectByName(subName);
     Map<String, Double> grades = subDao.getGrade(student,subject);
-    int semester = (int) request.getSession().getAttribute("studentSemester");
-
-    // TODO : Check current semester. For testing purposes now it is editable, so that lecturer can enter student scores.
-//    if(semester == currentSemester){
-//        input field must be required
-//    }else{
-//        input field must be readonly
-//    }
-
 %>
 
 <%!

@@ -345,4 +345,48 @@ public class SqlSubjectHistoryDAO implements SubjectHistoryDAO {
         }
         return result;
     }
+
+    @Override
+    public int getSemester(Student st, Subject sb) {
+        SubjectDAO sd = new SqlSubjectDAO(pool);
+        int SubjectID = sd.getSubjectIDByName(sb.getName());
+        StudentDAO studDAO = new SqlStudentDAO(pool);
+        int StudentID = studDAO.getStudentIDByUserID(st.getUserID());
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "SELECT * FROM SUBJECTS_HISTORY WHERE UserID = ? AND SubjectID = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, StudentID);
+            ps.setInt(2, SubjectID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                return rs.getInt(4);
+            }
+            return -1;
+        }catch (SQLException e){
+            System.out.println("SQLException happened.");
+            return -1;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
+
+    @Override
+    public boolean makeCompleted(int Semester) {
+        Connection conn = pool.getConnection();
+        try{
+            String statement = "UPDATE SUBJECTS_HISTORY SET IsCompleted = ? WHERE Semester = ?;";
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setBoolean(1, true);
+            ps.setInt(2, Semester);
+            ps.executeUpdate();
+            return true;
+        }catch (SQLException e){
+            System.out.println("SQLException happened.");
+            //e.printStackTrace();
+            return false;
+        }finally {
+            pool.releaseConnection(conn);
+        }
+    }
 }

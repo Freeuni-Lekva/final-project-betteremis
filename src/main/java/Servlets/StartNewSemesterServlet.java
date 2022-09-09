@@ -1,9 +1,6 @@
 package Servlets;
 
-import DAO.Interfaces.ClassroomDAO;
-import DAO.Interfaces.CurrentSemesterDAO;
-import DAO.Interfaces.StudentDAO;
-import DAO.Interfaces.SubjectDAO;
+import DAO.Interfaces.*;
 import DAO.Mapping;
 import Model.Classroom;
 import Model.Subject;
@@ -38,13 +35,16 @@ public class StartNewSemesterServlet extends HttpServlet {
         SubjectDAO subjectDAO = (SubjectDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_DAO);
         ClassroomDAO classroomDAO = (ClassroomDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_DAO);
         CurrentSemesterDAO currentSemesterDAO = (CurrentSemesterDAO) request.getServletContext().getAttribute(Mapping.CURRENT_SEMESTER_DAO);
+        SubjectHistoryDAO shDAO = (SubjectHistoryDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_HISTORY_DAO);
+        int semester = currentSemesterDAO.getCurrentSemester();
+        shDAO.makeCompleted(semester);
         if(!currentSemesterDAO.incrementSemester())
             return;
-        int semester = currentSemesterDAO.getCurrentSemester();
-        StudentDAO studentDAO = (StudentDAO) request.getServletContext().getAttribute(Mapping.STUDENT_DAO);
-        studentDAO.updateStudentCurrentSemester(semester);
+        semester = currentSemesterDAO.getCurrentSemester();
         if(semester == -1)
             return;
+        StudentDAO studentDAO = (StudentDAO) request.getServletContext().getAttribute(Mapping.STUDENT_DAO);
+        studentDAO.updateStudentCurrentSemester(semester);
         List<Subject> subjectList = subjectDAO.getAllSubjects();
         for(Subject s : subjectList){
             Classroom c = new Classroom(-1, subjectDAO.getSubjectIDByName(s.getName()), semester, s.getLecturerID(), null);

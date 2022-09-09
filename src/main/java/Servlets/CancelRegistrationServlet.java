@@ -16,8 +16,6 @@ import static Helper.ErrorPageRedirector.redirect;
 public class CancelRegistrationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Ignored
-        super.doGet(request, response);
     }
 
     @Override
@@ -28,19 +26,6 @@ public class CancelRegistrationServlet extends HttpServlet {
             redirect(request, response);
             return;
         }
-        RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
-        try {
-            if(!rsDAO.registrationStatus() || ((User) request.getSession().getAttribute(Mapping.USER_OBJECT)).getType() != USERTYPE.STUDENT){
-                request.setAttribute("userMessage", "Access denied.");
-                request.setAttribute("path", "studentProfile.jsp");
-                request.setAttribute("cssPath", "../css/welcome.scss");
-                request.getRequestDispatcher("MessagePrinter.jsp").forward(request, response);
-                return;
-            }
-        } catch (SQLException e) {
-            request.getRequestDispatcher("studyingCard.jsp").forward(request, response);
-            return;
-        }
 
         String subjectToRemove = request.getParameter("subjectToRemove");
         SubjectHistoryDAO shDAO = (SubjectHistoryDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_HISTORY_DAO);
@@ -49,6 +34,15 @@ public class CancelRegistrationServlet extends HttpServlet {
         Student student = (Student) request.getSession().getAttribute(Mapping.USER_OBJECT);
         StudentClassroomDAO studentClassroomDAO = (StudentClassroomDAO) request.getServletContext().getAttribute(Mapping.STUDENT_CLASSROOM_DAO);
         ClassroomDAO classroomDAO = (ClassroomDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_DAO);
+        CurrentSemesterDAO currentSemesterDAO = (CurrentSemesterDAO) request.getServletContext().getAttribute(Mapping.CURRENT_SEMESTER_DAO);
+
+        if(currentSemesterDAO.getCurrentSemester() != shDAO.getSemester(student, subject)){
+            request.setAttribute("userMessage", "Access denied.");
+            request.setAttribute("path", "studentProfile.jsp");
+            request.setAttribute("cssPath", "../css/welcome.scss");
+            request.getRequestDispatcher("MessagePrinter.jsp").forward(request, response);
+            return;
+        }
 
         if(!shDAO.isCompleted(student, subject)){
             Classroom c = classroomDAO.getClassroomBySubjectNameAndSemester(subjectToRemove, student.getCurrentSemester());
