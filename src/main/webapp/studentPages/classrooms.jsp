@@ -27,6 +27,7 @@
     private String decorate(Classroom classroom, String sub_name, String lec_email){
         String result = " <tr>\n" +
                 "            <td>" + sub_name + "</td>\n" +
+                "            <td>" + classroom.getSemester()+ "</td>\n" +
                 "            <td> " + lec_email + "</td>\n" +
                 "          <td>\n" +
                 "              <a href=\"../classroom.jsp?"+Mapping.CLASSROOM_ID + "=" +classroom.getTableID() + "\" >Visit</a>\n"+
@@ -49,6 +50,7 @@
             <tr >
                     <th><h1>Classroom's Subject</h1></th>
                     <th><h1>Classroom's Lecturer</h1></th>
+                    <th><h1>Classroom Semester</h1></th>
                     <th><h1>Visit Classroom</h1></th>
              </tr>
        </thead>

@@ -23,52 +23,27 @@
     Map<Integer, ArrayList<Subject>> data = dao.getAllSubjects(student, 0);
     int cnt = 1;
 %>
+
+<%!
+    public String getGrade(double mark){
+        if(91 <= mark && mark <= 100)
+            return "A";
+        if(81 <= mark && mark < 91)
+            return "B";
+        if(71 <= mark && mark < 81)
+            return "C";
+        if(61 <= mark && mark < 71)
+            return "D";
+        if(51 <= mark && mark < 61)
+            return "E";
+        if(mark < 51)
+            return "F";
+        return "";
+    }
+%>
+
 <div class="wrapper-container">
 <body>
-<div class="p-3 mb-2 bg-dark text-white">
-    <div class="container">
-        <h2 style='text-align: center'>Free University Of Georgia</h2>
-        <br>
-        <h3 style="text-align: center">Academic Records</h3>
-        <br>
-        <div style='border: 0px solid #AAA;'>
-            <table style='text-align: left'>
-                <tr>
-                    <td >
-                        <table>
-                            <tr>
-                                <td style="align: right">First Name:</td>
-                                <td style="width: 5px">&nbsp;</td>
-                                <td>Nika</td>
-                            </tr>
-                            <tr>
-                                <td style="align: right">Second Name:</td>
-                                <td style="width: 5px">&nbsp;</td>
-                                <td>Glunchadze</td>
-                            </tr>
-                            <tr>
-                                <td style="align: right">School:</td>
-                                <td style="width: 5px">&nbsp;</td>
-                                <td>Mathematics and Computer Science</td>
-                            </tr>
-
-                        </table>
-                    </td>
-                    <td></td>
-                    <td style="vertical-align: top">
-                        <table style="text-align: right">
-                            <tr style="text-align: right">
-                                <td style="width: 300px"></td>
-                                <td style="text-align: right">Date of</td>
-                                <td>&nbsp;Birth:&nbsp;</td>
-                                <td>10/06/2002</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <br>
         <table class="table table-hover table-dark table-striped">
             <thead>
             <tr style="color: #8BC34A">
@@ -82,52 +57,27 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
             <%
                 for(Integer sem : data.keySet()){
                     for(Subject subject : data.get(sem)){
-
+                        double mark = dao.getSumOfScores(student, subject);
+                        String grade = getGrade(mark);
             %>
             <td><%=(cnt++)%></td>
             <td><%=subject.getName()%></td>
             <td><%=sem%></td>
-            <td>100%</td> <%-- TODO --%>
-            <td><%=subject.getNumCredits()%></td> <%-- TODO --%>
+            <td><%=mark%>%</td>
+            <td><%=grade%></td>
             <td> <%=subject.getNumCredits()%></td>
+            <td> <%=grade == "F" ? 0 : subject.getNumCredits()%></td>
+            </tr>
             <%
                     }
                 }
             %>
-            <tr>
-                <td>1</td>
-                <td>Programming Abstractions</td>
-                <td>2</td>
-                <td>100%</td>
-                <td>A</td>
-                <td>8</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Philosophy</td>
-                <td>3</td>
-                <td>46%</td>
-                <td>F</td>
-                <td>0</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Theoretical Informatics</td>
-                <td>4</td>
-                <td>98.3%</td>
-                <td>A</td>
-                <td>6</td>
-                <td>6</td>
-            </tr>
             </tbody>
         </table>
-    </div>
-</div>
 </body>
 </div>
 </html>

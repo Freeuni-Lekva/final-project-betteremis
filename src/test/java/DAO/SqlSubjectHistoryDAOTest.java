@@ -393,4 +393,61 @@ public class SqlSubjectHistoryDAOTest {
         assertEquals(1, map3.get(1).size());
     }
 
+    @Test
+    public void SqlSubjectHistoryDAOTest15(){
+        User u = new User("gmail21@gmail.com", "passhash", USERTYPE.STUDENT);
+        int newID = userDAO.addUser(u);
+        Student st = new Student("gmail21@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 1, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", newID);
+        studentDAO.addStudent(st);
+        Subject subject = new Subject("Computer Science 3", 6, LecID);
+        Subject subject2 = new Subject("Computer Science 4", 6, LecID);
+        Subject subject3 = new Subject("Computer Science 5", 6, LecID);
+        u = new User("gmail22@gmail.com", "passhash", USERTYPE.STUDENT);
+        newID = userDAO.addUser(u);
+        Student st2 = new Student("gmail22@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 2, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", newID);
+        studentDAO.addStudent(st2);
+
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject2) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject3) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st2, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st2, subject2) != -1);
+
+        assertTrue(subjectHistoryDAO.makeCompleted(1));
+        assertTrue(subjectHistoryDAO.isCompleted(st, subject));
+        assertTrue(subjectHistoryDAO.isCompleted(st, subject2));
+        assertTrue(subjectHistoryDAO.isCompleted(st, subject3));
+        assertFalse(subjectHistoryDAO.isCompleted(st2, subject));
+        assertFalse(subjectHistoryDAO.isCompleted(st2, subject2));
+    }
+
+    @Test
+    public void SqlSubjectHistoryDAOTest16(){
+        User u = new User("gmail21@gmail.com", "passhash", USERTYPE.STUDENT);
+        int newID = userDAO.addUser(u);
+        Student st = new Student("gmail21@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 1, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", newID);
+        studentDAO.addStudent(st);
+        Subject subject = new Subject("Computer Science 3", 6, LecID);
+        Subject subject2 = new Subject("Computer Science 4", 6, LecID);
+        Subject subject3 = new Subject("Computer Science 5", 6, LecID);
+        u = new User("gmail22@gmail.com", "passhash", USERTYPE.STUDENT);
+        newID = userDAO.addUser(u);
+        Student st2 = new Student("gmail22@gmail.com", "passhash", USERTYPE.STUDENT, "First", "Second", "Pro", 2, GENDER.MALE, Date.valueOf("1111-11-11"), "a", STATUS.ACTIVE, "a", 1, 1.0, new BigInteger("11111"), "1", newID);
+        studentDAO.addStudent(st2);
+
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject2) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st, subject3) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st2, subject) != -1);
+        assertTrue(subjectHistoryDAO.addStudentAndSubject(st2, subject2) != -1);
+
+        assertEquals(1, subjectHistoryDAO.getSemester(st, subject));
+        assertEquals(1, subjectHistoryDAO.getSemester(st, subject2));
+        assertEquals(1, subjectHistoryDAO.getSemester(st, subject3));
+        assertEquals(2, subjectHistoryDAO.getSemester(st2, subject));
+        assertEquals(2, subjectHistoryDAO.getSemester(st2, subject2));
+
+    }
+
+
 }

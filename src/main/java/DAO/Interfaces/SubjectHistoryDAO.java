@@ -173,4 +173,18 @@ public interface SubjectHistoryDAO {
      */
     Map<Integer, ArrayList<Student> > getAllStudentsOfSubject(String subjectName);
 
+    /**
+     * This method gets the semester in which given student was registered on a subject.
+     * @param st
+     * @param sb
+     * @return semester, -1 if some kind of error happened.
+     */
+    int getSemester(Student st, Subject sb);
+
+    /**
+     * This method marks subjects in a given semester as completed.
+     * @param Semester
+     * @return true if operation was successful, false otherwise.
+     */
+    boolean makeCompleted(int Semester);
 }

@@ -3,14 +3,11 @@
 <%@ page import="Model.Subject" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="DAO.Interfaces.SubjectHistoryDAO" %>
 <%@ page import="DAO.SqlSubjectHistoryDAO" %>
-<%@ page import="DAO.Interfaces.LecturerDAO" %>
 <%@ page import="Model.Lecturer" %>
-<%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="DAO.Interfaces.PrerequisitesDAO" %>
-<%@ page import="Model.User" %><%--
+<%@ page import="Model.User" %>
+<%@ page import="DAO.Interfaces.*" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 21.07.22
@@ -26,6 +23,7 @@
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
     SubjectHistoryDAO shDAO = (SubjectHistoryDAO) application.getAttribute(Mapping.SUBJECT_HISTORY_DAO);
     LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
+    CurrentSemesterDAO currentSemesterDAO = (CurrentSemesterDAO) application.getAttribute(Mapping.CURRENT_SEMESTER_DAO);
     Map<Integer, ArrayList<Subject>> completed = shDAO.getCompletedSubjects(student);
     Map<Integer, ArrayList<Subject>> incomplete = shDAO.getIncompleteSubjects(student);
     RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
@@ -92,7 +90,7 @@
                         "            <td> " + pDAO.getSubjectPrerequisitesByName(sb.getName()) + "</td>\n" +
                         "            <td>Syllabus is currently unavailable</td>\n";
                 try {
-                    if (!shDAO.isCompleted(student, sb) && rsDAO.registrationStatus())
+                    if (!shDAO.isCompleted(student, sb) && rsDAO.registrationStatus() && shDAO.getSemester(student, sb) == student.getCurrentSemester())
                         result += "            <td>\n" +
                                 "               <form action = \"CancelRegistrationServlet\" method = \"POST\">\n" +
                                 "                   <input type = \"hidden\" name = \"subjectToRemove\" value = \""+ sb.getName() + "\"/>\n" +
