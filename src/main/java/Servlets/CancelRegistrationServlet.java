@@ -10,6 +10,8 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static Helper.ErrorPageRedirector.redirect;
+
 @WebServlet(name = "CancelRegistrationServlet", value = "/studentPages/CancelRegistrationServlet")
 public class CancelRegistrationServlet extends HttpServlet {
     @Override
@@ -18,20 +20,10 @@ public class CancelRegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User usr = (User)request.getSession().getAttribute(Mapping.USER_OBJECT);
-        RegistrationStatusDAO rsDAO = (RegistrationStatusDAO) request.getServletContext().getAttribute(Mapping.REGISTRATION_STATUS_DAO);
-        try {
-            if(usr.getType() != USERTYPE.STUDENT || !rsDAO.registrationStatus()){
-                request.setAttribute("userMessage", "Access denied.");
-                String path = "lecturerPages/lecturerProfile.jsp";
-                if(usr.getType() == USERTYPE.ADMIN)
-                    path = "adminPages/adminProfile.jsp";
-                request.setAttribute("path", path);
-                request.setAttribute("cssPath", "css/welcome.scss");
-                request.getRequestDispatcher("studentPages/MessagePrinter.jsp").forward(request, response);
-                return;
-            }
-        } catch (SQLException e) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+        if (user == null || user.getType() != USERTYPE.STUDENT) {
+            redirect(request, response);
             return;
         }
 

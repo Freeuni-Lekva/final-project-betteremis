@@ -7,11 +7,15 @@ import DAO.Mapping;
 import DAO.SqlUserDAO;
 import Model.Student;
 import Model.Subject;
+import Model.USERTYPE;
+import Model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+
+import static Helper.ErrorPageRedirector.redirect;
 
 @WebServlet(name = "ServletChangeMarks", value = "/ServletChangeMarks")
 public class ServletChangeMarks extends HttpServlet {
@@ -22,6 +26,12 @@ public class ServletChangeMarks extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User admin = (User) session.getAttribute(Mapping.USER_OBJECT);
+        if(admin == null || admin.getType() != USERTYPE.ADMIN) {
+            redirect(request, response);
+            return;
+        }
         String email = request.getParameter("email");
         String resetDemand = request.getParameter("reset");
         String subName = request.getParameter("subname");

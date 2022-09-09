@@ -6,6 +6,7 @@ import DAO.Interfaces.SubjectHistoryDAO;
 import DAO.Mapping;
 import Model.Student;
 import Model.Subject;
+import Model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -20,6 +21,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static DAO.Mapping.USER_OBJECT;
+import static Helper.ErrorPageRedirector.redirect;
+import static Model.USERTYPE.LECTURER;
+
 @WebServlet(name = "ServletUploader", value = "/ServletUploader")
 @MultipartConfig
 public class ServletUploader extends HttpServlet {
@@ -31,6 +36,10 @@ public class ServletUploader extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User lecturer = (User) request.getSession().getAttribute(USER_OBJECT);
+        if(lecturer == null || lecturer.getType() != LECTURER || !request.getParameter(Mapping.LEC_EMAIL).equals(lecturer.getEmail())){
+            redirect(request, response);
+        }
         /* Receive file uploaded to the Servlet from the HTML form */
         Part filePart = request.getPart(Mapping.FILE);
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
@@ -40,8 +49,6 @@ public class ServletUploader extends HttpServlet {
         BufferedReader br = new BufferedReader(isr);
         //Get lecturer email and subject name.
         String lecturerEmail = request.getParameter(Mapping.LEC_EMAIL);
-        //TODO : CHECK LECTURER VALIDITY with the given email
-
         String subjectName =  request.getParameter(Mapping.SUB_NAME);
         SubjectHistoryDAO subDAO = (SubjectHistoryDAO) request.getServletContext().getAttribute(Mapping.SUBJECT_HISTORY_DAO);
         StudentDAO studentDAO = (StudentDAO) request.getServletContext().getAttribute(Mapping.STUDENT_DAO);

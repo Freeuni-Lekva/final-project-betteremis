@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import static Helper.ErrorPageRedirector.redirect;
+
 @WebServlet(name = "ServletAddPost", value = "/ServletAddPost")
 public class ServletAddPost extends HttpServlet {
     @Override
@@ -25,15 +27,18 @@ public class ServletAddPost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession curSession = request.getSession();
+        User usr = (User)request.getSession().getAttribute(Mapping.USER_OBJECT);
+        if(usr == null){
+            redirect(request, response);
+            return;
+        }
         int classroomID = Integer.parseInt(request.getParameter(Mapping.CLASSROOM_ID));
         ClassroomPostsDAO classroomPostsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
         String postStr = request.getParameter(Mapping.USER_INPUT);
-        User usr = (User)curSession.getAttribute(Mapping.USER_OBJECT);
         UserDAO userDAO = (UserDAO)request.getServletContext().getAttribute(Mapping.USER_DAO);
         Post post = new Post(classroomID, userDAO.getIDByEmail(usr.getEmail()), postStr, new Timestamp(System.currentTimeMillis()));
         classroomPostsDAO.addPost(post);
         System.out.println(classroomID + " " + postStr);
-        //TODO:send to posts page, in other words refresh.
         response.sendRedirect("classroom.jsp?" + Mapping.CLASSROOM_ID + "=" + classroomID);
 
     }

@@ -11,7 +11,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="Model.USERTYPE" %>
 <%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != USERTYPE.LECTURER) {
+        redirect(request, response);
+        return;
+    }
     Lecturer lecturer = (Lecturer) session.getAttribute(Mapping.USER_OBJECT);
 %>
 

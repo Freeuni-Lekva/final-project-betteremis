@@ -5,10 +5,19 @@
 <%@ page import="Model.Subject" %>
 <%@ page import="DAO.Interfaces.SubjectDAO" %>
 <%@ page import="DAO.Interfaces.RegistrationStatusDAO" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="Model.USERTYPE" %>
+<%@ page import="static Servlets.ErrorMessages.ERROR_MESSAGE" %>
 <%
     UserDAO userDAO = (UserDAO) application.getAttribute(Mapping.USER_DAO);
     RegistrationStatusDAO regStatusDAO = (RegistrationStatusDAO) application.getAttribute(Mapping.REGISTRATION_STATUS_DAO);
-    User admin = (User) application.getAttribute(Mapping.USER_OBJECT);
+    User admin = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(admin == null || admin.getType() != USERTYPE.ADMIN) {
+        redirect(request, response);
+        return;
+    }
     List<User> allUsers = userDAO.getAllUsers();
 %>
 
@@ -73,6 +82,15 @@
         %>
     </form>
 </div>
+<%
+    if(session.getAttribute(ERROR_MESSAGE) != null){
+%>
+<p> <%=session.getAttribute(ERROR_MESSAGE)%></p>
+
+<%
+        session.removeAttribute(ERROR_MESSAGE);
+    }
+%>
 <div class="main">
     <div class="fieldset2" >
         <div class="temp">

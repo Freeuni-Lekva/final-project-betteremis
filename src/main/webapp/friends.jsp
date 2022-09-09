@@ -8,13 +8,17 @@
 <%@ page import="Services.FriendService" %>
 <!DOCTYPE html>
 <html lang="en">
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%
+    User currentUser = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(currentUser == null) {
+        redirect(request, response);
+        return;
+    }
+%>
 <head>
     <%
         List<User> data;
-        User currentUser = (User) request.getSession().getAttribute(USER_OBJECT);
-        if(currentUser == null){
-            response.sendRedirect("invalidUser.jsp");
-        }
         FriendService service = (FriendService) request.getServletContext().getAttribute(FRIEND_SERVICE);
         data = service.getAllFriends(currentUser, request.getServletContext());
 //        data.add(new User("hello@freeuni.edu.ge", "passw", USERTYPE.ADMIN));

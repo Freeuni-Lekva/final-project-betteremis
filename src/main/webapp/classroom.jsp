@@ -6,7 +6,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="DAO.Interfaces.UserDAO" %>
 <%@ page import="Model.Comment" %>
-<%@ page import="java.util.Collections" %><%--
+<%@ page import="java.util.Collections" %>
+<%@ page import="Model.User" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 15.08.22
@@ -15,6 +17,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null) {
+        redirect(request, response);
+        return;
+    }
+    // TODO : check whether user has privileges to enter this class
     ClassroomPostsDAO postsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
     UserDAO userDAO = (UserDAO) request.getServletContext().getAttribute(Mapping.USER_DAO);
     CommentsDAO commentsDAO = (CommentsDAO) request.getServletContext().getAttribute(Mapping.COMMENTS_DAO);

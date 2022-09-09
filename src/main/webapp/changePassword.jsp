@@ -1,3 +1,6 @@
+<%@ page import="Model.User" %>
+<%@ page import="static DAO.Mapping.USER_OBJECT" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -11,7 +14,13 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/indexStyle.scss">
 </head>
-
+<%
+    User user = (User) session.getAttribute(USER_OBJECT);
+    if(user != null){
+        redirect(request, response);
+        return;
+    }
+%>
 
 <body class="align">
 <div class="grid">

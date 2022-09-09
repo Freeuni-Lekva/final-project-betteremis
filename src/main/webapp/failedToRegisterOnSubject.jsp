@@ -7,6 +7,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Mapping" %>
+<%@ page import="Model.User" %>
+<%@ page import="Model.USERTYPE" %>
+<%
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != USERTYPE.STUDENT) {
+        redirect(request, response);
+        return;
+    }
+%>
 <head>
     <meta chartset="utf-8">
     <title>Failed to register</title>

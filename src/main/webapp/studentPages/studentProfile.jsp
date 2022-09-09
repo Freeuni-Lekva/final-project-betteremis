@@ -10,10 +10,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="Model.User" %>
+<%@ page import="static Model.USERTYPE.*" %>
 <%
-    User user = (User) request.getSession().getAttribute(Mapping.USER_OBJECT);
-    if(user == null){
-        response.sendRedirect("invalidUser.jsp");
+    User user = (User) session.getAttribute(Mapping.USER_OBJECT);
+    if(user == null || user.getType() != STUDENT) {
+        redirect(request, response);
+        return;
     }
     Student student = (Student) session.getAttribute(Mapping.USER_OBJECT);
 %>
