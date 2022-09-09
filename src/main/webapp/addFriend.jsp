@@ -26,8 +26,9 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/addFriend.css">
 </head>
-<body>
+<body style="background-color: #434750; color: white">
 <!-- navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom">
     <a class="navbar-brand" href="addFriend.jsp">Add Friend</a>
@@ -56,18 +57,25 @@
 <%
     if(request.getSession().getAttribute(ERROR_MESSAGE) != null){
         %>
-        <p> <%=request.getSession().getAttribute(ERROR_MESSAGE)%></p>
+        <p style="text-align: center"> <%=request.getSession().getAttribute(ERROR_MESSAGE)%></p>
 <%
         request.getSession().removeAttribute(ERROR_MESSAGE);
     }
 %>
+
 <form action="SendFriendRequestServlet" method="get">
-    <input type="text" name="email">
-    <input type="submit" value="Send Friend Request">
+    <div class="input">
+        <input type="text" name="email" id="email">
+        <label for="email"> Send Friend Request! </label>
+    </div>
+    <button class="fancyButton" type="submit" role="button">Send</button>
 </form>
 <form action="RemoveFriendServlet" method="get">
-    <input type="text" name="email">
-    <input type="submit" value="Remove Friend">
+    <div class="input2">
+        <input type="text" name="email" id="email2">
+        <label for="email2"> Remove Friend </label>
+    </div>
+    <button class="fancyButton" style="justify-content: center" type="submit" role="button">Remove</button>
 </form>
 </body>
 </html>
