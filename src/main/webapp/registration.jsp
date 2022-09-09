@@ -13,6 +13,7 @@
     redirect(request, response);
     return;
   }
+%>
 <%
   SubjectDAO subjectDAO = (SubjectDAO) application.getAttribute(Mapping.SUBJECT_DAO);
   LecturerDAO lecDAO = (LecturerDAO) application.getAttribute(Mapping.LECTURER_DAO);
