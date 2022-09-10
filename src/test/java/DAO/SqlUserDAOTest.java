@@ -202,6 +202,19 @@ public class SqlUserDAOTest {
     }
 
     @Test
+    public void testEmailById(){
+        int id = userDAO.addUser(student);
+        int id2 = userDAO.addUser(student2);
+        assertEquals(student.getEmail(), userDAO.getEmailByID(id));
+        assertEquals(student2.getEmail(), userDAO.getEmailByID(id2));
+        userDAO.removeUser(student);
+        id = userDAO.addUser(student);
+        assertEquals(student.getEmail(), userDAO.getEmailByID(id));
+        userDAO.removeUser(student);
+        assertNull(userDAO.getEmailByID(id));
+    }
+
+    @Test
     public void testAllUsers(){
         userDAO.addUser(student);
         userDAO.addUser(lecturer);

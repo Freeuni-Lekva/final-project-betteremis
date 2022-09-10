@@ -29,8 +29,7 @@ public class SqlUserDAO implements UserDAO {
             stm.setString(3, user.getType().toString());
        //     stm.setString(3, USERTYPE.ADMIN.toString());
             int added = stm.executeUpdate();
-            if(added != 1)
-                return -1;
+            if(added != 1) return -1;
             ResultSet rs = stm.getGeneratedKeys();
             if(rs.next())
                 userID = rs.getInt(1);
@@ -50,7 +49,7 @@ public class SqlUserDAO implements UserDAO {
             stm = conn.prepareStatement("DELETE FROM USERS WHERE Email=?;");
             stm.setString(1, user.getEmail());
             int added = stm.executeUpdate();
-            return added == 1;
+            if(added == 1) return true;
         } catch (SQLException e) {}
             // No need to print the error here
         finally{
@@ -75,11 +74,11 @@ public class SqlUserDAO implements UserDAO {
                 USERTYPE type = USERTYPE.toUserType(privilege);
                 return new User(email, passHash, type);
             }
-            return null;
         } catch (SQLException e) {return null;}
         finally{
             pool.releaseConnection(conn);
         }
+        return null;
     }
 
     @Override
@@ -110,11 +109,11 @@ public class SqlUserDAO implements UserDAO {
             stm.setString(2,email);
             int updated = stm.executeUpdate();
             if(updated == 1) return true;
-            return false;
         } catch (SQLException e) {return false;}
         finally {
             pool.releaseConnection(conn);
         }
+        return false;
     }
 
     @Override
@@ -128,11 +127,11 @@ public class SqlUserDAO implements UserDAO {
             if(rs.next()){
                return rs.getInt(1);
             }
-            return -1;
         } catch (SQLException e) {return -1;}
         finally {
             pool.releaseConnection(conn);
         }
+        return -1;
     }
 
     @Override
@@ -146,11 +145,11 @@ public class SqlUserDAO implements UserDAO {
             if(rs.next()){
                 return rs.getString(1);
             }
-            return null;
         } catch (SQLException e) {return null;}
         finally {
             pool.releaseConnection(conn);
         }
+        return null;
     }
     @Override
     public List<User> getAllUsers(){
@@ -165,12 +164,11 @@ public class SqlUserDAO implements UserDAO {
                 res.add(new User(rs.getString(2), rs.getString(3),
                         USERTYPE.toUserType(rs.getString(4))));
             }
-            return res;
-        } catch (SQLException e) {return null;}
+        } catch (SQLException e) {}
         finally {
             pool.releaseConnection(conn);
         }
-
+        return res;
     }
 
 }
