@@ -20,6 +20,7 @@
 <%@ page import="static Helper.ErrorPageRedirector.redirect" %>
 <%@ page import="Model.User" %>
 <%@ page import="static Model.USERTYPE.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%
     User user = (User) session.getAttribute(Mapping.USER_OBJECT);
     if(user == null || user.getType() != STUDENT) {
@@ -52,6 +53,50 @@
 
 <div class="wrapper-container">
 <body>
+<div class="p-3 mb-2 bg-dark text-white">
+<div class="container">
+    <h2 style='text-align: center'>Free University Of Georgia</h2>
+    <br>
+    <h3 style="text-align: center">Academic Records</h3>
+    <br>
+    <div style='border: 0px solid #AAA;'>
+        <table style='text-align: left'>
+            <tr>
+                <td >
+                    <table>
+                        <tr>
+                            <td style="align: right">First Name:</td>
+                            <td style="width: 5px">&nbsp;</td>
+                            <td><%=student.getFirstName()%></td>
+                        </tr>
+                        <tr>
+                            <td style="align: right">Second Name:</td>
+                            <td style="width: 5px">&nbsp;</td>
+                            <td><%=student.getLastName()%></td>
+                        </tr>
+                        <tr>
+                            <td style="align: right">School:</td>
+                            <td style="width: 5px">&nbsp;</td>
+                            <td><%=student.getSchool()%></td>
+                        </tr>
+
+                    </table>
+                </td>
+                <td></td>
+                <td style="vertical-align: top">
+                    <table style="text-align: right">
+                        <tr style="text-align: right">
+                            <td style="width: 300px"></td>
+                            <td style="text-align: right">Date of</td>
+                            <td>&nbsp;Birth:&nbsp;</td>
+                            <td><%=(new SimpleDateFormat("MM-dd-yyyy").format(student.getBirthDate()))%></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
         <table class="table table-hover table-dark table-striped">
             <thead>
             <tr style="color: #8BC34A">
@@ -86,6 +131,8 @@
             %>
             </tbody>
         </table>
+</div>
+</div>
 </body>
 </div>
 </html>
