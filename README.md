@@ -28,4 +28,9 @@ There are three different types of users: Students, Lecturers and Admins.
 - Can have public/private chats with other students and lecturers.
 - Can add/remove friends and see list of friends and friend requests.
 - Can register/unregister on different courses if they are available and if the registration is open.
-- 
+
+### Lecturer
+- Able to chat with students/lecturers publicly and privately, and also via classroom.
+- Able to change grades for his/her students (This feature is very flexible for lecturers, you can upload a file containing all the grades and the website does 
+the work for you automatically).
+- Can add/remove friends and see list of friends and friend requests.
