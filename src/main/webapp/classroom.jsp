@@ -1,14 +1,9 @@
-<%@ page import="Model.Post" %>
-<%@ page import="DAO.Interfaces.ClassroomDAO" %>
 <%@ page import="DAO.Mapping" %>
-<%@ page import="DAO.Interfaces.ClassroomPostsDAO" %>
-<%@ page import="DAO.Interfaces.CommentsDAO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="DAO.Interfaces.UserDAO" %>
-<%@ page import="Model.Comment" %>
 <%@ page import="java.util.Collections" %>
-<%@ page import="Model.User" %>
-<%@ page import="static Helper.ErrorPageRedirector.redirect" %><%--
+<%@ page import="static Helper.ErrorPageRedirector.redirect" %>
+<%@ page import="DAO.Interfaces.*" %>
+<%@ page import="Model.*" %><%--
   Created by IntelliJ IDEA.
   User: dito
   Date: 15.08.22
@@ -22,11 +17,16 @@
         redirect(request, response);
         return;
     }
-    // TODO : check whether user has privileges to enter this class
     ClassroomPostsDAO postsDAO = (ClassroomPostsDAO) request.getServletContext().getAttribute(Mapping.CLASSROOM_POSTS_DAO);
     UserDAO userDAO = (UserDAO) request.getServletContext().getAttribute(Mapping.USER_DAO);
+    ClassroomDAO classroomDAO = (ClassroomDAO) application.getAttribute(Mapping.CLASSROOM_DAO);
     CommentsDAO commentsDAO = (CommentsDAO) request.getServletContext().getAttribute(Mapping.COMMENTS_DAO);
     int classroomID = Integer.parseInt(request.getParameter(Mapping.CLASSROOM_ID));
+    StudentClassroomDAO studentClassroomDAO = (StudentClassroomDAO) application.getAttribute(Mapping.STUDENT_CLASSROOM_DAO);
+    List<Student> students = studentClassroomDAO.getStudentsInClassroom(classroomID);
+    if(user.getType() == USERTYPE.STUDENT && !students.contains(((Student)user))){
+        redirect(request, response);
+    }
     List<Post> postList = postsDAO.getPostsByClassroomID(classroomID, true);
     Collections.reverse(postList);
 
